@@ -1,0 +1,8 @@
+# agents_orchestrator state is project-local and NOT committed by default.
+# To share lessons within THIS project's team, change memory.lessons.commit
+# in config/agent_config.yaml to "yes" and replace this file with:
+#   *
+#   !.gitignore
+#   !lessons.md
+*
+!.gitignore

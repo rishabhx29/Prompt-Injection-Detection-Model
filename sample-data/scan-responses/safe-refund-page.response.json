@@ -1,0 +1,34 @@
+{
+  "$comment": "Reference response shape for the safe-refund-page fixture. Field names and enum members are normative (docs/03_API_CONTRACT.md §2.2). Numeric values are illustrative.",
+  "scanId": "safe-refund-page",
+  "riskScore": 0,
+  "riskLevel": "low",
+  "decision": "allow",
+  "summary": "All extracted content directly supports the refund-policy task and no injection or risky instruction was found.",
+  "findings": [],
+  "safeContent": [
+    {
+      "text": "Refund Policy",
+      "view": "visible_text"
+    },
+    {
+      "text": "Refunds are accepted within 30 days with proof of purchase.",
+      "view": "visible_text"
+    },
+    {
+      "text": "To start a refund, open your order history and select the order.",
+      "view": "visible_text"
+    },
+    {
+      "text": "Refunds are processed within 5 business days.",
+      "view": "visible_text"
+    }
+  ],
+  "sanitizedContent": [
+    "Refund Policy",
+    "Refunds are accepted within 30 days with proof of purchase.",
+    "To start a refund, open your order history and select the order.",
+    "Refunds are processed within 5 business days."
+  ],
+  "blockedContent": []
+}

@@ -1,0 +1,129 @@
+# =====================================================================
+# agents_orchestrator — project-local configuration
+# =====================================================================
+# This file configures THE ORCHESTRATOR (the agent's routing and policy
+# decisions). It is NOT the native configuration of the underlying tools —
+# each tool has its own config (e.g., graft/ wiring, Mem0 MemoryConfig,
+# Headroom env vars). See 01_INSTALLATION.md for tool-native configuration.
+#
+# The agent should review and adapt this file during project discovery
+# (00_PROJECT_DISCOVERY.md). Every enabled provider must actually be
+# installed and verified before the agent relies on it.
+#
+# ---------------------------------------------------------------------
+# Discovery record — 2026-09-20 (first session)
+# ---------------------------------------------------------------------
+# Project : CtxVigil — multi-view prompt-injection protection layer for
+#           LLM web agents (college prototype, Rishabh + Saumya)
+# Languages: TypeScript (ESM, Node >= 22.18 type stripping)
+# Framework: Node.js; npm workspaces monorepo
+#           packages/ctxvigil-core, packages/shared-types, apps/*, fixtures/
+# Pkg mgr  : npm (package-lock.json)
+# Tests    : node --test (no suite directory yet)
+# Providers: graphify enabled+verified (AST graph built, 224 nodes);
+#            headroom enabled+verified (CLI 0.37.0, mcp mode);
+#            graft DISABLED — install blocked on this machine: native
+#            tree-sitter-kotlin needs the VS C++ build tools workload;
+#            mem0 DISABLED — mem0ai 2.1.0 installed in .venv (Python 3.13)
+#            but no LLM backend (Ollama absent), so the add/search/delete
+#            round-trip could not be verified.
+# =====================================================================
+
+version: 1
+
+# ---------------------------------------------------------------------
+# Providers
+# ---------------------------------------------------------------------
+providers:
+
+  # ---- Structure provider: pick ONE primary per project ----
+  # Graft and Graphify both map codebase structure. Running both is
+  # wasteful duplication for most projects. Choose one:
+  #   graft    -> plain-English markdown nodes, per-symbol wiring.json,
+  #               MCP server, auto-refresh on every query, LLM summaries
+  #               (needs a provider key for --deep; Node ecosystem)
+  #   graphify -> deterministic AST graph (graph.json), explain/path/query,
+  #               docs/PDF/media mapping, HTML visualization, Python
+  #               ecosystem, no LLM needed for code
+  # Selection guidance: 02_STRUCTURE_TOOLS.md
+  structure:
+    primary: graphify       # graft | graphify | none
+    fallback: none          # optional second tool used only when the
+                            # primary cannot answer (e.g., need to map
+                            # PDFs/docs -> graphify). Use sparingly.
+
+    graft:
+      enabled: false
+      mcp: true             # prefer the graft MCP server when available
+      deep_summaries: true  # allow LLM-summarized nodes (graft --deep);
+                            # false = structural tree-sitter graph only
+      lsp_edges: false      # opt-in compiler-grade edges (graft build --lsp)
+
+    graphify:
+      enabled: true
+      mcp: false            # graphifyy[mcp] extra provides a stdio server
+      semantic_pass: false  # allow the backend pass over docs/PDFs/media
+                            # (uses the assistant's model or an API key)
+
+  # ---- Durable project memory ----
+  mem0:
+    enabled: false
+    mode: self-hosted       # self-hosted | platform
+    mcp: openmemory         # openmemory | platform-mcp | none
+    # Self-hosted notes (see 03_MEMORY.md): pip install mem0ai; choose a
+    # local-capable LLM (e.g., Ollama) and a vector store appropriate to
+    # the project. Verify current defaults against docs.mem0.ai at install
+    # time — do not assume package internals.
+    local_llm: ollama       # ollama | openai | anthropic | ...
+    store_policy: confirm_with_user   # confirm_with_user | auto | disabled
+
+  # ---- Context compression (never automatic-by-default) ----
+  headroom:
+    enabled: true
+    mode: mcp               # mcp | proxy | wrap | library | off
+    only_when_needed: true  # invoke ONLY on context-pressure signals (07)
+    reversible: true        # require CCR-retrievable compression
+
+# ---------------------------------------------------------------------
+# Routing
+# ---------------------------------------------------------------------
+routing:
+  automatic_tool_selection: true
+  allow_fixed_pipeline: false   # NEVER Graphify->Graft->Mem0->Headroom->LLM
+  max_providers_per_task: 2     # soft cap; exceed only with a stated reason
+
+# ---------------------------------------------------------------------
+# Context policy (AGENTS.md — context tiers)
+# ---------------------------------------------------------------------
+context:
+  compression:
+    enabled: true
+    only_when_needed: true
+    protect_critical: true      # CRITICAL tier is never discarded (10)
+
+# ---------------------------------------------------------------------
+# Memory policy (03_MEMORY.md)
+# ---------------------------------------------------------------------
+memory:
+  auto_store: false             # memory writes are deliberate, never automatic
+
+  lessons:                      # local experience store (project-local!)
+    enabled: true
+    path: agents_orchestrator/state/lessons.md
+    commit: no                  # no = keep local (gitignored). yes = team-shared
+                                # within THIS project only.
+    max_active_lessons: 200     # prune/supersede beyond this
+
+  mem0:
+    scope: project              # memories are scoped to this project only
+    supersede_stale: true       # update outdated memories instead of stacking
+
+# ---------------------------------------------------------------------
+# Safety (05_SAFETY_RULES.md)
+# ---------------------------------------------------------------------
+safety:
+  require_confirmation_for_installation: true
+  never_auto_commit: true
+  never_auto_push: true
+  never_cross_project_memory: true
+  never_store_secrets: true

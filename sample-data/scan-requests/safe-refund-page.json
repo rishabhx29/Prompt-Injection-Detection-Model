@@ -1,0 +1,29 @@
+{
+  "scanId": "safe-refund-page",
+  "userTask": "Find and summarize the refund policy.",
+  "page": {
+    "url": "http://localhost:5173/fixtures/refund/safe",
+    "title": "Refund Policy",
+    "visibleText": [
+      "Refund Policy",
+      "Refunds are accepted within 30 days with proof of purchase.",
+      "To start a refund, open your order history and select the order.",
+      "Refunds are processed within 5 business days."
+    ],
+    "domText": [
+      "Refund Policy",
+      "Refunds are accepted within 30 days with proof of purchase.",
+      "To start a refund, open your order history and select the order.",
+      "Refunds are processed within 5 business days."
+    ],
+    "hiddenText": [],
+    "accessibilityText": [
+      {
+        "text": "Refund Policy",
+        "kind": "heading",
+        "selector": "h1"
+      }
+    ],
+    "imageText": []
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "scanId": "benign-aria-label",
+  "userTask": "Find the Submit application control.",
+  "proposedAction": {
+    "type": "submit_form",
+    "label": "Submit the job application form",
+    "riskCategory": "form_submit",
+    "triggeredByFindingIds": []
+  }
+}

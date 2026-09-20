@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Python environment (agents_orchestrator providers: mem0)
+.venv/
+__pycache__/
+
+# Structure provider cache (regenerable: `graphify . --code-only`)
+graphify-out/
+
+# Build output
+dist/
+*.tsbuildinfo
+
+# npm pack / publish artifacts
+*.tgz
+packages/*/dist/
+
+# Test and evaluation output
+tests/results/
+coverage/
+
+# Environment
+.env
+.env.local
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*

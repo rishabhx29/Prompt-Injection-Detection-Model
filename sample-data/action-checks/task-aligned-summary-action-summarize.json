@@ -1,0 +1,10 @@
+{
+  "scanId": "task-aligned-summary-action",
+  "userTask": "Find and summarize the refund policy.",
+  "proposedAction": {
+    "type": "summarize_policy",
+    "label": "Summarize the refund policy text on the page",
+    "riskCategory": "read_only",
+    "triggeredByFindingIds": []
+  }
+}

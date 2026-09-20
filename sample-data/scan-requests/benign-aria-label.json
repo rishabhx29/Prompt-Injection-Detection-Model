@@ -1,0 +1,31 @@
+{
+  "scanId": "benign-aria-label",
+  "userTask": "Find the Submit application control.",
+  "page": {
+    "url": "http://localhost:5173/fixtures/application/benign-aria",
+    "title": "Job Application",
+    "visibleText": [
+      "Job Application",
+      "Fill in your name and upload a resume, then submit the application."
+    ],
+    "domText": [
+      "Job Application",
+      "Fill in your name and upload a resume, then submit the application.",
+      "Submit application"
+    ],
+    "hiddenText": [],
+    "accessibilityText": [
+      {
+        "text": "Submit application",
+        "kind": "aria-label",
+        "selector": "#submit-application"
+      },
+      {
+        "text": "Application form. Required fields are marked with an asterisk.",
+        "kind": "aria-describedby",
+        "selector": "#application-form"
+      }
+    ],
+    "imageText": []
+  }
+}

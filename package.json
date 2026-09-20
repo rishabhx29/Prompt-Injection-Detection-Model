@@ -1,0 +1,20 @@
+{
+  "name": "ctxvigil-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Workspace root for CtxVigil — a multi-view prompt-injection protection layer for LLM web agents.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "test": "node --test \"packages/ctxvigil-core/tests/**/*.test.ts\"",
+    "test:contract": "node --test \"packages/ctxvigil-core/tests/contract.test.ts\"",
+    "scan": "node packages/ctxvigil-cli/src/index.ts"
+  }
+}
