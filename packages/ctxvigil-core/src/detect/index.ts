@@ -8,6 +8,7 @@
 
 import type { SignalName } from "@ctxvigil/shared-types";
 import type { ResolvedConfig } from "../config/types.ts";
+import { meaningfulTokens } from "../text/tokens.ts";
 import type { TextSegment } from "../normalise/index.ts";
 
 /* -------------------------------------------------------------------------- */
@@ -44,7 +45,6 @@ export interface DetectorHit {
 /* Shared helpers                                                             */
 /* -------------------------------------------------------------------------- */
 
-const WORD_PATTERN = /[\p{L}\p{N}]+(?:['’][\p{L}\p{N}]+)?/gu;
 const ACTION_WORD_PATTERN = /[a-z][a-z0-9]*(?:_[a-z0-9]+)+/gu;
 
 /**
@@ -80,23 +80,11 @@ function findPhrase(text: string, phrases: readonly string[]): string | undefine
   return undefined;
 }
 
-function tokenize(text: string): string[] {
-  return [...text.toLowerCase().matchAll(WORD_PATTERN)].map((match) => match[0]);
-}
-
 function textWords(text: string): string[] {
   return text
     .toLowerCase()
     .split(/[^a-z0-9]+/u)
     .filter((word) => word.length > 0);
-}
-
-function segmentWords(segment: TextSegment): string[] {
-  return tokenize(segment.text);
-}
-
-function taskWords(userTask: string): string[] {
-  return tokenize(userTask).filter((word) => word.length > 2);
 }
 
 function configTokens(patterns: readonly string[]): Set<string> {
@@ -145,7 +133,7 @@ function detectInstructionOverride(context: DetectionContext): DetectorHit[] {
 
 function detectRoleImpersonation(context: DetectionContext): DetectorHit[] {
   const phrases = context.config.phraseLists.roleImpersonation;
-  const weight = context.config.weights.instructionOverride;
+  const weight = context.config.weights.roleImpersonation;
   const hits: DetectorHit[] = [];
 
   context.segments.forEach((segment, segmentIndex) => {
@@ -168,7 +156,7 @@ function detectRoleImpersonation(context: DetectionContext): DetectorHit[] {
 
 function detectDataExfiltration(context: DetectionContext): DetectorHit[] {
   const phrases = context.config.phraseLists.dataExfiltration;
-  const weight = context.config.weights.riskyAction;
+  const weight = context.config.weights.dataExfiltration;
   const sets = lexiconSets(context.config);
   const hits: DetectorHit[] = [];
 
@@ -290,12 +278,6 @@ function detectRiskyAction(
 /* -------------------------------------------------------------------------- */
 
 /** Meaningful content words after removing the configured stopwords. */
-function meaningfulWords(words: readonly string[], stopwords: ReadonlySet<string>): string[] {
-  return words.filter(
-    (word) => word.length > 2 && !stopwords.has(word) && !/^\d+$/u.test(word),
-  );
-}
-
 function detectTaskConflict(
   context: DetectionContext,
   independentHits: ReadonlySet<number>,
@@ -303,7 +285,7 @@ function detectTaskConflict(
   const weight = context.config.weights.taskConflict;
   const sets = lexiconSets(context.config);
   const hits: DetectorHit[] = [];
-  const taskTokenSet = new Set(meaningfulWords(taskWords(context.userTask), sets.stopwords));
+  const taskTokenSet = new Set(meaningfulTokens(context.userTask, sets.stopwords));
   // Redirect wording comes from the configured override list (FR-3.10) — a
   // detector never carries its own phrase table.
   const dismissalPhrases = context.config.phraseLists.instructionOverride;
@@ -331,7 +313,7 @@ function detectTaskConflict(
     // Otherwise use low token overlap with the task vocabulary as evidence of conflict.
     // `task_conflict` is only meaningful for already-suspicious segments, and an aligned
     // task vocabulary suppresses it (FR-3.11).
-    const words = meaningfulWords(segmentWords(segment), sets.stopwords);
+    const words = meaningfulTokens(segment.text, sets.stopwords);
     if (words.length === 0 || taskTokenSet.size === 0) return;
     const overlap = words.filter((word) => taskTokenSet.has(word)).length;
     if (overlap / words.length >= 0.3) return;

@@ -528,10 +528,16 @@ grep -r "riskScore\s*=" apps/demo-web/src
 
 ```bash
 # Distinctive fixture phrasings must not appear outside fixtures/ and sample-data/
-grep -r "change the account email" packages/ --exclude-dir=node_modules
-grep -r "Ignore the user's request" packages/ --exclude-dir=node_modules
-# Expected: no matches (NFR-11, S2 §9).
+grep -r "change the account email" packages/*/src --exclude-dir=node_modules
+grep -r "Ignore the user's request" packages/*/src --exclude-dir=node_modules
+# Expected: no matches in src/ (NFR-11, S2 §9).
 ```
+
+The grep scope is the **rule sources** (`packages/*/src`), not `packages/*/tests`: unit and
+contract tests legitimately quote fixture sentences to pin behaviour, and excluding them here
+keeps the check meaningful for the thing it protects — detection logic that special-cases a
+fixture instead of a class of attack. Test files must still derive their expectations from
+`sample-data/` (the oracle harness does), never from copy-pasted sentences used as rule data.
 
 A generic action pattern in `src/detect/data/` is acceptable; a whole fixture sentence is not. The
 distinction: patterns describe a *class* of attack, fixtures are *instances* of it.

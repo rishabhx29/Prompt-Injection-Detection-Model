@@ -321,6 +321,10 @@ export interface ThresholdConfig {
 export interface WeightConfig {
   /** Explicit injection/override wording. Default `25`. */
   instructionOverride: number;
+  /** Text claiming a system/admin/developer role. Default `25`. */
+  roleImpersonation: number;
+  /** Text asking to reveal or move private data. Default `25`. */
+  dataExfiltration: number;
   /** Hidden DOM/ARIA-only suspicious instruction. Default `30`. */
   hiddenContent: number;
   /** Conflict with the original user task. Default `25`. */

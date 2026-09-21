@@ -147,24 +147,107 @@ describe("scanPage round-trip", () => {
     assert.equal(JSON.stringify(a), JSON.stringify(b));
   });
 
-  it("surfaces real detector findings while keeping the score stubbed", async () => {
-    // Ticket-03 acceptance: malicious samples yield specific findings through scanPage;
-    // tickets 04–05 replace the risk/decision half of this test with EXPECTATIONS.json checks.
+  it("scores and decides every fixture as sample-data/EXPECTATIONS.json requires", async () => {
+    // The DoD for ticket 04, driven by the normative oracle rather than by hand.
+    // Action-level expectations (actionDecision, actionAllowed, actionConfirmationRequired,
+    // reasonNonEmpty) are ticket 05's oracle and are deliberately not read here.
+    const expectations = JSON.parse(
+      readFileSync(new URL("../../../sample-data/EXPECTATIONS.json", import.meta.url), "utf8"),
+    ) as {
+      tests: Array<{
+        testId: string;
+        scanRequest: string;
+        expect: {
+          riskLevel?: string[];
+          riskScoreMin?: number;
+          riskScoreMax?: number;
+          decision?: string[];
+          requiredSignals?: string[];
+          requiredViews?: string[];
+          findingsExpected?: string;
+          blockedContentNonEmpty?: boolean;
+          blockedContentEmpty?: boolean;
+          mustNotBlockSolelyForImperativeAccessibleLabel?: boolean;
+        };
+      }>;
+    };
+
+    for (const testCase of expectations.tests) {
+      const request = readSample(testCase.scanRequest.split("/").at(-1) as string);
+      const response = await standaloneScanPage(request as never);
+      const expected = testCase.expect;
+
+      if (expected.riskLevel !== undefined) {
+        assert.ok(
+          expected.riskLevel.includes(response.riskLevel),
+          `${testCase.testId}: riskLevel ${response.riskLevel} not in ${expected.riskLevel.join("|")}`,
+        );
+      }
+      if (expected.riskScoreMin !== undefined) {
+        assert.ok(response.riskScore >= expected.riskScoreMin, `${testCase.testId}: score too low`);
+      }
+      if (expected.riskScoreMax !== undefined) {
+        assert.ok(response.riskScore <= expected.riskScoreMax, `${testCase.testId}: score too high`);
+      }
+      if (expected.decision !== undefined) {
+        assert.ok(
+          expected.decision.includes(response.decision),
+          `${testCase.testId}: decision ${response.decision} not in ${expected.decision.join("|")}`,
+        );
+      }
+      if (expected.requiredSignals !== undefined) {
+        const seen = new Set(response.findings.flatMap((finding) => finding.signals));
+        for (const signal of expected.requiredSignals) {
+          assert.ok(seen.has(signal as never), `${testCase.testId}: missing signal ${signal}`);
+        }
+      }
+      if (expected.requiredViews !== undefined) {
+        const seen = new Set(response.findings.map((finding) => finding.view));
+        for (const view of expected.requiredViews) {
+          assert.ok(seen.has(view as never), `${testCase.testId}: missing finding view ${view}`);
+        }
+      }
+      if (expected.findingsExpected === "none_high_severity") {
+        for (const finding of response.findings) {
+          assert.notEqual(finding.severity, "high", `${testCase.testId}: unexpected high severity`);
+        }
+      }
+      if (expected.blockedContentNonEmpty === true) {
+        assert.ok(response.blockedContent.length > 0, `${testCase.testId}: expected a blocked span`);
+      }
+      if (expected.blockedContentEmpty === true) {
+        assert.deepEqual(response.blockedContent, [], `${testCase.testId}: expected no blocked span`);
+      }
+      if (expected.mustNotBlockSolelyForImperativeAccessibleLabel === true) {
+        assert.notEqual(
+          response.decision,
+          "block",
+          `${testCase.testId}: an imperative accessible label must never block on its own (FR-3.11)`,
+        );
+      }
+    }
+  });
+
+  it("does not block the benign imperative ARIA label (FR-3.11 regression)", async () => {
+    const response = await standaloneScanPage(readSample("benign-aria-label.json"));
+    assert.deepEqual(response.findings, []);
+    assert.equal(response.decision, "allow");
+    assert.ok(response.safeContent.some((item) => item.text === "Submit application"));
+  });
+
+  it("redacts the suspicious span while keeping it in the audit record (FR-4.6–4.8)", async () => {
     const response = await standaloneScanPage(readSample("aria-injection.json"));
-    assert.ok(response.findings.length >= 1);
-    assert.ok(
-      response.findings.some((finding) => finding.view === "accessibility_tree"),
-      "an ARIA finding must surface through scanPage",
+    assert.equal(response.decision, "block");
+    assert.equal(
+      response.safeContent.some((item) => item.text.includes("Ignore the user's request")),
+      false,
+      "the agent must never receive the injected instruction",
     );
-    const allSignals = response.findings.flatMap((finding) => finding.signals);
-    assert.ok(allSignals.includes("instruction_override"));
     assert.ok(
-      response.findings.some((finding) => finding.signals.length > 1),
-      "one finding carries several signals for the same text (contract §2.2)",
+      response.sanitizedContent.some((text) => text.includes("[Blocked suspicious instruction from")),
+      "the agent context shows a placeholder, not the attack",
     );
-    // Placeholder score, but the decision must fail closed while findings exist.
-    assert.equal(response.riskScore, 0);
-    assert.equal(response.decision, "confirm");
+    assert.ok(response.blockedContent.some((text) => text.includes("Ignore the user's request")));
   });
 });
 
