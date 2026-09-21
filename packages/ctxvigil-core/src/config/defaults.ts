@@ -14,7 +14,7 @@
  */
 
 import type { CtxVigilConfig, ThresholdConfig, WeightConfig } from "@ctxvigil/shared-types";
-import type { ResolvedConfig, RiskCategoryConfig } from "./types.ts";
+import type { ResolvedConfig, RiskCategoryConfig, ActionPosture } from "./types.ts";
 
 /* -------------------------------------------------------------------------- */
 /* Score bands — contract §5, S1 §6                                           */
@@ -215,6 +215,21 @@ const DEFAULT_RISK_INFERENCE: Array<{ category: string; patterns: string[] }> = 
 const DEFAULT_RISK_CATEGORIES: RiskCategoryConfig = {
   weights: DEFAULT_RISK_WEIGHTS,
   inference: DEFAULT_RISK_INFERENCE,
+  // The "Default posture" column of architecture §5, as data (FR-3.10).
+  postures: {
+    read_only: "allow",
+    navigation: "allow",
+    search: "allow",
+    form_fill: "allow",
+    form_submit: "confirm",
+    message_send: "confirm",
+    data_transfer: "confirm",
+    account_change: "block",
+    purchase: "block",
+    destructive: "always_block",
+  },
+  // No known category: account_change-level caution, never read_only (FR-5.9).
+  unknownPosture: "block",
   // Never assume an unclassifiable action is safe (FR-5.9).
   unknownWeight: 60,
   // A read-only action that directly serves the user's task.
@@ -500,10 +515,17 @@ export function resolveConfig(config: CtxVigilConfig = {}): ResolvedConfig {
     riskCategories: {
       weights: { ...DEFAULT_RISK_WEIGHTS, ...config.riskCategories },
       inference: DEFAULT_RISK_INFERENCE,
+      postures: { ...DEFAULT_RISK_CATEGORIES.postures, ...postureOverrides(config) },
+      unknownPosture: config.riskCategories?.unknownPosture ?? DEFAULT_RISK_CATEGORIES.unknownPosture,
       unknownWeight: DEFAULT_RISK_CATEGORIES.unknownWeight,
       taskAlignedReadOnlyWeight: DEFAULT_RISK_CATEGORIES.taskAlignedReadOnlyWeight,
     },
   };
+}
+
+/** Caller-supplied posture overrides, when the config section carries any. */
+function postureOverrides(config: CtxVigilConfig): Record<string, ActionPosture> {
+  return config.riskCategories?.postures ?? {};
 }
 
 /**

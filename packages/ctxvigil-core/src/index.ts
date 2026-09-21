@@ -5,16 +5,16 @@
  * the factory, the contract types, and the typed error. Nothing else in the
  * package is public.
  *
- * **Status:** stages 1–5 walk validation, normalisation, detection, scoring, and
- * content policy — all implemented. The **action gate** is still a stub
- * (ticket 05 replaces it):
+ * **Status:** the full pipeline is implemented — validation, normalisation,
+ * detection, scoring, content policy, and the action gate.
  *
  * - `scanPage` returns a clamped 0–100 score, a banded `riskLevel`, one decision
  *   from `allow`/`sanitize`/`confirm`/`block`, one finding per suspicious
  *   segment, and the three audience-separated content fields.
- * - `checkAction` fails **closed**: it returns `confirm` so no proposed action
- *   can execute without user confirmation until the real gate lands
- *   (architecture §7: no code path may convert uncertainty into `allow`).
+ * - `checkAction` decides independently whether a proposed action may execute
+ *   (architecture §5.1); a missing scan is a supported call, handled
+ *   conservatively — a risky category never returns `allow` for lack of context
+ *   (FR-5.9, architecture §7).
  */
 
 import type {
@@ -30,6 +30,7 @@ import type {
 import { resolveConfig } from "./config/defaults.ts";
 import type { ResolvedConfig } from "./config/types.ts";
 import { CtxVigilError, isCtxVigilError } from "./errors.ts";
+import { evaluateAction } from "./action/index.ts";
 import { detectPage } from "./detect/index.ts";
 import { normalisePage } from "./normalise/index.ts";
 import { applyPolicy } from "./policy/index.ts";
@@ -127,26 +128,25 @@ async function runScanPage(input: unknown, config: ResolvedConfig): Promise<Scan
 /* -------------------------------------------------------------------------- */
 
 /**
- * The action gate, stubbed until ticket 05.
+ * The action gate (stage 6, architecture §5.1) — an independent check, not a
+ * repeat of the scan pipeline (FR-5.8).
  *
- * Fails **closed** (architecture §7, contract §10 point 6): until the real
- * gate exists, no action may be silently allowed. `confirm` keeps the action
- * pending behind user confirmation — the weakest safe decision.
- *
- * The prior `scan` result (contract §10 point 3) is accepted on the input and
- * deliberately unused by this stub; ticket 05's gate consumes it.
+ * Calling without a prior scan is a **supported call**, handled conservatively:
+ * a risky category never returns `allow` merely because context is missing
+ * (FR-5.9, architecture §7).
  */
-async function runCheckAction(input: unknown, _config: ResolvedConfig): Promise<CheckActionResponse> {
+async function runCheckAction(input: unknown, config: ResolvedConfig): Promise<CheckActionResponse> {
   const request = validateCheckActionRequest(input);
+  const scan = (input as CheckActionInput).scan;
+  const outcome = evaluateAction({ request, scan, config });
 
-  const decision: Decision = "confirm";
+  // Consistency invariants (contract §4.9): derived, never asserted independently.
   return {
-    decision,
-    riskScore: 0,
-    reason:
-      "The action gate is not implemented in this skeleton build, so the proposed action cannot be evaluated; user confirmation is required before it executes (fail-closed placeholder, replaced by the action-gate ticket).",
-    allowed: decision === "allow",
-    confirmationRequired: decision === "confirm",
+    decision: outcome.decision,
+    riskScore: outcome.riskScore,
+    reason: outcome.reason,
+    allowed: outcome.decision === "allow",
+    confirmationRequired: outcome.decision === "confirm",
   };
 }
 

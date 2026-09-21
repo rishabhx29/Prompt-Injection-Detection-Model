@@ -18,6 +18,7 @@ packages/*/dist/
 
 # Test and evaluation output
 tests/results/
+packages/*/tests/results/
 coverage/
 
 # Environment

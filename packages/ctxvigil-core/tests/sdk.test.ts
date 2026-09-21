@@ -279,8 +279,8 @@ describe("error paths (contract §9.1)", () => {
   });
 });
 
-describe("checkAction skeleton (fails closed)", () => {
-  it("never silently allows: confirm + invariants until the gate lands (ticket 05)", async () => {
+describe("checkAction (the real action gate)", () => {
+  it("never returns allow without a scan for a risky action (FR-5.9)", async () => {
     const guard = createCtxVigil();
     const scan = (await guard.scanPage(
       readSample("aria-injection.json") as never,
@@ -292,13 +292,12 @@ describe("checkAction skeleton (fails closed)", () => {
       scan, // contract §10 point 3: the prior scan result travels with the request.
     });
 
-    assert.equal(response.decision, "confirm");
+    assert.equal(response.decision, "block");
     assert.equal(response.allowed, false);
-    assert.equal(response.confirmationRequired, true);
+    assert.equal(response.confirmationRequired, false);
     // Consistency invariants (contract §4.9).
     assert.equal(response.allowed, response.decision === "allow");
     assert.equal(response.confirmationRequired, response.decision === "confirm");
-    assert.equal(typeof response.reason, "string");
     assert.notEqual(response.reason.trim(), "");
   });
 
@@ -306,10 +305,12 @@ describe("checkAction skeleton (fails closed)", () => {
     const response = await standaloneCheckAction({
       scanId: "refund-aria-attack-001",
       userTask: "Find and summarize the refund policy.",
-      proposedAction: { type: "change_account_email" },
+      proposedAction: { type: "summarize_policy" },
     });
-    assert.equal(response.decision, "confirm");
-    assert.equal(response.allowed, false);
+    // Read-only category is benign even without a scan (FR-5.9 treats only risky
+    // categories conservatively).
+    assert.equal(response.decision, "allow");
+    assert.equal(response.allowed, true);
   });
 
   it("rejects malformed action input with INVALID_REQUEST", async () => {

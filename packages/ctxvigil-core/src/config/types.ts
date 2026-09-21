@@ -14,6 +14,14 @@ import type {
 } from "@ctxvigil/shared-types";
 
 /** Risk-category weights, architecture §5. */
+
+/**
+ * The posture a category starts from, per the "Default posture" column of
+ * architecture §5. `always_block` exists for `destructive`, which has no
+ * task-alignment exception.
+ */
+export type ActionPosture = "allow" | "confirm" | "block" | "always_block";
+
 export interface RiskCategoryConfig {
   /** Category name → risk weight (0–100). */
   weights: Record<string, number>;
@@ -22,6 +30,10 @@ export interface RiskCategoryConfig {
    * Used to infer a category when the caller omits `riskCategory`.
    */
   inference: Array<{ category: string; patterns: string[] }>;
+  /** Category name → default posture (architecture §5, "Default posture" column). */
+  postures: Record<string, ActionPosture>;
+  /** Posture for an action whose category cannot be resolved (FR-5.9). */
+  unknownPosture: ActionPosture;
   /** Weight applied when a category cannot be inferred. Never treated as safe (FR-5.9). */
   unknownWeight: number;
   /** Weight for an action that is task-aligned and read-only. */
