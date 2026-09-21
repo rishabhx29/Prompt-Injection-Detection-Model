@@ -263,14 +263,3 @@ export function normalisePage(page: PageRepresentation): TextSegment[] {
 
   return segments;
 }
-
-/** Distinct channels represented in a segment list (used by the scorer's summary). */
-export function channelsPresent(segments: readonly TextSegment[]): ViewChannel[] {
-  const found = new Set<ViewChannel>();
-  for (const segment of segments) {
-    for (const channel of segment.channels) {
-      found.add(channel);
-    }
-  }
-  return [...found].sort();
-}

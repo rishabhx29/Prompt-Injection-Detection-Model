@@ -6,7 +6,7 @@ bad input is rejected with a helpful `INVALID_REQUEST` error. After this ticket,
 
 **Blocked by:** 01 (SDK skeleton with a walkable scan round-trip).
 
-**Status:** ready-for-agent
+**Status:** done
 
 Scope (Phase 1 of `docs/02_PHASE_PLAN_RISHABH.md` §4):
 
@@ -20,9 +20,20 @@ Scope (Phase 1 of `docs/02_PHASE_PLAN_RISHABH.md` §4):
 - Every segment preserves provenance: `view`, `sourceKind`, `selector`, original `text`;
   provenance tags: `visible`, `dom`, `hidden_dom`, `aria`, `alt` (and `ocr` reserved) (FR-2.6).
 
-- [ ] A request with missing `userTask` or malformed JSON returns `INVALID_REQUEST` with a helpful message.
-- [ ] Bare-string and object forms of `accessibilityText` both validate (S2 A3.2).
-- [ ] Overlapping visible/DOM text deduplicates to one segment; whitespace collapses.
-- [ ] Feeding the aria-injection sample request yields segments carrying
+- [x] A request with missing `userTask` or malformed JSON returns `INVALID_REQUEST` with a helpful message.
+- [x] Bare-string and object forms of `accessibilityText` both validate (S2 A3.2).
+- [x] Overlapping visible/DOM text deduplicates to one segment; whitespace collapses.
+- [x] Feeding the aria-injection sample request yields segments carrying
       `view: accessibility_tree` and `sourceKind: aria-label` (S2 A3.3 verification).
-- [ ] Normalisation is deterministic for identical input (NFR-1).
+- [x] Normalisation is deterministic for identical input (NFR-1).
+
+## Comments
+
+- Implemented 2026-09-21: added `tests/validate.test.ts` and `tests/normalise.test.ts`;
+  54 tests green via root `npm test`.
+- Reconciled `docs/04_ARCHITECTURE.md` §6.2 with the implemented concealment-preferring
+  primary-view rule and the implementation's `views` field; the rule matches frozen contract §2.2.
+- Removed unused `channelsPresent()`; extracted shared `optionalString()` in validation.
+- Remaining doc flag for the next joint checkpoint, not a code change: contract §7
+  says `sourceKind` is "free-form but must use this vocabulary" (requires the §11 protocol).
+- `validateCheckActionRequest` predates this ticket; its tests remain because ticket 05 needs them.

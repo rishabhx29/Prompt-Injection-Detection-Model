@@ -28,6 +28,13 @@ function requireNonEmptyString(value: unknown, field: string): string {
   return value;
 }
 
+/** Validate an optional string field: absent is fine, present-but-not-string is not. */
+function optionalString(value: unknown, field: string): void {
+  if (value !== undefined && typeof value !== "string") {
+    throw invalidRequest(`${field} must be a string when present.`, field);
+  }
+}
+
 /**
  * Validate an individual accessibility item.
  *
@@ -49,10 +56,7 @@ function validateAccessibilityItem(value: unknown, index: number): void {
   }
 
   for (const key of ["kind", "selector"] as const) {
-    const v = value[key];
-    if (v !== undefined && typeof v !== "string") {
-      throw invalidRequest(`${field}.${key} must be a string when present.`, `${field}.${key}`);
-    }
+    optionalString(value[key], `${field}.${key}`);
   }
 }
 
@@ -81,10 +85,7 @@ function validatePage(value: unknown): PageRepresentation {
   }
 
   for (const key of ["url", "title"] as const) {
-    const v = value[key];
-    if (v !== undefined && typeof v !== "string") {
-      throw invalidRequest(`page.${key} must be a string when present.`, `page.${key}`);
-    }
+    optionalString(value[key], `page.${key}`);
   }
 
   validateStringArray(value["visibleText"], "page.visibleText");
@@ -141,21 +142,10 @@ export function validateCheckActionRequest(input: unknown): CheckActionRequest {
 
   const type = requireNonEmptyString(action["type"], "proposedAction.type");
 
+  optionalString(action["label"], "proposedAction.label");
+  optionalString(action["riskCategory"], "proposedAction.riskCategory");
   const label = action["label"];
-  if (label !== undefined && typeof label !== "string") {
-    throw invalidRequest(
-      "proposedAction.label must be a string when present.",
-      "proposedAction.label",
-    );
-  }
-
   const riskCategory = action["riskCategory"];
-  if (riskCategory !== undefined && typeof riskCategory !== "string") {
-    throw invalidRequest(
-      "proposedAction.riskCategory must be a string when present.",
-      "proposedAction.riskCategory",
-    );
-  }
 
   validateStringArray(action["triggeredByFindingIds"], "proposedAction.triggeredByFindingIds");
 

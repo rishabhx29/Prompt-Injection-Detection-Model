@@ -268,11 +268,24 @@ S1 Phase 2: `visible`, `dom`, `hidden_dom`, `aria`, `alt`, later `ocr`.
 | `imageText` | `image_text` | `ocr` |
 
 Deduplication is **exact text equality after normalisation**, not semantic similarity (FR-2.5,
-S2 A3.3). A sentence appearing in both `visibleText` and `domText` collapses to one segment whose
-`view` is the "most visible" of the group, in the order `visible_text > dom > hidden_dom >
-accessibility_tree > image_text` — visually present evidence is the honest primary provenance. The
-other views are retained in the segment's `alsoSeenIn` list purely so `multi_view_repetition` can
-still fire.
+S2 A3.3). A sentence appearing in more than one view collapses to one segment whose `view` is the
+collapsed group's **primary provenance**, chosen by this rule:
+
+- **Visible content reports `visible_text`; concealed content reports its most concealed channel**
+  (`hidden_dom` > `accessibility_tree` > `image_text` > `dom`).
+
+Rationale: if the text is visible, the honest statement is "this is in the visible text" — a
+sighted reviewer could have caught it. If it is *not* visible, the important fact is *which*
+channel it hid in. (The blanket `visible_text > dom > …` order stated in earlier drafts of this
+section was replaced by this rule during Phase 1: for concealed text it reported `dom`, which
+hides the evidence a reviewer needs and contradicts the contract §2.2 example, where the
+aria-only instruction reports `accessibility_tree`.)
+
+The other views are retained in the segment's `views` list (the architecture-§6.2 draft called it
+`alsoSeenIn`; the implementation name is `views`) so `multi_view_repetition` can still fire, and
+each segment additionally carries its distinct observation **channels** — `rendered` (the
+`visible_text`/`dom` pair, which are the same channel), `hidden_dom`, `accessibility_tree`,
+`image` — the independence basis for `multi_view_repetition`.
 
 ### 6.3 Stage 3 — detection
 
