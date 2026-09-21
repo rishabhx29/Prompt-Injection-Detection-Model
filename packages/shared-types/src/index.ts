@@ -350,6 +350,25 @@ export interface PhraseListConfig {
   dataExfiltration: string[];
 }
 
+/**
+ * Generic detector word tables.
+ *
+ * Like `PhraseListConfig`, these describe **classes** of wording — never a
+ * specific fixture sentence (NFR-11, S2 §9).
+ */
+export interface DetectorLexiconConfig {
+  /** Prepositions/articles that carry no task meaning. */
+  taskStopwords: string[];
+  /** Nouns that denote private or sensitive material. */
+  sensitiveObjectNouns: string[];
+  /** Verbs that move or disclose material. */
+  transferVerbs: string[];
+  /** Nouns that denote a high-risk operation target. */
+  highRiskOperationNouns: string[];
+  /** Verbs that perform or request a state-changing operation. */
+  operationVerbs: string[];
+}
+
 /** Action classification patterns, matched against `proposedAction.type`. */
 export interface ActionCategoryConfig {
   /** Patterns for actions that are risky in general. */
@@ -368,6 +387,7 @@ export interface CtxVigilConfig {
   thresholds?: Partial<ThresholdConfig>;
   weights?: Partial<WeightConfig>;
   phraseLists?: Partial<PhraseListConfig>;
+  detectorLexicon?: Partial<DetectorLexiconConfig>;
   actionCategories?: Partial<ActionCategoryConfig>;
   /** Override or extend the risk-category weights in architecture §5. */
   riskCategories?: Record<string, number>;

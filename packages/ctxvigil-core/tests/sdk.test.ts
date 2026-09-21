@@ -1,11 +1,11 @@
 /**
- * SDK-surface tests (ticket 01: skeleton with a walkable scan round-trip).
+ * SDK-surface tests (tickets 01 and 03: detector-backed scan round-trip).
  *
  * These pin the **contract shape** of the public API against the frozen
  * `docs/03_API_CONTRACT.md` and the real sample JSON in `sample-data/`.
- * Detection is still a skeleton stub here: `findings: []`, score 0, `allow`.
- * The detector/scoring/policy tickets (03–05) replace those stub-specific
- * assertions — the contract-shape assertions stay.
+ * Detection is real; risk, decision, and content partitioning remain skeleton
+ * stubs until the scorer/policy tickets (04–05) — the contract-shape assertions
+ * stay.
  */
 
 import assert from "node:assert/strict";
@@ -147,14 +147,24 @@ describe("scanPage round-trip", () => {
     assert.equal(JSON.stringify(a), JSON.stringify(b));
   });
 
-  it("skeleton stub: no detectors yet, so the response is empty-findings/allow", async () => {
-    // Skeleton stub behaviour. Tickets 03–05 replace this test with the
-    // per-fixture expectations from sample-data/EXPECTATIONS.json.
+  it("surfaces real detector findings while keeping the score stubbed", async () => {
+    // Ticket-03 acceptance: malicious samples yield specific findings through scanPage;
+    // tickets 04–05 replace the risk/decision half of this test with EXPECTATIONS.json checks.
     const response = await standaloneScanPage(readSample("aria-injection.json"));
-    assert.deepEqual(response.findings, []);
+    assert.ok(response.findings.length >= 1);
+    assert.ok(
+      response.findings.some((finding) => finding.view === "accessibility_tree"),
+      "an ARIA finding must surface through scanPage",
+    );
+    const allSignals = response.findings.flatMap((finding) => finding.signals);
+    assert.ok(allSignals.includes("instruction_override"));
+    assert.ok(
+      response.findings.some((finding) => finding.signals.length > 1),
+      "one finding carries several signals for the same text (contract §2.2)",
+    );
+    // Placeholder score, but the decision must fail closed while findings exist.
     assert.equal(response.riskScore, 0);
-    assert.equal(response.riskLevel, "low");
-    assert.equal(response.decision, "allow");
+    assert.equal(response.decision, "confirm");
   });
 });
 

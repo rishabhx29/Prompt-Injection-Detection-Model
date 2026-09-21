@@ -220,6 +220,151 @@ const DEFAULT_RISK_CATEGORIES: RiskCategoryConfig = {
 };
 
 /* -------------------------------------------------------------------------- */
+/* Generic detector word tables (classes, not fixtures)                       */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Deliberately generic English word tables used by the relation-based detectors
+ * (`data_exfiltration`, `risky_action`, `task_conflict`). Like the phrase lists
+ * above, each entry names a **class** of wording; a fixture sentence must never
+ * appear here (S2 §9, NFR-11). Kept in this data file per FR-3.10.
+ */
+export const DEFAULT_DETECTOR_LEXICON = {
+  /** Prepositions/articles that carry no task meaning. */
+  taskStopwords: [
+    "about",
+    "after",
+    "against",
+    "among",
+    "around",
+    "because",
+    "before",
+    "behind",
+    "below",
+    "beneath",
+    "beside",
+    "between",
+    "beyond",
+    "during",
+    "except",
+    "from",
+    "into",
+    "near",
+    "over",
+    "through",
+    "under",
+    "until",
+    "upon",
+    "with",
+    "within",
+    "without",
+  ],
+  /** Nouns that denote private or sensitive material. */
+  sensitiveObjectNouns: [
+    "account",
+    "address",
+    "card",
+    "code",
+    "credential",
+    "credentials",
+    "data",
+    "details",
+    "document",
+    "documents",
+    "email",
+    "file",
+    "files",
+    "inbox",
+    "information",
+    "key",
+    "keys",
+    "message",
+    "messages",
+    "money",
+    "number",
+    "password",
+    "payment",
+    "payments",
+    "phone",
+    "photo",
+    "photos",
+    "private",
+    "profile",
+    "record",
+    "records",
+    "secret",
+    "secrets",
+    "settings",
+    "ssn",
+    "token",
+    "tokens",
+  ],
+  /** Verbs that move or disclose material. */
+  transferVerbs: [
+    "collect",
+    "copy",
+    "disclose",
+    "export",
+    "exfiltrate",
+    "forward",
+    "post",
+    "publish",
+    "reveal",
+    "sell",
+    "send",
+    "share",
+    "transfer",
+    "transmit",
+    "upload",
+  ],
+  /** Nouns that denote a high-risk operation target. */
+  highRiskOperationNouns: [
+    "account",
+    "accounts",
+    "address",
+    "backup",
+    "card",
+    "checkout",
+    "credentials",
+    "data",
+    "database",
+    "details",
+    "email",
+    "emails",
+    "order",
+    "orders",
+    "password",
+    "payment",
+    "payments",
+    "plan",
+    "purchase",
+    "records",
+    "settings",
+    "subscription",
+  ],
+  /** Verbs that perform or request a state-changing operation. */
+  operationVerbs: [
+    "buy",
+    "cancel",
+    "change",
+    "delete",
+    "disable",
+    "order",
+    "pay",
+    "purchase",
+    "remove",
+    "reset",
+    "revoke",
+    "send",
+    "share",
+    "submit",
+    "transfer",
+    "update",
+    "upload",
+  ],
+};
+
+/* -------------------------------------------------------------------------- */
 /* Resolution                                                                 */
 /* -------------------------------------------------------------------------- */
 
@@ -244,6 +389,7 @@ export function resolveConfig(config: CtxVigilConfig = {}): ResolvedConfig {
         ...(config.phraseLists?.dataExfiltration ?? DEFAULT_PHRASE_LISTS.dataExfiltration),
       ],
     },
+    detectorLexicon: resolveDetectorLexicon(config.detectorLexicon),
     actionCategories: {
       riskyActions: [
         ...(config.actionCategories?.riskyActions ?? DEFAULT_ACTION_CATEGORIES.riskyActions),
@@ -258,6 +404,28 @@ export function resolveConfig(config: CtxVigilConfig = {}): ResolvedConfig {
       unknownWeight: DEFAULT_RISK_CATEGORIES.unknownWeight,
       taskAlignedReadOnlyWeight: DEFAULT_RISK_CATEGORIES.taskAlignedReadOnlyWeight,
     },
+  };
+}
+
+/**
+ * Merge caller-supplied detector word-table overrides over the defaults.
+ *
+ * Each table is a flat word list, so the merge is per-table replacement of that
+ * table only (mirrors the shallow per-section rule in architecture §8.1).
+ */
+function resolveDetectorLexicon(
+  overrides?: CtxVigilConfig["detectorLexicon"],
+): ResolvedConfig["detectorLexicon"] {
+  return {
+    taskStopwords: [...(overrides?.taskStopwords ?? DEFAULT_DETECTOR_LEXICON.taskStopwords)],
+    sensitiveObjectNouns: [
+      ...(overrides?.sensitiveObjectNouns ?? DEFAULT_DETECTOR_LEXICON.sensitiveObjectNouns),
+    ],
+    transferVerbs: [...(overrides?.transferVerbs ?? DEFAULT_DETECTOR_LEXICON.transferVerbs)],
+    highRiskOperationNouns: [
+      ...(overrides?.highRiskOperationNouns ?? DEFAULT_DETECTOR_LEXICON.highRiskOperationNouns),
+    ],
+    operationVerbs: [...(overrides?.operationVerbs ?? DEFAULT_DETECTOR_LEXICON.operationVerbs)],
   };
 }
 

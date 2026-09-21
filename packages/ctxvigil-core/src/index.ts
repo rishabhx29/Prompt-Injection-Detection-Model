@@ -5,13 +5,14 @@
  * the factory, the contract types, and the typed error. Nothing else in the
  * package is public.
  *
- * **Skeleton status (ticket 01):** the pipeline below walks validation and
- * normalisation — both fully implemented — and stops there. Detection, scoring,
- * policy, and the action gate are stubs (tickets 03–05 replace them):
+ * **Skeleton status:** stages 1–3 walk validation, normalisation, and detection —
+ * all fully implemented. Scoring, policy, and the action gate are stubs
+ * (tickets 04–05 replace them):
  *
- * - `scanPage` returns an empty-findings, score-0, `allow` response whose
- *   `safeContent` currently exposes every segment. **This is not a safety
- *   judgement** — no detector has run — and the `summary` says so explicitly.
+ * - `scanPage` returns real detector findings (each with signal, evidence,
+ *   severity, and score contribution). Risk, decision, `safeContent`, and
+ *   `blockedContent` remain stubs until the scorer and policy land, and the
+ *   `summary` says so explicitly.
  * - `checkAction` fails **closed**: it returns `confirm` so no proposed action
  *   can execute without user confirmation until the real gate lands
  *   (architecture §7: no code path may convert uncertainty into `allow`).
@@ -29,7 +30,9 @@ import type {
 
 import { resolveConfig } from "./config/defaults.ts";
 import type { ResolvedConfig } from "./config/types.ts";
-import { CtxVigilError, isCtxVigilError } from "./errors.ts";
+import { CtxVigilError, internalError, isCtxVigilError } from "./errors.ts";
+import { detectPage } from "./detect/index.ts";
+import type { DetectorHit } from "./detect/index.ts";
 import { normalisePage } from "./normalise/index.ts";
 import { validateCheckActionRequest, validateScanPageRequest } from "./validate/index.ts";
 
@@ -49,6 +52,7 @@ export type {
   CheckActionResponse,
   CtxVigilConfig,
   Decision,
+  DetectorLexiconConfig,
   ErrorCode,
   Finding,
   HealthResponse,
@@ -70,12 +74,37 @@ export type {
 /* Pipeline — scanPage                                                        */
 /* -------------------------------------------------------------------------- */
 
+const SEVERITY_RANK: Record<DetectorHit["severity"], number> = { low: 0, medium: 1, high: 2 };
+
+/** Group detector hits by segment, preserving first-seen segment order. */
+function groupHitsBySegment(hits: readonly DetectorHit[]): Map<number, DetectorHit[]> {
+  const grouped = new Map<number, DetectorHit[]>();
+  for (const hit of hits) {
+    const existing = grouped.get(hit.segmentIndex);
+    if (existing === undefined) {
+      grouped.set(hit.segmentIndex, [hit]);
+    } else {
+      existing.push(hit);
+    }
+  }
+  return grouped;
+}
+
+/** The most serious severity among a segment's hits. */
+function highestSeverity(hits: readonly DetectorHit[]): DetectorHit["severity"] {
+  let highest: DetectorHit["severity"] = "low";
+  for (const hit of hits) {
+    if (SEVERITY_RANK[hit.severity] > SEVERITY_RANK[highest]) highest = hit.severity;
+  }
+  return highest;
+}
+
 /**
- * The scan pipeline, stages 1–2 real, 3–5 stubbed (architecture §6).
+ * The scan pipeline, stages 1–3 real, 4–5 stubbed (architecture §6).
  *
  * Stage order is fixed: `validate → normalise → detect → score → policy`.
- * The stub occupies stages 3–5 only; tickets 03–05 slot in without touching
- * stages 1–2 or the response assembly below.
+ * Detection populates `findings` with contract-shaped evidence now; ticket 04
+ * replaces the stub risk/decision/content outputs with the real scorer and policy.
  */
 async function runScanPage(input: unknown, config: ResolvedConfig): Promise<ScanPageResponse> {
   // Stage 1 — validation (real).
@@ -84,15 +113,45 @@ async function runScanPage(input: unknown, config: ResolvedConfig): Promise<Scan
   // Stage 2 — normalisation (real): provenance-tagged, deduplicated segments.
   const segments = normalisePage(request.page);
 
+  // Stage 3 — detection (real): contract-shaped, explainable hits.
+  const hits = detectPage({ segments, userTask: request.userTask, config });
+
   /* -------------------------------------------------------------------------
-   * SKELETON STUB — stages 3–5 (tickets 03–05).
-   * Not a safety judgement: no detector has run, so no finding exists yet.
-   * The summary must say so — an unexplained `allow` would violate NFR-8.
+   * SKELETON STUB — stages 4–5 (tickets 04–05).
+   * Findings are real detector output; risk, decision, and content partitioning
+   * below remain stubs until the scorer and content policy land. The summary
+   * must say so — an unexplained score would violate NFR-8.
    * ---------------------------------------------------------------------- */
+
+  // One contract finding per suspicious segment — contract §2.2 shows a single
+  // finding carrying several signal names for the same text.
   const findings: ScanPageResponse["findings"] = [];
+  for (const [segmentIndex, segmentHits] of groupHitsBySegment(hits)) {
+    const segment = segments[segmentIndex];
+    if (segment === undefined) {
+      // Fail loudly, never silently: a missing segment means the detector and
+      // normaliser disagree (architecture §7).
+      throw internalError(`Detector hit references missing segment ${segmentIndex}.`);
+    }
+    findings.push({
+      id: `finding-${findings.length + 1}`,
+      view: segment.view,
+      sourceKind: segment.sourceKind,
+      ...(segment.selector === undefined ? {} : { selector: segment.selector }),
+      text: segment.text,
+      // Detector order is stable, so the strongest signal is listed first.
+      signals: [...new Set(segmentHits.map((hit) => hit.signal))],
+      severity: highestSeverity(segmentHits),
+      scoreContribution: segmentHits.reduce((sum, hit) => sum + hit.scoreContribution, 0),
+    });
+  }
+
+  // Scoring is not implemented yet, so the score stays a placeholder. The
+  // decision still fails closed: any finding keeps the response out of `allow`
+  // until the real policy can judge it (architecture §7).
   const riskScore = 0;
   const riskLevel: RiskLevel = riskScore <= config.thresholds.low ? "low" : "medium";
-  const decision: Decision = riskScore <= config.thresholds.low ? "allow" : "sanitize";
+  const decision: Decision = findings.length === 0 ? "allow" : "confirm";
 
   return {
     scanId: request.scanId,
@@ -100,9 +159,9 @@ async function runScanPage(input: unknown, config: ResolvedConfig): Promise<Scan
     riskLevel,
     decision,
     summary:
-      segments.length === 0
-        ? `Skeleton scan ${request.scanId}: the page supplied no content, and detection is not implemented yet, so nothing was flagged.`
-        : `Skeleton scan ${request.scanId}: ${segments.length} content segment(s) normalised, but detection is not implemented yet, so nothing was flagged and nothing was blocked.`,
+      findings.length === 0
+        ? `Scan ${request.scanId}: no suspicious wording found in ${segments.length} content segment(s); scoring is not implemented yet, so the score is a placeholder.`
+        : `Scan ${request.scanId}: ${findings.length} suspicious segment(s) flagged by detection; scoring and content policy are not implemented yet, so the score is a placeholder and the decision fails closed pending review.`,
     findings,
     safeContent: segments.map((segment) => ({ text: segment.text, view: segment.view })),
     sanitizedContent: segments.map((segment) => segment.text),
