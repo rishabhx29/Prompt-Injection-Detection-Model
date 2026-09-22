@@ -1,0 +1,81 @@
+/* ==========================================================================
+   AgentGuard Cockpit Grid & Responsive Layout Architecture
+   ========================================================================== */
+
+.app-container {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-base);
+}
+
+.dashboard-main {
+  flex: 1;
+  padding: 24px;
+  max-width: 1680px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* 3-Column Asymmetric Cockpit Layout */
+.cockpit-grid {
+  display: grid;
+  grid-template-columns: 360px 380px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.column-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1360px) {
+  .cockpit-grid {
+    grid-template-columns: 340px 1fr;
+  }
+  .cockpit-col-verdict {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 960px) {
+  .cockpit-grid {
+    grid-template-columns: 1fr;
+  }
+  .cockpit-col-verdict {
+    grid-column: span 1;
+  }
+  .dashboard-main {
+    padding: 16px;
+    gap: 16px;
+  }
+}
+
+/* Double-Bezel Nested Card Container */
+.bezel-card {
+  border-radius: var(--radius-lg);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  padding: 1px;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1), box-shadow 0.2s ease;
+}
+
+.bezel-card:hover {
+  box-shadow: 0 14px 34px -10px rgba(0, 0, 0, 0.65), 0 0 18px -3px var(--primary-glow);
+}
+
+.bezel-card-inner {
+  border-radius: calc(var(--radius-lg) - 1px);
+  background: var(--bg-surface-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 20px;
+  height: 100%;
+}

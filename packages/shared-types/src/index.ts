@@ -393,7 +393,24 @@ export interface CtxVigilConfig {
   phraseLists?: Partial<PhraseListConfig>;
   detectorLexicon?: Partial<DetectorLexiconConfig>;
   actionCategories?: Partial<ActionCategoryConfig>;
-  /** Override or extend the risk-category weights in architecture §5. */
-  riskCategories?: Record<string, number>;
+  /** Override or extend the action gate's risk-category weights and postures (architecture §5). */
+  riskCategories?: RiskCategoryOverrides;
+}
+
+/**
+ * The posture a risk category starts from (architecture §5, "Default posture"
+ * column). `always_block` exists for `destructive`, which has no task-alignment
+ * exception.
+ */
+export type ActionPosture = "allow" | "confirm" | "block" | "always_block";
+
+/** Overrides for the action gate's risk-category configuration. */
+export interface RiskCategoryOverrides {
+  /** Category name → risk weight (0–100), merged over the defaults. */
+  weights?: Record<string, number>;
+  /** Category name → default posture, merged over the defaults. */
+  postures?: Record<string, ActionPosture>;
+  /** Posture for an action whose category cannot be resolved (FR-5.9). */
+  unknownPosture?: ActionPosture;
 }
 

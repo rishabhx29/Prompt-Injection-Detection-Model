@@ -16,6 +16,11 @@
     "test": "node --test \"packages/ctxvigil-core/tests/**/*.test.ts\" \"packages/ctxvigil-cli/tests/**/*.test.ts\" \"apps/protection-api/tests/**/*.test.ts\"",
     "test:contract": "node --test \"packages/ctxvigil-core/tests/contract.test.ts\"",
     "evaluate": "node packages/ctxvigil-core/tests/evaluation/run.mjs",
-    "scan": "node packages/ctxvigil-cli/src/index.ts"
+    "typecheck": "npm run typecheck --workspace packages/ctxvigil-core",
+    "pack-check": "node scripts/pack-check.mjs",
+    "scan": "node packages/ctxvigil-cli/src/index.ts",
+    "demo:web": "npm run dev --workspace apps/demo-web",
+    "eval:multiview": "python eval_ml/cross_view_agreement.py",
+    "notebooks:gen": "python scripts/generate_notebooks.py"
   }
 }

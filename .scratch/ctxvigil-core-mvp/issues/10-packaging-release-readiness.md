@@ -6,7 +6,7 @@ reproducible on a clean checkout.
 
 **Blocked by:** 08 (documentation), 09 (evaluation + adversarial hardening).
 
-**Status:** ready-for-agent
+**Status:** closed (completed)
 
 Scope (Phase 6 §9.3 of `docs/02_PHASE_PLAN_RISHABH.md`):
 
@@ -18,7 +18,7 @@ Scope (Phase 6 §9.3 of `docs/02_PHASE_PLAN_RISHABH.md`):
   decides — never claim public installability before then (NFR-8).
 - Core SDK imports and works without running a server (FR-1.6, NFR-12).
 
-- [ ] `npm pack` tarball installs in a fresh project; `createCtxVigil` and types resolve there.
-- [ ] AC-1…AC-12 checklist from `docs/02_PHASE_PLAN_RISHABH.md` §13 all pass on a clean checkout.
-- [ ] Full `npm test` suite green; CLI `--help` works; `/health` responds.
-- [ ] Changelog written; no claim of public npm installability anywhere in docs.
+- [x] `npm pack` tarball installs in a fresh project; `createCtxVigil` and types resolve there.
+- [x] AC-1…AC-12 checklist from `docs/02_PHASE_PLAN_RISHABH.md` §13 all pass on a clean checkout.
+- [x] Full `npm test` suite green; CLI `--help` works; `/health` responds.
+- [x] Changelog written; no claim of public npm installability anywhere in docs.

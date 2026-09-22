@@ -513,7 +513,7 @@ export function resolveConfig(config: CtxVigilConfig = {}): ResolvedConfig {
       ],
     },
     riskCategories: {
-      weights: { ...DEFAULT_RISK_WEIGHTS, ...config.riskCategories },
+      weights: { ...DEFAULT_RISK_WEIGHTS, ...config.riskCategories?.weights },
       inference: DEFAULT_RISK_INFERENCE,
       postures: { ...DEFAULT_RISK_CATEGORIES.postures, ...postureOverrides(config) },
       unknownPosture: config.riskCategories?.unknownPosture ?? DEFAULT_RISK_CATEGORIES.unknownPosture,
