@@ -1,5 +1,6 @@
 """
-Script to generate the two Kaggle Jupyter Notebooks for CtxVigil:
+Script to generate the two completely foolproof, self-contained Google Colab & Kaggle
+Jupyter Notebooks for CtxVigil:
 1. notebooks/01_DeBERTa_Prompt_Injection_Classifier.ipynb
 2. notebooks/02_CtxVigil_MultiView_Fusion_Network.ipynb
 """
@@ -52,20 +53,20 @@ def code_cell(source):
 def generate_notebook_1():
     cells = []
     
-    # Cell 1: Markdown Title & Academic Header
+    # Cell 1: Markdown Academic Header
     cells.append(md_cell("""# CtxVigil: DeBERTa-v3 Prompt Injection Classifier
 ### Course: BCSE306L - Artificial Intelligence | Final Project & Viva Evaluation
 **Authors:** Rishabh Tripathi & Saumya  
-**Target Hardware:** Kaggle GPU (T4 x2 or P100)  
+**Hardware Support:** Google Colab GPU (T4) or Kaggle GPU (T4 x2 / P100)  
 **Deliverable 1:** Deep Learning NLP Classifier for Web Agent Prompt Injection Defense  
 **Architecture:** `microsoft/deberta-v3-small` with Disentangled Attention & Classification Head  
 **Dataset Scale:** 20,000 Curated Benchmark Samples (InjecAgent, BIPIA, AgentDojo & Hard Negatives)
 
 ---
 ### Research Motivation & Problem Statement
-Autonomous LLM web agents navigate external environments (e.g. web pages, emails, customer tickets) where malicious third parties can embed **indirect prompt injections**. Traditional string filters and regex heuristics suffer from catastrophic failure when facing paraphrase attacks, delimiter evasion, and semantic obfuscation.
+Autonomous LLM web agents navigate external environments (web pages, customer emails, support tickets) where malicious third parties embed **indirect prompt injections**. Traditional regex filters fail against semantic paraphrasing, delimiter evasion, and syntax cloaking.
 
-This notebook implements **Step 1** of the CtxVigil AI Pipeline:
+This notebook implements **Stage 1** of the CtxVigil AI Pipeline:
 1. Constructing a high-fidelity **20,000-sample balanced benchmark** combining adversarial prompt injection attacks and realistic benign agent actions.
 2. Fine-tuning **DeBERTa-v3** (`microsoft/deberta-v3-small`), leveraging its disentangled attention mechanism (which models token contents and relative positions in separate vectors).
 3. Comprehensive evaluation with Confusion Matrix, ROC-AUC Curve, and Classification Metrics (>98.5% Target Accuracy).
@@ -73,7 +74,7 @@ This notebook implements **Step 1** of the CtxVigil AI Pipeline:
 
     # Cell 2: Dependencies Installation
     cells.append(code_cell("""# 1. Environment Setup & Dependency Installation
-!pip install -q transformers datasets accelerate scikit-learn seaborn matplotlib torch
+!pip install -q transformers datasets accelerate scikit-learn seaborn matplotlib torch sentencepiece protobuf
 
 import os
 import sys
@@ -90,8 +91,7 @@ from transformers import (
     AutoTokenizer, 
     AutoModelForSequenceClassification, 
     Trainer, 
-    TrainingArguments,
-    DataCollatorWithPadding
+    TrainingArguments
 )
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support, roc_auc_score, confusion_matrix, roc_curve
 
@@ -101,7 +101,9 @@ print(f"[*] PyTorch Version : {torch.__version__}")
 print(f"[*] Compute Device  : {device}")
 if torch.cuda.is_available():
     print(f"[*] GPU Model       : {torch.cuda.get_device_name(0)}")
-    print(f"[*] Total VRAM      : {torch.cuda.get_device_properties(0).total_memory / 1e9:.2f} GB")"""))
+    print(f"[*] Total VRAM      : {torch.cuda.get_device_properties(0).total_memory / 1e9:.2f} GB")
+else:
+    print("[!] Running on CPU. Recommend switching runtime to T4 GPU for 10x faster training.")"""))
 
     # Cell 3: Deterministic Seeds
     cells.append(code_cell("""# 2. Deterministic Seed Initialization
@@ -198,7 +200,6 @@ def generate_curated_dataset(n_samples=20000):
     half = n_samples // 2
     data = []
     
-    # Generate 10,000 Injection Samples with contextual variance
     variations = [
         "", " [HIGH PRIORITY]", " ATTENTION AGENT:", " <!-- system directive -->",
         " [URGENT AUDIT]", " ### INSTRUCTION:", " Note to autonomous assistant:"
@@ -219,7 +220,6 @@ def generate_curated_dataset(n_samples=20000):
     print("[*] Synthesizing 10,000 Benign & Hard Negative samples...")
     for i in range(half):
         tmpl = random.choice(benign_templates)
-        # Introduce natural paraphrasing
         if random.random() < 0.3:
             prefix = random.choice(["Please ", "Kindly ", "Task: ", "Could you ", "Assistant, "])
             text = prefix + tmpl
@@ -277,7 +277,7 @@ class PromptInjectionDataset(Dataset):
             text,
             truncation=True,
             max_length=self.max_len,
-            padding=False,  # dynamically padded by collator
+            padding="max_length",
             return_tensors="pt"
         )
         return {
@@ -289,7 +289,7 @@ class PromptInjectionDataset(Dataset):
 train_dataset = PromptInjectionDataset(train_df["text"].tolist(), train_df["label"].tolist(), tokenizer)
 val_dataset = PromptInjectionDataset(val_df["text"].tolist(), val_df["label"].tolist(), tokenizer)
 test_dataset = PromptInjectionDataset(test_df["text"].tolist(), test_df["label"].tolist(), tokenizer)
-print("[+] Dataset instances constructed successfully.")"""))
+print("[+] Dataset instances constructed successfully with fixed-length padding (128 tokens).")"""))
 
     # Cell 7: Model Instantiation
     cells.append(code_cell("""# 6. Instantiate DeBERTa-v3 Sequence Classification Model
@@ -311,12 +311,17 @@ print(f"[+] Trainable Parameters : {trainable_params:,}")"""))
     cells.append(code_cell("""# 7. Training Pipeline Setup with Mixed Precision (FP16)
 def compute_metrics(eval_pred):
     logits, labels = eval_pred
+    if isinstance(logits, tuple):
+        logits = logits[0]
     preds = np.argmax(logits, axis=1)
     probs = torch.softmax(torch.tensor(logits), dim=1)[:, 1].numpy()
     
-    precision, recall, f1, _ = precision_recall_fscore_support(labels, preds, average='binary')
+    precision, recall, f1, _ = precision_recall_fscore_support(labels, preds, average='binary', zero_division=0)
     acc = accuracy_score(labels, preds)
-    auc = roc_auc_score(labels, probs)
+    try:
+        auc = roc_auc_score(labels, probs)
+    except Exception:
+        auc = 0.5
     
     return {
         'accuracy': acc,
@@ -326,23 +331,43 @@ def compute_metrics(eval_pred):
         'roc_auc': auc
     }
 
-training_args = TrainingArguments(
-    output_dir="./deberta_injection_checkpoints",
-    num_train_epochs=3,
-    per_device_train_batch_size=32,
-    per_device_eval_batch_size=64,
-    learning_rate=2e-5,
-    weight_decay=0.01,
-    warmup_ratio=0.1,
-    logging_steps=100,
-    eval_strategy="epoch",
-    save_strategy="epoch",
-    load_best_model_at_end=True,
-    metric_for_best_model="f1",
-    greater_is_better=True,
-    fp16=torch.cuda.is_available(),
-    report_to="none"
-)
+# Safe cross-version TrainingArguments (handles both eval_strategy and evaluation_strategy)
+try:
+    training_args = TrainingArguments(
+        output_dir="./deberta_injection_checkpoints",
+        num_train_epochs=3,
+        per_device_train_batch_size=32,
+        per_device_eval_batch_size=64,
+        learning_rate=2e-5,
+        weight_decay=0.01,
+        warmup_ratio=0.1,
+        logging_steps=100,
+        eval_strategy="epoch",
+        save_strategy="epoch",
+        load_best_model_at_end=True,
+        metric_for_best_model="f1",
+        greater_is_better=True,
+        fp16=torch.cuda.is_available(),
+        report_to="none"
+    )
+except TypeError:
+    training_args = TrainingArguments(
+        output_dir="./deberta_injection_checkpoints",
+        num_train_epochs=3,
+        per_device_train_batch_size=32,
+        per_device_eval_batch_size=64,
+        learning_rate=2e-5,
+        weight_decay=0.01,
+        warmup_ratio=0.1,
+        logging_steps=100,
+        evaluation_strategy="epoch",
+        save_strategy="epoch",
+        load_best_model_at_end=True,
+        metric_for_best_model="f1",
+        greater_is_better=True,
+        fp16=torch.cuda.is_available(),
+        report_to="none"
+    )
 
 trainer = Trainer(
     model=model,
@@ -350,7 +375,6 @@ trainer = Trainer(
     train_dataset=train_dataset,
     eval_dataset=val_dataset,
     tokenizer=tokenizer,
-    data_collator=DataCollatorWithPadding(tokenizer=tokenizer),
     compute_metrics=compute_metrics
 )
 print("[+] Trainer configured with AdamW optimizer, Linear Warmup, and FP16.")"""))
@@ -359,19 +383,21 @@ print("[+] Trainer configured with AdamW optimizer, Linear Warmup, and FP16.")""
     cells.append(code_cell("""# 8. Train the DeBERTa-v3 Model
 print("[*] Commencing Fine-Tuning across 14,000 Training Samples...")
 train_result = trainer.train()
-print("[+] Training completed!")
+print("[+] Training completed successfully!")
 print(train_result.metrics)"""))
 
     # Cell 10: Evaluation on Hold-Out Test Set (3,000 samples)
     cells.append(code_cell("""# 9. Comprehensive Evaluation on Unseen Test Set (3,000 Samples)
 test_predictions = trainer.predict(test_dataset)
 test_logits = test_predictions.predictions
+if isinstance(test_logits, tuple):
+    test_logits = test_logits[0]
 test_labels = test_predictions.label_ids
 test_preds = np.argmax(test_logits, axis=1)
 test_probs = torch.softmax(torch.tensor(test_logits), dim=1)[:, 1].numpy()
 
 test_acc = accuracy_score(test_labels, test_preds)
-p, r, f1, _ = precision_recall_fscore_support(test_labels, test_preds, average='binary')
+p, r, f1, _ = precision_recall_fscore_support(test_labels, test_preds, average='binary', zero_division=0)
 test_auc = roc_auc_score(test_labels, test_probs)
 
 print("="*60)
@@ -420,19 +446,22 @@ plt.show()"""))
     # Cell 12: Real-Time Inference Demo
     cells.append(code_cell("""# 11. Interactive Real-Time Inference Function
 def predict_prompt_injection(text: str):
-    inputs = tokenizer(text, return_tensors="pt", truncation=True, max_length=128).to(device)
+    inputs = tokenizer(text, return_tensors="pt", truncation=True, max_length=128, padding="max_length").to(device)
     model.eval()
     with torch.no_grad():
         outputs = model(**inputs)
-        probs = torch.softmax(outputs.logits, dim=1).squeeze(0)
-        risk_score = probs[1].item()
+        logits = outputs.logits
+        if isinstance(logits, tuple):
+            logits = logits[0]
+        probs = torch.softmax(logits, dim=1).squeeze(0)
+        risk_score = float(probs[1].item())
         predicted_class = "INJECTION" if risk_score >= 0.5 else "BENIGN"
         
     return {
         "text": text,
         "prediction": predicted_class,
         "risk_score": round(risk_score, 4),
-        "confidence": round(max(probs[0].item(), probs[1].item()), 4)
+        "confidence": round(float(max(probs[0].item(), probs[1].item())), 4)
     }
 
 demo_samples = [
@@ -446,7 +475,7 @@ demo_samples = [
 print("[*] LIVE INFERENCE DEMO:")
 for s in demo_samples:
     res = predict_prompt_injection(s)
-    badge = "🚨 [FLAGGED]" if res["prediction"] == "INJECTION" else "✅ [CLEAN]"
+    badge = "[FLAGGED]" if res["prediction"] == "INJECTION" else "[CLEAN]"
     print(f"{badge} Risk={res['risk_score']:.4f} | Conf={res['confidence']:.4f} | Text: '{s[:65]}...'")"""))
 
     # Cell 13: Export Weights & Inference File for Notebook 2
@@ -464,7 +493,17 @@ export_df["predicted_prob"] = test_probs[:500]
 export_df["predicted_label"] = test_preds[:500]
 export_df.to_csv("./exports/deberta_test_inferences.csv", index=False)
 print("[+] Exported 500 inference samples to ./exports/deberta_test_inferences.csv")
-print("[*] Step 1 Complete. Ready for Notebook 2: CtxVigil Multi-View Fusion Network.")"""))
+
+# 3. Google Colab 1-Click File Downloader (automatically triggers in browser)
+try:
+    from google.colab import files
+    print("[*] Initiating download to local machine...")
+    files.download("./exports/deberta_test_inferences.csv")
+    files.download("./exports/deberta_prompt_injection.pt")
+except Exception:
+    print("[*] Artifacts available in ./exports/ directory.")
+
+print("[*] Stage 1 Complete! Ready for Notebook 2: CtxVigil Multi-View Fusion Network.")"""))
 
     return create_notebook(cells)
 
@@ -475,7 +514,7 @@ def generate_notebook_2():
     cells.append(md_cell("""# CtxVigil: Multi-View Representation Fusion & Uncertainty Network
 ### Course: BCSE306L - Artificial Intelligence | Final Project & Viva Evaluation
 **Authors:** Rishabh Tripathi & Saumya  
-**Target Hardware:** Kaggle GPU (T4 x2 or P100) / Kaggle CPU  
+**Hardware Support:** Google Colab GPU / CPU or Kaggle GPU / CPU  
 **Deliverable 2:** Implementation of Research Proposal DA-1 Section 4.1 Architecture  
 **Embedding Backbone:** `sentence-transformers/all-MiniLM-L6-v2` (384-dimensional dense semantic vectors)  
 **Neural Classifier:** Dual-Head Multi-Layer Perceptron (Risk Head + Uncertainty Head) with Pairwise Cosine Agreement Features
@@ -547,7 +586,6 @@ def compute_pairwise_agreements(e1, e2, e3, e4):
         for j in range(i + 1, 4):
             v_i = views[i]
             v_j = views[j]
-            # Normalize vectors to ensure exact cosine similarity
             sim = np.dot(v_i, v_j) / (np.linalg.norm(v_i) * np.linalg.norm(v_j) + 1e-9)
             agreements.append(float(sim))
     return np.array(agreements, dtype=np.float32)
@@ -620,9 +658,7 @@ def generate_multiview_episodes(n_episodes=5000):
         v2 = random.choice(system_prompts)
         v3 = tool_actions_safe[idx]
         v4 = observations_safe[idx]
-        # Low injection probability from Stage 1
         p_deberta = random.uniform(0.01, 0.15)
-        # Low uncertainty on clean, standard cases
         target_uncertainty = random.uniform(0.05, 0.20)
         
         episodes.append({
@@ -637,11 +673,9 @@ def generate_multiview_episodes(n_episodes=5000):
         idx = random.randint(0, len(user_tasks_safe) - 1)
         v1 = user_tasks_safe[idx]
         v2 = random.choice(system_prompts)
-        v3 = random.choice(tool_actions_malicious)  # Hijacked tool execution!
-        v4 = random.choice(observations_injected)   # Adversarial observation!
-        # High injection probability from Stage 1
+        v3 = random.choice(tool_actions_malicious)
+        v4 = random.choice(observations_injected)
         p_deberta = random.uniform(0.85, 0.99)
-        # Moderate to high uncertainty if subtle, low if blatantly malicious
         target_uncertainty = random.uniform(0.10, 0.35)
         
         episodes.append({
@@ -677,8 +711,7 @@ agreements_arr = np.array(agreements_list)
 
 p_deberta_arr = df_episodes["p_deberta"].values.reshape(-1, 1).astype(np.float32)
 
-# Full Concatenated Feature Vector:
-# 384*4 (embeddings) + 6 (cosine agreements) + 1 (DeBERTa score) = 1543 dims
+# Full Concatenated Feature Vector: 384*4 (embeddings) + 6 (agreements) + 1 (DeBERTa) = 1543 dims
 X = np.hstack([v1_emb, v2_emb, v3_emb, v4_emb, agreements_arr, p_deberta_arr])
 y_risk = df_episodes["label"].values.astype(np.int64)
 y_unc = df_episodes["uncertainty"].values.astype(np.float32)
@@ -711,7 +744,6 @@ test_loader = DataLoader(MultiViewDataset(X_test, y_r_test, y_u_test), batch_siz
 class CtxVigilFusionMLP(nn.Module):
     def __init__(self, input_dim=1543, hidden_dim1=256, hidden_dim2=64):
         super().__init__()
-        # Shared Multi-View Encoder
         self.shared_encoder = nn.Sequential(
             nn.Linear(input_dim, hidden_dim1),
             nn.LayerNorm(hidden_dim1),
@@ -722,12 +754,7 @@ class CtxVigilFusionMLP(nn.Module):
             nn.ReLU(),
             nn.Dropout(0.2)
         )
-        
-        # Dual Output Heads (DA-1 Section 4.1)
-        # Head 1: Risk Classification (Benign vs Compromised)
         self.risk_head = nn.Linear(hidden_dim2, 2)
-        
-        # Head 2: Epistemic Uncertainty Estimation (0.0 to 1.0)
         self.uncertainty_head = nn.Sequential(
             nn.Linear(hidden_dim2, 1),
             nn.Sigmoid()
@@ -763,7 +790,6 @@ for epoch in range(1, EPOCHS + 1):
         optimizer.zero_grad()
         logits_r, pred_u = fusion_model(batch_x)
         
-        # Joint Loss: CrossEntropy for classification + MSE for uncertainty estimation
         loss_r = criterion_risk(logits_r, batch_yr)
         loss_u = criterion_unc(pred_u, batch_yu)
         loss = loss_r + 0.5 * loss_u
@@ -806,7 +832,7 @@ all_r_probs = np.array(all_r_probs)
 all_u_preds = np.array(all_u_preds)
 
 acc = accuracy_score(y_r_test, all_r_preds)
-p, r, f1, _ = precision_recall_fscore_support(y_r_test, all_r_preds, average='binary')
+p, r, f1, _ = precision_recall_fscore_support(y_r_test, all_r_preds, average='binary', zero_division=0)
 auc = roc_auc_score(y_r_test, all_r_probs)
 brier = brier_score_loss(y_r_test, all_r_probs)
 
@@ -878,9 +904,6 @@ plt.show()"""))
     # Cell 11: Action Gate Decision Function
     cells.append(code_cell("""# 10. Autonomous Action Gate Decision Function
 def evaluate_agent_action_gate(user_task, system_prompt, proposed_action, observation, p_deberta=None):
-    \"\"\"
-    End-to-End CtxVigil Autonomous Interception Engine
-    \"\"\"
     if p_deberta is None:
         p_deberta = 0.05
         
@@ -899,7 +922,6 @@ def evaluate_agent_action_gate(user_task, system_prompt, proposed_action, observ
         risk_prob = F.softmax(logits_r, dim=1)[0, 1].item()
         unc_score = pred_u[0].item()
         
-    # Decision Gate Mapping
     if risk_prob < 0.30 and unc_score < 0.35:
         decision = "ALLOW"
         recommendation = "Low risk and high confidence. Safe to execute tool."
@@ -914,7 +936,7 @@ def evaluate_agent_action_gate(user_task, system_prompt, proposed_action, observ
         "decision": decision,
         "risk_probability": round(risk_prob, 4),
         "uncertainty_score": round(unc_score, 4),
-        "v1_v3_task_action_agreement": round(agreements[1], 4),
+        "v1_v3_task_action_agreement": round(float(agreements[1]), 4),
         "recommendation": recommendation
     }
 
@@ -957,6 +979,16 @@ summary_card = {
 with open("./exports/ctxvigil_viva_summary.json", "w") as f:
     json.dump(summary_card, f, indent=2)
 print("[+] Research Summary Exported to ./exports/ctxvigil_viva_summary.json")
+
+# Google Colab 1-Click File Downloader
+try:
+    from google.colab import files
+    print("[*] Initiating download to local machine...")
+    files.download("./exports/ctxvigil_multiview_fusion.pt")
+    files.download("./exports/ctxvigil_viva_summary.json")
+except Exception:
+    print("[*] Artifacts available in ./exports/ directory.")
+
 print("[*] Notebook 2 Finished Successfully! All Viva AI requirements satisfied.")"""))
 
     return create_notebook(cells)
@@ -967,12 +999,12 @@ def main():
     nb1 = generate_notebook_1()
     with open("notebooks/01_DeBERTa_Prompt_Injection_Classifier.ipynb", "w", encoding="utf-8") as f:
         json.dump(nb1, f, indent=1)
-    print("[+] Created notebooks/01_DeBERTa_Prompt_Injection_Classifier.ipynb")
+    print("[+] Generated: notebooks/01_DeBERTa_Prompt_Injection_Classifier.ipynb")
     
     nb2 = generate_notebook_2()
     with open("notebooks/02_CtxVigil_MultiView_Fusion_Network.ipynb", "w", encoding="utf-8") as f:
         json.dump(nb2, f, indent=1)
-    print("[+] Created notebooks/02_CtxVigil_MultiView_Fusion_Network.ipynb")
+    print("[+] Generated: notebooks/02_CtxVigil_MultiView_Fusion_Network.ipynb")
 
 if __name__ == "__main__":
     main()
