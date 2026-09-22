@@ -1,0 +1,3 @@
+{
+  "$comment": "Deliberately not a ScanPageRequest: no scanId, no userTask, no page. The CLI must reject it with INVALID_REQUEST (FR-6.3)."
+}

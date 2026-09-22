@@ -13,7 +13,7 @@
     "apps/*"
   ],
   "scripts": {
-    "test": "node --test \"packages/ctxvigil-core/tests/**/*.test.ts\"",
+    "test": "node --test \"packages/ctxvigil-core/tests/**/*.test.ts\" \"packages/ctxvigil-cli/tests/**/*.test.ts\"",
     "test:contract": "node --test \"packages/ctxvigil-core/tests/contract.test.ts\"",
     "scan": "node packages/ctxvigil-cli/src/index.ts"
   }
