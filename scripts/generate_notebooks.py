@@ -233,7 +233,8 @@ def generate_curated_dataset(n_samples=20000):
 
 df_benchmark = generate_curated_dataset(20000)
 print(f"[+] Total Curated Dataset: {len(df_benchmark):,} samples")
-print(f"[+] Class Balance:\n{df_benchmark['label'].value_counts()}")
+print("[+] Class Balance:")
+print(df_benchmark["label"].value_counts())
 df_benchmark.head(6)"""))
 
     # Cell 5: Stratified Train / Val / Test Splits
