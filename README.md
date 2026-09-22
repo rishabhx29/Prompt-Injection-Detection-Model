@@ -86,19 +86,21 @@ changes are made in `docs/03_API_CONTRACT.md` first.
 
 ## Current status
 
-**Specification phase complete.** All seven planning documents are written; the API contract is
-frozen; sample request/response JSON and the normative expectation manifest exist. No source code has
-been written yet — implementation begins at Phase 0
-([`docs/02_PHASE_PLAN_RISHABH.md`](docs/02_PHASE_PLAN_RISHABH.md) §3).
+**Protection layer implemented and green.** The frozen contract is unchanged; the SDK, CLI, and
+optional HTTP adapter all walk one pipeline (`validate → normalise → detect → score → policy →
+action gate`), and the seven contract tests are the gate for dashboard integration.
 
 | Artefact | State |
 |---|---|
-| `docs/00`–`docs/05` | Complete |
-| `docs/06_EVALUATION_PLAN.md` | Complete — plan only; produces no numbers until Phase 6 |
-| `docs/07_DEMO_SCRIPT.md` | Complete — script verbatim from S2 §7 |
-| `fixtures/CONTRACT.md` | Complete — Saumya can build fixtures in parallel from this alone |
-| `sample-data/` | 7 scan requests, 4 action checks, 2 reference responses, 1 expectation manifest |
-| `packages/`, `apps/` | **Not started** (Phase 0 onward) |
+| `docs/00`–`docs/07` | Complete (specification phase) |
+| `packages/ctxvigil-core/` | **Implemented** — SDK pipeline + 145 tests ([README](packages/ctxvigil-core/README.md)) |
+| `packages/shared-types/` | **Implemented** — contract types only |
+| `packages/ctxvigil-cli/` | **Implemented** — CLI over the SDK ([README](packages/ctxvigil-cli/README.md)) |
+| `apps/protection-api/` | **Implemented** — optional HTTP transport ([README](apps/protection-api/README.md)) |
+| The seven contract tests | **Green** — `npm run test:contract` (the Checkpoint 1 gate) |
+| `apps/demo-web/`, `fixtures/` | Saumya — not built here |
+| Evaluation tables | Phase 6 (ticket 09); `npm test` writes observed results to `tests/results/` |
+| `npm pack` / install verification | Phase 6 (ticket 10) |
 
 Quoted requirement text throughout `docs/` is preserved verbatim from `Required/` so the traceability
 in `docs/00_SOURCE_EXTRACTION.md` §24–§25 can be checked against the originals.
