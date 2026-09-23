@@ -331,17 +331,23 @@ def compute_metrics(eval_pred):
         'roc_auc': auc
     }
 
-training_args = TrainingArguments(
-    output_dir="./deberta_injection_checkpoints",
-    num_train_epochs=3,
-    per_device_train_batch_size=32,
-    learning_rate=2e-5,
-    weight_decay=0.01,
-    warmup_ratio=0.1,
-    logging_steps=50,
-    fp16=torch.cuda.is_available(),
-    report_to="none"
-)
+import inspect
+
+# Dynamically filter parameters based on the installed transformers version
+valid_kwargs = set(inspect.signature(TrainingArguments.__init__).parameters.keys())
+desired_args = {
+    "output_dir": "./deberta_injection_checkpoints",
+    "num_train_epochs": 3,
+    "per_device_train_batch_size": 32,
+    "learning_rate": 2e-5,
+    "weight_decay": 0.01,
+    "logging_steps": 50,
+    "fp16": torch.cuda.is_available(),
+    "report_to": "none"
+}
+safe_args = {k: v for k, v in desired_args.items() if k in valid_kwargs}
+
+training_args = TrainingArguments(**safe_args)
 
 trainer = Trainer(
     model=model,
