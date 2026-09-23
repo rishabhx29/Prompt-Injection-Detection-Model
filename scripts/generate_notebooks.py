@@ -307,8 +307,8 @@ trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
 print(f"[+] Total Parameters     : {total_params:,}")
 print(f"[+] Trainable Parameters : {trainable_params:,}")"""))
 
-    # Cell 8: Training Arguments and Metric Computation
-    cells.append(code_cell("""# 7. Training Pipeline Setup with Mixed Precision (FP16)
+    # Cell 8: Training Pipeline Setup & Fine-Tuning Execution
+    cells.append(code_cell("""# 7. Fine-Tune DeBERTa-v3 Model (3 Epochs with FP16)
 def compute_metrics(eval_pred):
     logits, labels = eval_pred
     if isinstance(logits, tuple):
@@ -331,43 +331,17 @@ def compute_metrics(eval_pred):
         'roc_auc': auc
     }
 
-# Safe cross-version TrainingArguments (handles both eval_strategy and evaluation_strategy)
-try:
-    training_args = TrainingArguments(
-        output_dir="./deberta_injection_checkpoints",
-        num_train_epochs=3,
-        per_device_train_batch_size=32,
-        per_device_eval_batch_size=64,
-        learning_rate=2e-5,
-        weight_decay=0.01,
-        warmup_ratio=0.1,
-        logging_steps=100,
-        eval_strategy="epoch",
-        save_strategy="epoch",
-        load_best_model_at_end=True,
-        metric_for_best_model="f1",
-        greater_is_better=True,
-        fp16=torch.cuda.is_available(),
-        report_to="none"
-    )
-except TypeError:
-    training_args = TrainingArguments(
-        output_dir="./deberta_injection_checkpoints",
-        num_train_epochs=3,
-        per_device_train_batch_size=32,
-        per_device_eval_batch_size=64,
-        learning_rate=2e-5,
-        weight_decay=0.01,
-        warmup_ratio=0.1,
-        logging_steps=100,
-        evaluation_strategy="epoch",
-        save_strategy="epoch",
-        load_best_model_at_end=True,
-        metric_for_best_model="f1",
-        greater_is_better=True,
-        fp16=torch.cuda.is_available(),
-        report_to="none"
-    )
+training_args = TrainingArguments(
+    output_dir="./deberta_injection_checkpoints",
+    num_train_epochs=3,
+    per_device_train_batch_size=32,
+    learning_rate=2e-5,
+    weight_decay=0.01,
+    warmup_ratio=0.1,
+    logging_steps=50,
+    fp16=torch.cuda.is_available(),
+    report_to="none"
+)
 
 trainer = Trainer(
     model=model,
@@ -377,10 +351,7 @@ trainer = Trainer(
     tokenizer=tokenizer,
     compute_metrics=compute_metrics
 )
-print("[+] Trainer configured with AdamW optimizer, Linear Warmup, and FP16.")"""))
-
-    # Cell 9: Training Execution
-    cells.append(code_cell("""# 8. Train the DeBERTa-v3 Model
+print("[+] Trainer initialized successfully.")
 print("[*] Commencing Fine-Tuning across 14,000 Training Samples...")
 train_result = trainer.train()
 print("[+] Training completed successfully!")
