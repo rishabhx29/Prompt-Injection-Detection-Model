@@ -32,13 +32,12 @@
 \title{CtxVigil: An Explainable Multi-View Protection Layer Against
 Indirect Prompt Injection in LLM Web Agents}
 
-\author{Rishabh~Tripathi~and~Saumya% TODO: Saumya's full name
+\author{Rishabh~Tripathi~(24BRS1136)~and~Saumya~(24BRS1065)% TODO: Saumya's full name
 \thanks{Manuscript prepared September 24, 2026, for the DA2 project review
-and viva evaluation. \textit{(Corresponding author: Rishabh Tripathi.)}
-Rishabh Tripathi (Roll No.~24BRS1136) and Saumya (Roll No.~24BRS1065) are
-with the Department of Computer Science and Engineering, [Institution],
-% TODO: replace [Institution] with the institution name
-India. Course: BCSE306L --- Artificial Intelligence
+and viva evaluation. \textit{(Project guide: Vijayaprabhakaran~K.)}
+The authors are with the Department of Computer Science and Engineering,
+[Institution], India. % TODO: replace [Institution] with the institution name
+Course: BCSE306L --- Artificial Intelligence
 (e-mail: rishabh.j.tripathi2903@gmail.com).% TODO: second author's e-mail
 }}
 
@@ -119,14 +118,11 @@ with latency measurements on commodity CPU (Section~\ref{sec:results}).
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.98\textwidth]{fig1_system_overview.png}
-\caption{End-to-end application flow. (1) The Gemini agent's only two tools
-route through the protection layer: \texttt{read\_page} fetches the page and
-receives only \texttt{safeContent} back, and \texttt{propose\_action} receives
-the gate's binding decision. (2) The deterministic layer validates, normalises
-the page into four content views, detects, scores, and partitions content.
-(3) The multi-view fusion model of Fig.~\ref{fig:layer} evaluates the episode
-and contributes an advisory verdict to the gate.}
+\includegraphics[width=0.98\textwidth]{fig1_proposed_architecture.png}
+\caption{Overall architecture of the proposed CtxVigil system: the LLM web
+agent's tool calls are routed through the protection layer, whose scan
+pipeline, action gate, and advisory multi-view fusion model decide what the
+agent may read and do.}
 \label{fig:overview}
 \end{figure*}
 
@@ -157,7 +153,8 @@ checking---whose combination catches attacks that either gate alone misses
 \label{sec:methodology}
 
 \subsection{System Overview}
-Fig.~\ref{fig:overview} shows the deployed application. An LLM web agent
+Fig.~\ref{fig:overview} shows the overall architecture of the deployed
+system. An LLM web agent
 (Gemini, via a function-calling loop) exposes exactly two tools:
 \texttt{read\_page(url)} and \texttt{propose\_action(type, riskCategory)}.
 Both tools route through the CtxVigil SDK, which runs in-process with the
@@ -186,7 +183,7 @@ ALLOW / QUARANTINE / BLOCK decision that is returned to the agent runtime.}
 \end{figure*}
 
 \subsection{Scan Pipeline}
-The scan pipeline (Fig.~\ref{fig:overview}, middle band) executes five pure,
+The scan pipeline executes five pure,
 order-fixed stages:
 
 \subsubsection{Validation and normalisation}
