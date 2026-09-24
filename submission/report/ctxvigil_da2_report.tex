@@ -32,46 +32,46 @@
 \title{CtxVigil: An Explainable Multi-View Protection Layer Against
 Indirect Prompt Injection in LLM Web Agents}
 
-\author{Rishabh~Tripathi~(24BRS1136)~and~Saumya~(24BRS1065)% TODO: Saumya's full name
+\author{Rishabh~Tripathi~(24BRS1136)~and~Saumya~(24BRS1065)\\[4pt]
+{\small Project guide: Vijayaprabhakaran~K}% TODO: Saumya's full name
 \thanks{Manuscript prepared September 24, 2026, for the DA2 project review
-and viva evaluation. \textit{(Project guide: Vijayaprabhakaran~K.)}
-The authors are with the Department of Computer Science and Engineering,
-[Institution], India. % TODO: replace [Institution] with the institution name
+and viva evaluation. The authors are with the Department of Computer Science
+and Engineering, [Institution], India. % TODO: replace [Institution] with the institution name
 Course: BCSE306L --- Artificial Intelligence
 (e-mail: rishabh.j.tripathi2903@gmail.com).% TODO: second author's e-mail
-}}
-
-\maketitle
-
-\begin{abstract}
-Large language model (LLM) web agents read untrusted web content and take
-actions on the user's behalf, which exposes them to \emph{indirect prompt
-injection}: attacker-authored text, hidden in a page's visible text, DOM,
-HTML comments, or accessibility tree, that instructs the agent to abandon its
-task and perform a harmful action. This paper presents CtxVigil, a protection
-layer that sits between an agent and the web and combines three complementary
+}
+\\[2.5ex]
+\begin{minipage}{\textwidth}
+{\small\mdseries\noindent\textbf{\itshape Abstract---}Large language model
+(LLM) web agents read untrusted web content and take actions on the user's
+behalf, which exposes them to \emph{indirect prompt injection}:
+attacker-authored text, hidden in a page's visible text, DOM, HTML comments,
+or accessibility tree, that instructs the agent to abandon its task and
+perform a harmful action. This paper presents CtxVigil, a protection layer
+that sits between an agent and the web and combines three complementary
 components: (i) a deterministic, explainable scan pipeline that normalises a
 page into four content views, runs seven rule detectors, and maps a weighted
 0--100 risk score to \texttt{allow}/\texttt{sanitize}/\texttt{confirm}/
-\texttt{block} verdicts with withheld-content containment; (ii) an independent
-action gate that blocks or escalates tool actions using task alignment,
-risk-category postures, and scan evidence; and (iii) a dual-head multi-view
-fusion network over MiniLM sentence embeddings of four agent-context views
-(user task, system prompt, proposed action, observation) plus a DeBERTa-v3
-prompt-injection classifier. On a 20{,}000-sample benchmark curated from
-InjecAgent- and BIPIA-style scenarios with hard negatives, the fine-tuned
-DeBERTa-v3-small classifier reaches 100.00\% accuracy, precision, recall, and
-F1 (ROC-AUC 1.000) on the 3{,}000-sample held-out test set; the fusion network
-reaches 100\% F1 on 1{,}000 hold-out episodes. The rule-based layer passes all
-seven contract fixtures and all six live agent episodes, including a
-hidden-ARIA injection that a sighted reviewer cannot see, at 2--21\,ms per
-episode on a commodity CPU, fully offline and fail-closed.
-\end{abstract}
+\texttt{block} verdicts with withheld-content containment; (ii) an
+independent action gate that blocks or escalates tool actions using task
+alignment, risk-category postures, and scan evidence; and (iii) a dual-head
+multi-view fusion network over MiniLM sentence embeddings of four
+agent-context views (user task, system prompt, proposed action, observation)
+plus a DeBERTa-v3 prompt-injection classifier. On a 20{,}000-sample benchmark
+curated from InjecAgent- and BIPIA-style scenarios with hard negatives, the
+fine-tuned DeBERTa-v3-small classifier reaches 100.00\% accuracy, precision,
+recall, and F1 (ROC-AUC 1.000) on the 3{,}000-sample held-out test set; the
+fusion network reaches 100\% F1 on 1{,}000 hold-out episodes. The rule-based
+layer passes all seven contract fixtures and all six live agent episodes,
+including a hidden-ARIA injection that a sighted reviewer cannot see, at
+2--21\,ms per episode on a commodity CPU, fully offline and fail-closed.
+\par\smallskip
+\noindent\textbf{\itshape IEEE Keywords---}indirect prompt injection, LLM
+agents, action gate, multi-view fusion, DeBERTa-v3, uncertainty estimation,
+web security.}
+\end{minipage}}
 
-\begin{IEEEkeywords}
-indirect prompt injection, LLM agents, action gate, multi-view fusion,
-DeBERTa-v3, uncertainty estimation, web security
-\end{IEEEkeywords}
+\maketitle
 
 \section{Introduction}
 Autonomous LLM web agents navigate external environments---product pages,
