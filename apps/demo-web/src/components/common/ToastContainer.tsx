@@ -11,9 +11,9 @@ export const ToastContainer: React.FC = () => {
     <div
       style={{
         position: 'fixed',
-        top: '20px',
+        top: '76px',
         right: '24px',
-        zIndex: 9999,
+        zIndex: 90,
         display: 'flex',
         flexDirection: 'column',
         gap: '10px',
@@ -24,25 +24,29 @@ export const ToastContainer: React.FC = () => {
     >
       {toasts.map((t) => {
         let borderColor = 'var(--border-subtle)';
-        let bgColor = 'rgba(10, 15, 29, 0.95)';
+        let bgColor = '#ffffff';
         let Icon = Info;
-        let iconColor = '#06b6d4';
+        let iconColor = '#0284c7';
+        let badgeBg = '#f0f9ff';
 
         if (t.type === 'success') {
-          borderColor = 'rgba(16, 185, 129, 0.4)';
-          bgColor = 'rgba(6, 25, 20, 0.95)';
+          borderColor = '#a7f3d0';
+          bgColor = '#ffffff';
           Icon = CheckCircle;
-          iconColor = '#34d399';
+          iconColor = '#059669';
+          badgeBg = '#ecfdf5';
         } else if (t.type === 'error') {
-          borderColor = 'rgba(239, 68, 68, 0.5)';
-          bgColor = 'rgba(30, 10, 15, 0.95)';
+          borderColor = '#fecdd3';
+          bgColor = '#ffffff';
           Icon = ShieldAlert;
-          iconColor = '#f87171';
+          iconColor = '#e11d48';
+          badgeBg = '#fff1f2';
         } else if (t.type === 'warning') {
-          borderColor = 'rgba(245, 158, 11, 0.5)';
-          bgColor = 'rgba(30, 20, 10, 0.95)';
+          borderColor = '#fde68a';
+          bgColor = '#ffffff';
           Icon = AlertTriangle;
-          iconColor = '#fbbf24';
+          iconColor = '#d97706';
+          badgeBg = '#fffbeb';
         }
 
         return (
@@ -53,25 +57,36 @@ export const ToastContainer: React.FC = () => {
               background: bgColor,
               border: `1px solid ${borderColor}`,
               borderRadius: 'var(--radius-md)',
-              padding: '12px 14px',
+              padding: '12px 16px',
               display: 'flex',
               alignItems: 'flex-start',
-              gap: '10px',
-              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.6), 0 0 15px rgba(0,0,0,0.3)',
-              backdropFilter: 'blur(10px)',
+              gap: '12px',
+              boxShadow: '0 10px 25px -4px rgba(15, 23, 42, 0.12), 0 4px 10px -2px rgba(15, 23, 42, 0.06)',
+              backdropFilter: 'blur(8px)',
               animation: 'fadeIn 0.2s ease-out',
               position: 'relative',
               overflow: 'hidden'
             }}
           >
-            <Icon size={18} color={iconColor} style={{ marginTop: '2px', flexShrink: 0 }} />
+            <div style={{
+              width: '28px',
+              height: '28px',
+              borderRadius: '6px',
+              background: badgeBg,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0
+            }}>
+              <Icon size={16} color={iconColor} />
+            </div>
 
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#f8fafc', letterSpacing: '0.02em' }}>
+              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
                 {t.title}
               </div>
               {t.message && (
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: 1.4 }}>
+                <div style={{ fontSize: '0.76rem', color: 'var(--text-secondary)', lineHeight: 1.45 }}>
                   {t.message}
                 </div>
               )}

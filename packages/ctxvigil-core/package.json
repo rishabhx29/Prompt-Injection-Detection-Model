@@ -1,6 +1,6 @@
 {
   "name": "ctxvigil",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Multi-view prompt-injection protection layer for LLM web agents. Explainable, deterministic, offline.",
   "keywords": [
     "prompt-injection",

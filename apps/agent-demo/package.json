@@ -1,0 +1,18 @@
+{
+  "name": "agent-demo",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Local scripted web agent that fetches the fixture pages over HTTP and runs them through the ctxvigil protection layer. Demo harness — no detection logic lives here.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "scripts": {
+    "start": "node src/index.ts",
+    "test": "node --test \"tests/**/*.test.ts\""
+  },
+  "dependencies": {
+    "ctxvigil": "*"
+  }
+}

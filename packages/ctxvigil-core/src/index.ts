@@ -36,6 +36,11 @@ import { normalisePage } from "./normalise/index.ts";
 import { applyPolicy } from "./policy/index.ts";
 import { scoreScan } from "./score/index.ts";
 import { validateCheckActionRequest, validateScanPageRequest } from "./validate/index.ts";
+import {
+  evaluateMultiViewAgreement,
+  type MultiViewInput,
+  type MultiViewAgreementResult,
+} from "./multiview/index.ts";
 
 /* -------------------------------------------------------------------------- */
 /* Re-exports                                                                 */
@@ -70,6 +75,18 @@ export type {
   ViewKind,
   WeightConfig,
 } from "@ctxvigil/shared-types";
+
+// Multi-View Semantic Agreement Layer (DA-1 §4.1)
+export {
+  evaluateMultiViewAgreement,
+  embedSemanticText,
+  cosineSimilarity,
+} from "./multiview/index.ts";
+export type {
+  MultiViewInput,
+  PairwiseAgreements,
+  MultiViewAgreementResult,
+} from "./multiview/index.ts";
 
 /* -------------------------------------------------------------------------- */
 /* Pipeline — scanPage                                                        */
@@ -164,12 +181,14 @@ export interface CheckActionInput extends CheckActionRequest {
   scan?: ScanPageResponse;
 }
 
-/** The two hook functions an integrator wraps around an agent (contract §10). */
+/** The hook functions and evaluators an integrator wraps around an agent (contract §10, DA-1 §4.1). */
 export interface CtxVigil {
   /** Scan content before the agent reads it. */
   scanPage(input: ScanPageRequest): Promise<ScanPageResponse>;
   /** Validate a proposed action before it executes. */
   checkAction(input: CheckActionInput): Promise<CheckActionResponse>;
+  /** Evaluate multi-view semantic agreement across V1 (task), V2 (system), V3 (action), and V4 (observation context). */
+  evaluateMultiViewAgreement(input: MultiViewInput): MultiViewAgreementResult;
 }
 
 /**
@@ -183,6 +202,7 @@ export function createCtxVigil(config: CtxVigilConfig = {}): CtxVigil {
   return {
     scanPage: (input) => runScanPage(input, resolved),
     checkAction: (input) => runCheckAction(input, resolved),
+    evaluateMultiViewAgreement: (input) => evaluateMultiViewAgreement(input),
   };
 }
 

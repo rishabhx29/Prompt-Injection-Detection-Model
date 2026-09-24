@@ -36,8 +36,8 @@ export const ActionGateCard: React.FC<ActionGateCardProps> = ({
             fontSize: '0.7rem',
             padding: '2px 8px',
             borderRadius: '4px',
-            background: !isHighRisk ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
-            color: !isHighRisk ? '#34d399' : '#f87171',
+            background: !isHighRisk ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)',
+            color: !isHighRisk ? '#047857' : '#be123c',
             border: `1px solid ${!isHighRisk ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)'}`,
             fontWeight: 700,
             textTransform: 'uppercase',
@@ -55,18 +55,18 @@ export const ActionGateCard: React.FC<ActionGateCardProps> = ({
     >
       <div
         style={{
-          background: 'rgba(0, 0, 0, 0.35)',
-          border: '1px solid rgba(255, 255, 255, 0.05)',
+          background: '#f8fafc',
+          border: '1px solid var(--border-subtle)',
           padding: '10px 14px',
           borderRadius: 'var(--radius-sm)',
           fontSize: '0.85rem'
         }}
       >
-        <div style={{ fontWeight: 600, color: '#f8fafc', marginBottom: '3px' }}>
+        <div style={{ fontWeight: 600, color: '#0f172a', marginBottom: '3px' }}>
           {proposedAction.label}
         </div>
-        <div style={{ fontSize: '0.74rem', fontFamily: 'var(--font-mono)', color: '#94a3b8' }}>
-          Action Type: <span style={{ color: '#c7d2fe' }}>{proposedAction.type}()</span>
+        <div style={{ fontSize: '0.74rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }}>
+          Action Type: <span style={{ color: '#4f46e5', fontWeight: 600 }}>{proposedAction.type}()</span>
         </div>
       </div>
 
@@ -80,7 +80,7 @@ export const ActionGateCard: React.FC<ActionGateCardProps> = ({
           padding: '11px',
           fontSize: '0.88rem',
           background: canCheck 
-            ? 'linear-gradient(135deg, #06b6d4, #3b82f6)' 
+            ? 'linear-gradient(135deg, #0284c7, #4f46e5)' 
             : undefined,
           display: 'flex',
           alignItems: 'center',
@@ -102,7 +102,7 @@ export const ActionGateCard: React.FC<ActionGateCardProps> = ({
             left: 0,
             right: 0,
             height: '2px',
-            background: '#38bdf8',
+            background: '#0284c7',
             animation: 'radar-sweep 1.2s infinite ease-in-out'
           }} />
         )}
@@ -119,15 +119,15 @@ export const ActionGateCard: React.FC<ActionGateCardProps> = ({
         <div style={{
           padding: '12px',
           borderRadius: 'var(--radius-sm)',
-          background: 'rgba(6, 182, 212, 0.08)',
-          border: '1px dashed rgba(6, 182, 212, 0.4)',
+          background: '#f0f9ff',
+          border: '1px dashed #bae6fd',
           display: 'flex',
           alignItems: 'center',
           gap: '10px',
           fontSize: '0.78rem',
-          color: '#38bdf8'
+          color: '#0284c7'
         }}>
-          <div className="spinner" style={{ width: '16px', height: '16px', borderTopColor: '#06b6d4' }} />
+          <div className="spinner" style={{ width: '16px', height: '16px', borderTopColor: '#0284c7' }} />
           <span>Intercepting agent action intent... Cross-checking with original user goal.</span>
         </div>
       )}
@@ -140,7 +140,7 @@ export const ActionGateCard: React.FC<ActionGateCardProps> = ({
             marginTop: '4px',
             padding: '12px 14px',
             borderRadius: 'var(--radius-sm)',
-            background: 'rgba(16, 185, 129, 0.1)',
+            background: '#ecfdf5',
             border: '1px solid #10b981',
             display: 'flex',
             flexDirection: 'column',
@@ -157,10 +157,10 @@ export const ActionGateCard: React.FC<ActionGateCardProps> = ({
                 fontWeight: 800,
                 fontSize: '0.82rem',
                 color: actionResult.allowed
-                  ? '#34d399'
+                  ? '#059669'
                   : actionResult.confirmationRequired
-                  ? '#c084fc'
-                  : '#f87171',
+                  ? '#7c3aed'
+                  : '#e11d48',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '6px',
@@ -189,16 +189,17 @@ export const ActionGateCard: React.FC<ActionGateCardProps> = ({
                 fontFamily: 'var(--font-mono)',
                 padding: '2px 8px',
                 borderRadius: '4px',
-                background: 'rgba(0, 0, 0, 0.4)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                color: actionResult.riskScore >= 60 ? '#fca5a5' : '#86efac'
+                background: '#f1f5f9',
+                border: '1px solid var(--border-subtle)',
+                color: actionResult.riskScore >= 60 ? '#e11d48' : '#059669',
+                fontWeight: 700
               }}
             >
               Risk: {actionResult.riskScore}/100
             </span>
           </div>
 
-          <p style={{ fontSize: '0.78rem', color: '#e2e8f0', lineHeight: 1.45, margin: 0 }}>
+          <p style={{ fontSize: '0.78rem', color: '#1e293b', lineHeight: 1.45, margin: 0 }}>
             {actionResult.reason}
           </p>
 
@@ -209,12 +210,12 @@ export const ActionGateCard: React.FC<ActionGateCardProps> = ({
             justifyContent: 'space-between',
             fontSize: '0.7rem',
             paddingTop: '6px',
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+            borderTop: '1px solid var(--border-subtle)',
             color: 'var(--text-muted)'
           }}>
             <span>State Mutation Policy:</span>
             <span style={{ 
-              color: actionResult.allowed ? '#34d399' : '#f87171',
+              color: actionResult.allowed ? '#059669' : '#e11d48',
               fontWeight: 700,
               fontFamily: 'var(--font-mono)'
             }}>
@@ -227,9 +228,9 @@ export const ActionGateCard: React.FC<ActionGateCardProps> = ({
               onClick={onOpenConfirmModal}
               style={{
                 marginTop: '4px',
-                background: 'rgba(139, 92, 246, 0.25)',
-                border: '1px solid #8b5cf6',
-                color: '#e9d5ff',
+                background: '#f5f3ff',
+                border: '1px solid #7c3aed',
+                color: '#7c3aed',
                 padding: '8px 12px',
                 borderRadius: '4px',
                 fontSize: '0.78rem',

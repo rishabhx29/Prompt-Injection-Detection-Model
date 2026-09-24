@@ -55,9 +55,9 @@ export const FindingsList: React.FC<FindingsListProps> = ({ findings }) => {
               fontWeight: 700,
               padding: '2px 8px',
               borderRadius: '9999px',
-              background: 'rgba(16, 185, 129, 0.15)',
-              color: '#34d399',
-              border: '1px solid rgba(16, 185, 129, 0.3)'
+              background: '#ecfdf5',
+              color: '#059669',
+              border: '1px solid #a7f3d0'
             }}
           >
             0 Threats Detected
@@ -68,16 +68,16 @@ export const FindingsList: React.FC<FindingsListProps> = ({ findings }) => {
           style={{
             padding: '16px 14px',
             borderRadius: 'var(--radius-md)',
-            background: 'rgba(16, 185, 129, 0.05)',
-            border: '1px solid rgba(16, 185, 129, 0.15)',
-            color: '#6ee7b7',
+            background: '#ecfdf5',
+            border: '1px solid #a7f3d0',
+            color: '#065f46',
             fontSize: '0.82rem',
             display: 'flex',
             alignItems: 'center',
             gap: '12px'
           }}
         >
-          <ShieldCheck size={20} color="#10b981" style={{ flexShrink: 0 }} />
+          <ShieldCheck size={20} color="#059669" style={{ flexShrink: 0 }} />
           <div>
             <div style={{ fontWeight: 700, marginBottom: '2px' }}>Verified Clean Baseline</div>
             <div style={{ color: 'var(--text-secondary)', fontSize: '0.76rem' }}>
@@ -93,7 +93,7 @@ export const FindingsList: React.FC<FindingsListProps> = ({ findings }) => {
     <DoubleBezelCard
       headerLeft={
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <AlertCircle size={16} color="#ef4444" />
+          <AlertCircle size={16} color="#e11d48" />
           <span>Security Findings Intelligence</span>
         </div>
       }
@@ -106,9 +106,9 @@ export const FindingsList: React.FC<FindingsListProps> = ({ findings }) => {
               fontFamily: 'var(--font-mono)',
               padding: '2px 8px',
               borderRadius: '4px',
-              background: 'rgba(239, 68, 68, 0.2)',
-              color: '#fca5a5',
-              border: '1px solid rgba(239, 68, 68, 0.4)'
+              background: '#fff1f2',
+              color: '#e11d48',
+              border: '1px solid #fecdd3'
             }}
           >
             ∑ +{totalContribution} pts
@@ -137,11 +137,12 @@ export const FindingsList: React.FC<FindingsListProps> = ({ findings }) => {
           <div
             key={f.id}
             style={{
-              background: isCritical ? 'rgba(239, 68, 68, 0.08)' : 'rgba(245, 158, 11, 0.08)',
-              border: isCritical ? '1px solid rgba(239, 68, 68, 0.3)' : '1px solid rgba(245, 158, 11, 0.3)',
+              background: isCritical ? '#fff1f2' : '#fffbeb',
+              border: isCritical ? '1px solid #fecdd3' : '1px solid #fde68a',
               borderRadius: 'var(--radius-md)',
               overflow: 'hidden',
-              transition: 'all 0.2s ease'
+              transition: 'all 0.2s ease',
+              boxShadow: '0 1px 2px rgba(15, 23, 42, 0.03)'
             }}
           >
             {/* Clickable Card Header */}
@@ -154,7 +155,7 @@ export const FindingsList: React.FC<FindingsListProps> = ({ findings }) => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 userSelect: 'none',
-                background: 'rgba(0, 0, 0, 0.2)'
+                background: '#ffffff'
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -167,7 +168,7 @@ export const FindingsList: React.FC<FindingsListProps> = ({ findings }) => {
                   style={{
                     fontSize: '0.76rem',
                     fontWeight: 700,
-                    color: isCritical ? '#f87171' : '#fbbf24',
+                    color: isCritical ? '#e11d48' : '#d97706',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '6px'
@@ -181,8 +182,8 @@ export const FindingsList: React.FC<FindingsListProps> = ({ findings }) => {
                       fontWeight: 700,
                       padding: '1px 6px',
                       borderRadius: '3px',
-                      background: isCritical ? 'rgba(239, 68, 68, 0.25)' : 'rgba(245, 158, 11, 0.25)',
-                      color: isCritical ? '#fca5a5' : '#fde68a'
+                      background: isCritical ? '#ffe4e6' : '#fef3c7',
+                      color: isCritical ? '#9f1239' : '#92400e'
                     }}
                   >
                     {f.severity.toUpperCase()}
@@ -196,11 +197,11 @@ export const FindingsList: React.FC<FindingsListProps> = ({ findings }) => {
                   fontSize: '0.75rem',
                   fontWeight: 700,
                   fontFamily: 'var(--font-mono)',
-                  background: isCritical ? 'rgba(239, 68, 68, 0.25)' : 'rgba(245, 158, 11, 0.25)',
-                  color: isCritical ? '#fca5a5' : '#fde68a',
+                  background: isCritical ? '#ffe4e6' : '#fef3c7',
+                  color: isCritical ? '#9f1239' : '#92400e',
                   padding: '2px 8px',
                   borderRadius: '4px',
-                  border: isCritical ? '1px solid rgba(239, 68, 68, 0.4)' : '1px solid rgba(245, 158, 11, 0.4)'
+                  border: isCritical ? '1px solid #fecdd3' : '1px solid #fde68a'
                 }}
               >
                 +{f.scoreContribution} Score
@@ -208,17 +209,20 @@ export const FindingsList: React.FC<FindingsListProps> = ({ findings }) => {
             </div>
 
             {/* Injected Content Excerpt */}
-            <div style={{ padding: '10px 12px', borderTop: '1px solid rgba(255, 255, 255, 0.04)' }}>
+            <div style={{ padding: '10px 12px', borderTop: '1px solid var(--border-subtle)' }}>
               <div
                 style={{
                   fontFamily: 'var(--font-mono)',
                   fontSize: '0.78rem',
-                  color: '#fca5a5',
+                  color: isCritical ? '#9f1239' : '#92400e',
                   lineHeight: 1.5,
-                  background: 'rgba(0, 0, 0, 0.3)',
+                  background: '#ffffff',
                   padding: '8px 10px',
                   borderRadius: '4px',
-                  borderLeft: isCritical ? '3px solid #ef4444' : '3px solid #f59e0b',
+                  borderLeft: isCritical ? '3px solid #e11d48' : '3px solid #d97706',
+                  borderTop: '1px solid var(--border-subtle)',
+                  borderRight: '1px solid var(--border-subtle)',
+                  borderBottom: '1px solid var(--border-subtle)',
                   wordBreak: 'break-all'
                 }}
               >
@@ -230,10 +234,11 @@ export const FindingsList: React.FC<FindingsListProps> = ({ findings }) => {
                 <span
                   style={{
                     fontSize: '0.68rem',
-                    background: 'rgba(255, 255, 255, 0.06)',
+                    background: '#f1f5f9',
                     color: 'var(--text-secondary)',
                     padding: '2px 8px',
                     borderRadius: '4px',
+                    border: '1px solid var(--border-subtle)',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '4px'
@@ -247,8 +252,9 @@ export const FindingsList: React.FC<FindingsListProps> = ({ findings }) => {
                   <span
                     style={{
                       fontSize: '0.68rem',
-                      background: 'rgba(255, 255, 255, 0.06)',
-                      color: '#a5b4fc',
+                      background: '#f0f9ff',
+                      color: '#0284c7',
+                      border: '1px solid #bae6fd',
                       padding: '2px 8px',
                       borderRadius: '4px',
                       fontFamily: 'var(--font-mono)',
@@ -269,7 +275,7 @@ export const FindingsList: React.FC<FindingsListProps> = ({ findings }) => {
                   style={{
                     marginTop: '10px',
                     paddingTop: '8px',
-                    borderTop: '1px dashed rgba(255, 255, 255, 0.06)',
+                    borderTop: '1px dashed var(--border-subtle)',
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '6px'
@@ -284,8 +290,8 @@ export const FindingsList: React.FC<FindingsListProps> = ({ findings }) => {
                       key={sig}
                       style={{
                         fontSize: '0.72rem',
-                        background: 'rgba(99, 102, 241, 0.1)',
-                        border: '1px solid rgba(99, 102, 241, 0.2)',
+                        background: '#ffffff',
+                        border: '1px solid var(--border-subtle)',
                         borderRadius: '4px',
                         padding: '6px 8px',
                         display: 'flex',
@@ -293,9 +299,9 @@ export const FindingsList: React.FC<FindingsListProps> = ({ findings }) => {
                         gap: '6px'
                       }}
                     >
-                      <Info size={12} color="#818cf8" style={{ marginTop: '2px', flexShrink: 0 }} />
+                      <Info size={12} color="#4f46e5" style={{ marginTop: '2px', flexShrink: 0 }} />
                       <div>
-                        <strong style={{ color: '#c7d2fe', fontFamily: 'var(--font-mono)' }}>{sig}</strong>
+                        <strong style={{ color: '#4f46e5', fontFamily: 'var(--font-mono)' }}>{sig}</strong>
                         <div style={{ color: 'var(--text-secondary)', fontSize: '0.68rem', marginTop: '1px' }}>
                           {SIGNAL_DESCRIPTIONS[sig] || 'Anomalous prompt structure flagged by multi-view parser.'}
                         </div>

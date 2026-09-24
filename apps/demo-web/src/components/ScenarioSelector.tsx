@@ -26,7 +26,7 @@ export const ScenarioSelector: React.FC<ScenarioSelectorProps> = ({
         </div>
       }
       headerRight={
-        <span style={{ fontSize: '0.74rem', color: '#818cf8', fontWeight: 600 }}>
+        <span style={{ fontSize: '0.74rem', color: '#4f46e5', fontWeight: 600 }}>
           {currentFixture.category}
         </span>
       }
@@ -46,7 +46,7 @@ export const ScenarioSelector: React.FC<ScenarioSelectorProps> = ({
         style={{
           width: '100%',
           padding: '10px 14px',
-          background: 'var(--bg-surface-elevated)',
+          background: '#ffffff',
           border: '1px solid var(--border-subtle)',
           borderRadius: 'var(--radius-md)',
           color: 'var(--text-primary)',
@@ -54,11 +54,11 @@ export const ScenarioSelector: React.FC<ScenarioSelectorProps> = ({
           fontFamily: 'var(--font-sans)',
           cursor: 'pointer',
           outline: 'none',
-          boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.3)'
+          boxShadow: '0 1px 2px rgba(15, 23, 42, 0.04)'
         }}
       >
         {ALL_FIXTURES.map((fixture, idx) => (
-          <option key={fixture.id} value={fixture.id} style={{ background: '#0f172a', color: '#ffffff' }}>
+          <option key={fixture.id} value={fixture.id} style={{ background: '#ffffff', color: '#0f172a' }}>
             [{idx + 1}] {fixture.id === 'aria-injection' ? '★ ' : ''}{fixture.title} ({fixture.category})
           </option>
         ))}
@@ -69,15 +69,15 @@ export const ScenarioSelector: React.FC<ScenarioSelectorProps> = ({
         style={{
           padding: '10px 12px',
           borderRadius: 'var(--radius-sm)',
-          background: 'rgba(255, 255, 255, 0.02)',
-          border: '1px solid rgba(255, 255, 255, 0.05)',
+          background: '#f8fafc',
+          border: '1px solid var(--border-subtle)',
           fontSize: '0.78rem',
           color: 'var(--text-secondary)',
           lineHeight: 1.45
         }}
       >
         {currentFixture.id === 'aria-injection' && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#38bdf8', fontWeight: 600, marginBottom: '4px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#0284c7', fontWeight: 700, marginBottom: '4px' }}>
             <Sparkles size={14} />
             <span>Featured Star Demo Scenario</span>
           </div>

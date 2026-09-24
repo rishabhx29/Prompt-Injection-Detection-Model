@@ -9,6 +9,7 @@ import { FindingsList } from './components/FindingsList';
 import { ActionGateCard } from './components/ActionGateCard';
 import { MultiViewNeuralMatrix } from './components/MultiViewNeuralMatrix';
 import { SimulatedAgentTrace } from './components/SimulatedAgentTrace';
+import { AgentConsolePanel } from './components/AgentConsolePanel';
 import { ConfirmationModal } from './components/ConfirmationModal';
 import { DemoGuideModal } from './components/DemoGuideModal';
 import { FallbackAlertBanner } from './components/FallbackAlertBanner';
@@ -348,6 +349,10 @@ const AppDashboard: React.FC = () => {
         }
       }
 
+      // While any modal is open, no other shortcuts fire (prevents scenario
+      // switching behind the guide/confirmation dialogs)
+      if (isGuideOpen || isConfirmModalOpen) return;
+
       // Check if user is typing in an input/textarea
       const target = e.target as HTMLElement | null;
       const isInputFocused = target && (
@@ -374,7 +379,7 @@ const AppDashboard: React.FC = () => {
         return;
       }
 
-      // Keys 1 - 5 to switch scenarios (only when not typing in an input)
+      // Keys 1 - 6 to switch scenarios (only when not typing in an input)
       if (!isInputFocused && !e.ctrlKey && !e.altKey && !e.metaKey) {
         const num = parseInt(e.key, 10);
         if (num >= 1 && num <= ALL_FIXTURES.length) {
@@ -496,6 +501,9 @@ const AppDashboard: React.FC = () => {
           trace={agentTrace}
           isRunning={isCheckingAction}
         />
+
+        {/* Live Agent Episodes: the local scripted agent run (npm run agent:demo) */}
+        <AgentConsolePanel />
       </main>
 
       {/* Confirmation Modal */}

@@ -1,6 +1,5 @@
 import React from 'react';
 import { 
-  Network, 
   BrainCircuit, 
   AlertTriangle, 
   CheckCircle2, 
@@ -8,20 +7,19 @@ import {
   ShieldCheck, 
   Activity, 
   Sparkles,
-  Layers,
-  ArrowRight
+  Layers
 } from 'lucide-react';
 import { DoubleBezelCard } from './common/DoubleBezelCard';
 import type { FixtureScenario } from '../fixtures/types';
 
 interface MultiViewNeuralMatrixProps {
   fixture: FixtureScenario;
-  hasScanRun: boolean;
+  hasScanRun?: boolean;
 }
 
 export const MultiViewNeuralMatrix: React.FC<MultiViewNeuralMatrixProps> = ({
   fixture,
-  hasScanRun
+  hasScanRun: _hasScanRun
 }) => {
   const metrics = fixture.multiViewNeuralMetrics;
 
@@ -43,20 +41,17 @@ export const MultiViewNeuralMatrix: React.FC<MultiViewNeuralMatrixProps> = ({
   const s13 = pairwiseCosineAgreements.s13_task_action;
   const isS13Discrepancy = s13 < 0.40;
 
-  // Decision styling
+  // Decision styling in Light Mode
   const isBlock = actionGateDecision === 'BLOCK';
   const isAllow = actionGateDecision === 'ALLOW';
-  const gateColor = isBlock ? '#ef4444' : isAllow ? '#10b981' : '#f59e0b';
-  const gateBg = isBlock 
-    ? 'rgba(239, 68, 68, 0.12)' 
-    : isAllow 
-    ? 'rgba(16, 185, 129, 0.12)' 
-    : 'rgba(245, 158, 11, 0.12)';
+  const gateColor = isBlock ? '#e11d48' : isAllow ? '#059669' : '#d97706';
+  const gateBg = isBlock ? '#fff1f2' : isAllow ? '#ecfdf5' : '#fffbeb';
+  const gateBorder = isBlock ? '#fecdd3' : isAllow ? '#a7f3d0' : '#fde68a';
 
   const getHeatmapColor = (val: number) => {
-    if (val >= 0.70) return { bg: 'rgba(16, 185, 129, 0.25)', text: '#34d399', border: 'rgba(16, 185, 129, 0.4)' };
-    if (val >= 0.40) return { bg: 'rgba(245, 158, 11, 0.25)', text: '#fbbf24', border: 'rgba(245, 158, 11, 0.4)' };
-    return { bg: 'rgba(239, 68, 68, 0.25)', text: '#f87171', border: 'rgba(239, 68, 68, 0.4)' };
+    if (val >= 0.70) return { bg: '#ecfdf5', text: '#065f46', border: '#a7f3d0' };
+    if (val >= 0.40) return { bg: '#fffbeb', text: '#92400e', border: '#fde68a' };
+    return { bg: '#fff1f2', text: '#9f1239', border: '#fecdd3' };
   };
 
   const viewHeaders = ['V1: Task', 'V2: System', 'V3: Action', 'V4: Context'];
@@ -69,26 +64,27 @@ export const MultiViewNeuralMatrix: React.FC<MultiViewNeuralMatrixProps> = ({
             width: '28px',
             height: '28px',
             borderRadius: '8px',
-            background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)',
+            background: 'linear-gradient(135deg, #7c3aed, #4f46e5)',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            boxShadow: '0 2px 6px rgba(124, 58, 237, 0.25)'
           }}>
             <BrainCircuit size={16} color="#ffffff" />
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontWeight: 700, fontSize: '0.95rem', letterSpacing: '-0.01em' }}>
+              <span style={{ fontWeight: 700, fontSize: '0.95rem', letterSpacing: '-0.01em', color: 'var(--text-primary)' }}>
                 CtxVigil Multi-View Neural Fusion & Uncertainty Network
               </span>
               <span style={{
                 fontSize: '0.68rem',
                 fontWeight: 800,
-                background: 'rgba(139, 92, 246, 0.2)',
-                color: '#a78bfa',
+                background: '#f5f3ff',
+                color: '#7c3aed',
                 padding: '2px 8px',
                 borderRadius: '6px',
-                border: '1px solid rgba(139, 92, 246, 0.3)'
+                border: '1px solid #ddd6fe'
               }}>
                 DA-1 §4.1 ARCHITECTURE
               </span>
@@ -111,7 +107,7 @@ export const MultiViewNeuralMatrix: React.FC<MultiViewNeuralMatrixProps> = ({
             fontWeight: 700,
             background: gateBg,
             color: gateColor,
-            border: `1px solid ${gateColor}40`
+            border: `1px solid ${gateBorder}`
           }}>
             {isBlock ? <ShieldAlert size={14} /> : isAllow ? <ShieldCheck size={14} /> : <AlertTriangle size={14} />}
             Action Gate: {actionGateDecision}
@@ -128,16 +124,17 @@ export const MultiViewNeuralMatrix: React.FC<MultiViewNeuralMatrixProps> = ({
       }}>
         {/* V1: User Task */}
         <div style={{
-          background: 'rgba(255, 255, 255, 0.02)',
+          background: '#f8fafc',
           border: '1px solid var(--border-subtle)',
           borderRadius: '10px',
           padding: '12px',
           display: 'flex',
           flexDirection: 'column',
-          gap: '6px'
+          gap: '6px',
+          boxShadow: '0 1px 2px rgba(15, 23, 42, 0.03)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#38bdf8', letterSpacing: '0.05em' }}>
+            <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#0284c7', letterSpacing: '0.05em' }}>
               VIEW 1: AUTHORIZED TASK
             </span>
             <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>V1</span>
@@ -149,16 +146,17 @@ export const MultiViewNeuralMatrix: React.FC<MultiViewNeuralMatrixProps> = ({
 
         {/* V2: System Prompt */}
         <div style={{
-          background: 'rgba(255, 255, 255, 0.02)',
+          background: '#f8fafc',
           border: '1px solid var(--border-subtle)',
           borderRadius: '10px',
           padding: '12px',
           display: 'flex',
           flexDirection: 'column',
-          gap: '6px'
+          gap: '6px',
+          boxShadow: '0 1px 2px rgba(15, 23, 42, 0.03)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#a78bfa', letterSpacing: '0.05em' }}>
+            <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#7c3aed', letterSpacing: '0.05em' }}>
               VIEW 2: SYSTEM GUARDRAIL
             </span>
             <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>V2</span>
@@ -170,30 +168,31 @@ export const MultiViewNeuralMatrix: React.FC<MultiViewNeuralMatrixProps> = ({
 
         {/* V3: Proposed Tool Action */}
         <div style={{
-          background: isS13Discrepancy ? 'rgba(239, 68, 68, 0.05)' : 'rgba(255, 255, 255, 0.02)',
-          border: `1px solid ${isS13Discrepancy ? 'rgba(239, 68, 68, 0.4)' : 'var(--border-subtle)'}`,
+          background: isS13Discrepancy ? '#fff1f2' : '#f8fafc',
+          border: `1px solid ${isS13Discrepancy ? '#fecdd3' : 'var(--border-subtle)'}`,
           borderRadius: '10px',
           padding: '12px',
           display: 'flex',
           flexDirection: 'column',
-          gap: '6px'
+          gap: '6px',
+          boxShadow: '0 1px 2px rgba(15, 23, 42, 0.03)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <span style={{ 
               fontSize: '0.7rem', 
               fontWeight: 800, 
-              color: isS13Discrepancy ? '#f87171' : '#34d399', 
+              color: isS13Discrepancy ? '#e11d48' : '#059669', 
               letterSpacing: '0.05em' 
             }}>
               VIEW 3: PROPOSED ACTION
             </span>
-            <span style={{ fontSize: '0.65rem', color: isS13Discrepancy ? '#f87171' : 'var(--text-muted)' }}>
+            <span style={{ fontSize: '0.65rem', fontWeight: 700, color: isS13Discrepancy ? '#e11d48' : 'var(--text-muted)' }}>
               {isS13Discrepancy ? 'HIJACKED' : 'V3'}
             </span>
           </div>
           <code style={{ 
             fontSize: '0.75rem', 
-            color: isS13Discrepancy ? '#fca5a5' : '#86efac', 
+            color: isS13Discrepancy ? '#9f1239' : '#065f46', 
             wordBreak: 'break-all',
             fontFamily: 'var(--font-mono)'
           }}>
@@ -203,16 +202,17 @@ export const MultiViewNeuralMatrix: React.FC<MultiViewNeuralMatrixProps> = ({
 
         {/* V4: Observation Context */}
         <div style={{
-          background: 'rgba(255, 255, 255, 0.02)',
+          background: '#f8fafc',
           border: '1px solid var(--border-subtle)',
           borderRadius: '10px',
           padding: '12px',
           display: 'flex',
           flexDirection: 'column',
-          gap: '6px'
+          gap: '6px',
+          boxShadow: '0 1px 2px rgba(15, 23, 42, 0.03)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#fbbf24', letterSpacing: '0.05em' }}>
+            <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#d97706', letterSpacing: '0.05em' }}>
               VIEW 4: OBSERVATION CONTEXT
             </span>
             <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>V4</span>
@@ -240,10 +240,11 @@ export const MultiViewNeuralMatrix: React.FC<MultiViewNeuralMatrixProps> = ({
       }}>
         {/* Left: 4x4 Pairwise Cosine Agreement Heatmap */}
         <div style={{
-          background: 'rgba(10, 15, 29, 0.6)',
+          background: '#ffffff',
           border: '1px solid var(--border-subtle)',
           borderRadius: '12px',
-          padding: '16px'
+          padding: '16px',
+          boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)'
         }}>
           <div style={{ 
             display: 'flex', 
@@ -252,8 +253,8 @@ export const MultiViewNeuralMatrix: React.FC<MultiViewNeuralMatrixProps> = ({
             marginBottom: '12px'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Layers size={16} color="#818cf8" />
-              <span style={{ fontSize: '0.85rem', fontWeight: 700 }}>
+              <Layers size={16} color="#4f46e5" />
+              <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                 Pairwise Cosine Agreement Matrix (S_ij)
               </span>
             </div>
@@ -303,7 +304,7 @@ export const MultiViewNeuralMatrix: React.FC<MultiViewNeuralMatrixProps> = ({
                       const isDiagonal = rIdx === cIdx;
                       const isTaskActionCell = (rIdx === 0 && cIdx === 2) || (rIdx === 2 && cIdx === 0);
                       const colorInfo = isDiagonal 
-                        ? { bg: 'rgba(255, 255, 255, 0.05)', text: 'var(--text-muted)', border: 'transparent' }
+                        ? { bg: '#f1f5f9', text: 'var(--text-muted)', border: '#e2e8f0' }
                         : getHeatmapColor(val);
 
                       return (
@@ -346,25 +347,25 @@ export const MultiViewNeuralMatrix: React.FC<MultiViewNeuralMatrixProps> = ({
             marginTop: '12px',
             padding: '10px 12px',
             borderRadius: '8px',
-            background: isS13Discrepancy ? 'rgba(239, 68, 68, 0.1)' : 'rgba(16, 185, 129, 0.1)',
-            border: `1px solid ${isS13Discrepancy ? 'rgba(239, 68, 68, 0.3)' : 'rgba(16, 185, 129, 0.3)'}`,
+            background: isS13Discrepancy ? '#fff1f2' : '#ecfdf5',
+            border: `1px solid ${isS13Discrepancy ? '#fecdd3' : '#a7f3d0'}`,
             display: 'flex',
             alignItems: 'center',
             gap: '10px'
           }}>
             {isS13Discrepancy ? (
-              <AlertTriangle size={18} color="#f87171" style={{ flexShrink: 0 }} />
+              <AlertTriangle size={18} color="#e11d48" style={{ flexShrink: 0 }} />
             ) : (
-              <CheckCircle2 size={18} color="#34d399" style={{ flexShrink: 0 }} />
+              <CheckCircle2 size={18} color="#059669" style={{ flexShrink: 0 }} />
             )}
             <div style={{ fontSize: '0.74rem', lineHeight: 1.35 }}>
               {isS13Discrepancy ? (
                 <span>
-                  <strong style={{ color: '#f87171' }}>Geometric Discrepancy (S_13 = {s13.toFixed(2)}):</strong> Proposed tool action deviates sharply from authorized user instructions. Strong invariant of indirect hijacking!
+                  <strong style={{ color: '#e11d48' }}>Geometric Discrepancy (S_13 = {s13.toFixed(2)}):</strong> Proposed tool action deviates sharply from authorized user instructions. Strong invariant of indirect hijacking!
                 </span>
               ) : (
                 <span>
-                  <strong style={{ color: '#34d399' }}>Semantic Alignment (S_13 = {s13.toFixed(2)}):</strong> Proposed tool action directly maps to user task intent. No injection discrepancy detected.
+                  <strong style={{ color: '#059669' }}>Semantic Alignment (S_13 = {s13.toFixed(2)}):</strong> Proposed tool action directly maps to user task intent. No injection discrepancy detected.
                 </span>
               )}
             </div>
@@ -379,22 +380,23 @@ export const MultiViewNeuralMatrix: React.FC<MultiViewNeuralMatrixProps> = ({
         }}>
           {/* Head 1: DeBERTa-v3 NLP Signal & Risk Head */}
           <div style={{
-            background: 'rgba(10, 15, 29, 0.6)',
+            background: '#ffffff',
             border: '1px solid var(--border-subtle)',
             borderRadius: '12px',
-            padding: '16px'
+            padding: '16px',
+            boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Activity size={16} color="#38bdf8" />
-                <span style={{ fontSize: '0.85rem', fontWeight: 700 }}>
+                <Activity size={16} color="#0284c7" />
+                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                   Head 1: Risk Probability Head (Softmax)
                 </span>
               </div>
               <span style={{ 
                 fontSize: '0.75rem', 
                 fontWeight: 800, 
-                color: debertaInjectionProb > 0.5 ? '#f87171' : '#34d399' 
+                color: debertaInjectionProb > 0.5 ? '#e11d48' : '#059669' 
               }}>
                 {(debertaInjectionProb * 100).toFixed(1)}% P(Inject)
               </span>
@@ -403,9 +405,9 @@ export const MultiViewNeuralMatrix: React.FC<MultiViewNeuralMatrixProps> = ({
             {/* Progress Bar */}
             <div style={{
               width: '100%',
-              height: '10px',
+              height: '8px',
               borderRadius: '6px',
-              background: 'rgba(255, 255, 255, 0.08)',
+              background: '#e2e8f0',
               overflow: 'hidden',
               marginBottom: '8px'
             }}>
@@ -413,10 +415,10 @@ export const MultiViewNeuralMatrix: React.FC<MultiViewNeuralMatrixProps> = ({
                 width: `${debertaInjectionProb * 100}%`,
                 height: '100%',
                 background: debertaInjectionProb > 0.5 
-                  ? 'linear-gradient(90deg, #f59e0b, #ef4444)' 
-                  : 'linear-gradient(90deg, #10b981, #06b6d4)',
+                  ? 'linear-gradient(90deg, #f59e0b, #e11d48)' 
+                  : 'linear-gradient(90deg, #10b981, #0284c7)',
                 borderRadius: '6px',
-                transition: 'width 0.6s cubic-bezier(0.4, 0, 0.2, 1)'
+                transition: 'width 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
               }} />
             </div>
 
@@ -428,26 +430,27 @@ export const MultiViewNeuralMatrix: React.FC<MultiViewNeuralMatrixProps> = ({
 
           {/* Head 2: Epistemic Uncertainty Estimation (Sigmoid) */}
           <div style={{
-            background: 'rgba(10, 15, 29, 0.6)',
+            background: '#ffffff',
             border: '1px solid var(--border-subtle)',
             borderRadius: '12px',
-            padding: '16px'
+            padding: '16px',
+            boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Sparkles size={16} color="#a78bfa" />
-                <span style={{ fontSize: '0.85rem', fontWeight: 700 }}>
+                <Sparkles size={16} color="#7c3aed" />
+                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                   Head 2: Epistemic Uncertainty U ∈ [0, 1]
                 </span>
               </div>
               <span style={{
                 fontSize: '0.75rem',
                 fontWeight: 800,
-                color: uncertaintyScore > 0.35 ? '#fbbf24' : '#a78bfa',
-                background: 'rgba(167, 139, 250, 0.1)',
+                color: uncertaintyScore > 0.35 ? '#d97706' : '#7c3aed',
+                background: '#f5f3ff',
                 padding: '2px 8px',
                 borderRadius: '6px',
-                border: '1px solid rgba(167, 139, 250, 0.25)'
+                border: '1px solid #ddd6fe'
               }}>
                 U = {uncertaintyScore.toFixed(3)}
               </span>
@@ -458,7 +461,7 @@ export const MultiViewNeuralMatrix: React.FC<MultiViewNeuralMatrixProps> = ({
               width: '100%',
               height: '8px',
               borderRadius: '4px',
-              background: 'rgba(255, 255, 255, 0.08)',
+              background: '#e2e8f0',
               overflow: 'hidden',
               marginBottom: '8px'
             }}>
@@ -466,8 +469,8 @@ export const MultiViewNeuralMatrix: React.FC<MultiViewNeuralMatrixProps> = ({
                 width: `${uncertaintyScore * 100}%`,
                 height: '100%',
                 background: uncertaintyScore > 0.35 
-                  ? 'linear-gradient(90deg, #818cf8, #f59e0b)' 
-                  : 'linear-gradient(90deg, #6366f1, #a78bfa)',
+                  ? 'linear-gradient(90deg, #6366f1, #d97706)' 
+                  : 'linear-gradient(90deg, #4f46e5, #7c3aed)',
                 borderRadius: '4px'
               }} />
             </div>
@@ -486,7 +489,7 @@ export const MultiViewNeuralMatrix: React.FC<MultiViewNeuralMatrixProps> = ({
           {/* Action Gate Rationale */}
           <div style={{
             background: gateBg,
-            border: `1px solid ${gateColor}40`,
+            border: `1px solid ${gateBorder}`,
             borderRadius: '12px',
             padding: '12px 14px'
           }}>

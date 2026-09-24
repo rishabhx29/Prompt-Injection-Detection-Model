@@ -22,8 +22,8 @@ export const DemoGuideModal: React.FC<DemoGuideModalProps> = ({
       style={{
         position: 'fixed',
         inset: 0,
-        backgroundColor: 'rgba(6, 9, 17, 0.85)',
-        backdropFilter: 'blur(10px)',
+        backgroundColor: 'rgba(15, 23, 42, 0.45)',
+        backdropFilter: 'blur(8px)',
         zIndex: 100,
         display: 'flex',
         alignItems: 'center',
@@ -44,10 +44,10 @@ export const DemoGuideModal: React.FC<DemoGuideModalProps> = ({
           maxWidth: '860px',
           maxHeight: '90vh',
           overflowY: 'auto',
-          backgroundColor: 'var(--bg-card)',
+          backgroundColor: '#ffffff',
           borderRadius: '16px',
-          border: '1px solid rgba(99, 102, 241, 0.4)',
-          boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 30px rgba(99, 102, 241, 0.2)',
+          border: '1px solid var(--border-subtle)',
+          boxShadow: '0 25px 60px -15px rgba(15, 23, 42, 0.2), 0 0 0 1px #e2e8f0',
           display: 'flex',
           flexDirection: 'column'
         }}
@@ -60,22 +60,23 @@ export const DemoGuideModal: React.FC<DemoGuideModalProps> = ({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          background: 'linear-gradient(90deg, rgba(99, 102, 241, 0.12), transparent)'
+          background: 'linear-gradient(90deg, #eef2ff, #ffffff)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{
               width: '36px',
               height: '36px',
               borderRadius: '10px',
-              background: 'linear-gradient(135deg, #6366f1, #06b6d4)',
+              background: 'linear-gradient(135deg, #4f46e5, #0284c7)',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              boxShadow: '0 2px 8px rgba(79, 70, 229, 0.25)'
             }}>
               <Sparkles size={20} color="#ffffff" />
             </div>
             <div>
-              <h2 id="demo-guide-title" style={{ fontSize: '1.2rem', fontWeight: 800, margin: 0, color: '#f8fafc' }}>
+              <h2 id="demo-guide-title" style={{ fontSize: '1.2rem', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
                 Mission Control: 4-Minute Presentation Guide
               </h2>
               <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', margin: 0 }}>
@@ -87,8 +88,8 @@ export const DemoGuideModal: React.FC<DemoGuideModalProps> = ({
             onClick={onClose}
             aria-label="Close presentation guide"
             style={{
-              background: 'transparent',
-              border: 'none',
+              background: '#f1f5f9',
+              border: '1px solid var(--border-subtle)',
               color: 'var(--text-muted)',
               cursor: 'pointer',
               padding: '6px',
@@ -97,14 +98,6 @@ export const DemoGuideModal: React.FC<DemoGuideModalProps> = ({
               alignItems: 'center',
               justifyContent: 'center',
               transition: 'background 0.15s ease, color 0.15s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-              e.currentTarget.style.color = '#ffffff';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'transparent';
-              e.currentTarget.style.color = 'var(--text-muted)';
             }}
           >
             <X size={20} />
@@ -118,8 +111,8 @@ export const DemoGuideModal: React.FC<DemoGuideModalProps> = ({
           <div style={{
             padding: '14px 18px',
             borderRadius: '10px',
-            backgroundColor: 'rgba(99, 102, 241, 0.08)',
-            border: '1px solid rgba(99, 102, 241, 0.25)',
+            backgroundColor: '#f0f9ff',
+            border: '1px solid #bae6fd',
             display: 'flex',
             alignItems: 'flex-start',
             gap: '12px',
@@ -127,9 +120,9 @@ export const DemoGuideModal: React.FC<DemoGuideModalProps> = ({
             lineHeight: 1.5,
             color: 'var(--text-secondary)'
           }}>
-            <Shield size={20} color="#818cf8" style={{ flexShrink: 0, marginTop: '2px' }} />
+            <Shield size={20} color="#0284c7" style={{ flexShrink: 0, marginTop: '2px' }} />
             <div>
-              <strong style={{ color: '#ffffff' }}>Demonstration Objective:</strong> Prove how CtxVigil prevents
+              <strong style={{ color: '#0f172a' }}>Demonstration Objective:</strong> Prove how CtxVigil prevents
               indirect prompt injection attacks against autonomous browser agents by cross-referencing visual, DOM, and accessibility representations, backed by an immutable runtime Action Gate.
             </div>
           </div>
@@ -141,12 +134,12 @@ export const DemoGuideModal: React.FC<DemoGuideModalProps> = ({
             <div style={{
               padding: '18px 20px',
               borderRadius: '12px',
-              backgroundColor: 'rgba(255, 255, 255, 0.02)',
+              backgroundColor: '#ffffff',
               border: '1px solid var(--border-subtle)',
+              boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)',
               display: 'flex',
               flexDirection: 'column',
-              gap: '12px',
-              transition: 'border-color 0.2s ease'
+              gap: '12px'
             }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -156,13 +149,13 @@ export const DemoGuideModal: React.FC<DemoGuideModalProps> = ({
                     letterSpacing: '0.05em',
                     padding: '3px 8px',
                     borderRadius: '6px',
-                    backgroundColor: 'rgba(16, 185, 129, 0.15)',
-                    color: '#34d399',
-                    border: '1px solid rgba(16, 185, 129, 0.3)'
+                    backgroundColor: '#ecfdf5',
+                    color: '#059669',
+                    border: '1px solid #a7f3d0'
                   }}>
                     ACT 1 · 45 SEC
                   </span>
-                  <h3 style={{ fontSize: '1rem', fontWeight: 700, margin: 0, color: '#f8fafc' }}>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 700, margin: 0, color: '#0f172a' }}>
                     Safe Baseline Control
                   </h3>
                 </div>
@@ -174,13 +167,13 @@ export const DemoGuideModal: React.FC<DemoGuideModalProps> = ({
                   className="btn-secondary"
                   style={{ fontSize: '0.78rem', padding: '6px 14px', gap: '6px' }}
                 >
-                  <Play size={13} fill="#818cf8" color="#818cf8" />
+                  <Play size={13} fill="#4f46e5" color="#4f46e5" />
                   <span>Launch Act 1</span>
                 </button>
               </div>
 
               <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                <strong style={{ color: '#e2e8f0' }}>Speaking Script:</strong> &ldquo;First, let&apos;s establish our ground truth baseline. The agent is assigned a legitimate e-commerce return. We run a security scan—all three views are clean, risk score is 0/100, and the action gate safely authorizes the browser agent to proceed.&rdquo;
+                <strong style={{ color: '#0f172a' }}>Speaking Script:</strong> &ldquo;First, let&apos;s establish our ground truth baseline. The agent is assigned a legitimate e-commerce return. We run a security scan—all three views are clean, risk score is 10/100, and the action gate safely authorizes the browser agent to proceed.&rdquo;
               </div>
 
               <div style={{
@@ -190,15 +183,15 @@ export const DemoGuideModal: React.FC<DemoGuideModalProps> = ({
                 paddingTop: '6px'
               }}>
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <CheckCircle size={14} color="#34d399" />
-                  <span>Expected Score: <strong>0 / 100</strong></span>
+                  <CheckCircle size={14} color="#059669" />
+                  <span>Expected Score: <strong>10 / 100</strong></span>
                 </div>
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Shield size={14} color="#34d399" />
+                  <Shield size={14} color="#059669" />
                   <span>Verdict: <strong>ALLOW</strong></span>
                 </div>
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <ArrowRight size={14} color="#38bdf8" />
+                  <ArrowRight size={14} color="#0284c7" />
                   <span>Action: <strong>Permitted (Legitimate)</strong></span>
                 </div>
               </div>
@@ -208,9 +201,9 @@ export const DemoGuideModal: React.FC<DemoGuideModalProps> = ({
             <div style={{
               padding: '18px 20px',
               borderRadius: '12px',
-              backgroundColor: 'rgba(239, 68, 68, 0.04)',
-              border: '1px solid rgba(239, 68, 68, 0.3)',
-              boxShadow: '0 0 20px rgba(239, 68, 68, 0.08)',
+              backgroundColor: '#fff1f2',
+              border: '1px solid #fecdd3',
+              boxShadow: '0 2px 8px rgba(225, 29, 72, 0.06)',
               display: 'flex',
               flexDirection: 'column',
               gap: '12px'
@@ -223,13 +216,13 @@ export const DemoGuideModal: React.FC<DemoGuideModalProps> = ({
                     letterSpacing: '0.05em',
                     padding: '3px 8px',
                     borderRadius: '6px',
-                    backgroundColor: 'rgba(239, 68, 68, 0.2)',
-                    color: '#f87171',
-                    border: '1px solid rgba(239, 68, 68, 0.4)'
+                    backgroundColor: '#ffe4e6',
+                    color: '#e11d48',
+                    border: '1px solid #fecdd3'
                   }}>
                     ACT 2 · STAR DEMO · 2 MIN
                   </span>
-                  <h3 style={{ fontSize: '1rem', fontWeight: 700, margin: 0, color: '#f8fafc' }}>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 700, margin: 0, color: '#9f1239' }}>
                     Concealed ARIA Prompt Injection Exploit
                   </h3>
                 </div>
@@ -238,13 +231,12 @@ export const DemoGuideModal: React.FC<DemoGuideModalProps> = ({
                     onSelectAct('aria-injection');
                     onClose();
                   }}
-                  className="btn-primary"
+                  className="btn-action"
                   style={{
                     fontSize: '0.78rem',
                     padding: '6px 14px',
                     gap: '6px',
-                    background: 'linear-gradient(135deg, #ef4444, #dc2626)',
-                    boxShadow: '0 0 12px rgba(239, 68, 68, 0.4)'
+                    background: 'linear-gradient(135deg, #e11d48, #be123c)'
                   }}
                 >
                   <Play size={13} fill="#ffffff" color="#ffffff" />
@@ -252,8 +244,8 @@ export const DemoGuideModal: React.FC<DemoGuideModalProps> = ({
                 </button>
               </div>
 
-              <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                <strong style={{ color: '#e2e8f0' }}>Speaking Script:</strong> &ldquo;Now observe this malicious attack. In the Webpage Preview, the page looks completely harmless—just a standard customer satisfaction poll. A human or visual model sees nothing wrong. But when we toggle to the <em>Accessibility Tree Inspector</em>, CtxVigil uncovers a hidden malicious instruction disguised inside an aria-label directing the agent to exfiltrate credentials. When the agent attempts to execute <code>change_account_email</code>, our runtime Action Gate intervenes, activating the Containment Barrier and maintaining absolute zero state mutation.&rdquo;
+              <div style={{ fontSize: '0.82rem', color: '#475569', lineHeight: 1.5 }}>
+                <strong style={{ color: '#0f172a' }}>Speaking Script:</strong> &ldquo;Now observe this malicious attack. In the Webpage Preview, the page looks completely harmless—just a standard customer satisfaction poll. A human or visual model sees nothing wrong. But when we toggle to the <em>Accessibility Tree Inspector</em>, CtxVigil uncovers a hidden malicious instruction disguised inside an aria-label directing the agent to exfiltrate credentials. When the agent attempts to execute <code>change_account_email</code>, our runtime Action Gate intervenes, activating the Containment Barrier and maintaining absolute zero state mutation.&rdquo;
               </div>
 
               <div style={{
@@ -262,16 +254,16 @@ export const DemoGuideModal: React.FC<DemoGuideModalProps> = ({
                 gap: '10px',
                 paddingTop: '6px'
               }}>
-                <div style={{ fontSize: '0.75rem', color: '#fca5a5', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <AlertTriangle size={14} color="#f87171" />
-                  <span>Expected Score: <strong>92 / 100</strong></span>
+                <div style={{ fontSize: '0.75rem', color: '#9f1239', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <AlertTriangle size={14} color="#e11d48" />
+                  <span>Expected Score: <strong>89 / 100</strong></span>
                 </div>
-                <div style={{ fontSize: '0.75rem', color: '#fca5a5', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Lock size={14} color="#f87171" />
+                <div style={{ fontSize: '0.75rem', color: '#9f1239', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Lock size={14} color="#e11d48" />
                   <span>Verdict: <strong>BLOCK (Discrepancy)</strong></span>
                 </div>
-                <div style={{ fontSize: '0.75rem', color: '#fca5a5', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Shield size={14} color="#f87171" />
+                <div style={{ fontSize: '0.75rem', color: '#9f1239', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Shield size={14} color="#e11d48" />
                   <span>Containment: <strong>ACTIVE (Zero Mutation)</strong></span>
                 </div>
               </div>
@@ -281,8 +273,9 @@ export const DemoGuideModal: React.FC<DemoGuideModalProps> = ({
             <div style={{
               padding: '18px 20px',
               borderRadius: '12px',
-              backgroundColor: 'rgba(255, 255, 255, 0.02)',
+              backgroundColor: '#ffffff',
               border: '1px solid var(--border-subtle)',
+              boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)',
               display: 'flex',
               flexDirection: 'column',
               gap: '12px'
@@ -295,13 +288,13 @@ export const DemoGuideModal: React.FC<DemoGuideModalProps> = ({
                     letterSpacing: '0.05em',
                     padding: '3px 8px',
                     borderRadius: '6px',
-                    backgroundColor: 'rgba(56, 189, 248, 0.15)',
-                    color: '#38bdf8',
-                    border: '1px solid rgba(56, 189, 248, 0.3)'
+                    backgroundColor: '#f0f9ff',
+                    color: '#0284c7',
+                    border: '1px solid #bae6fd'
                   }}>
                     ACT 3 · CONTROL · 1 MIN
                   </span>
-                  <h3 style={{ fontSize: '1rem', fontWeight: 700, margin: 0, color: '#f8fafc' }}>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 700, margin: 0, color: '#0f172a' }}>
                     Benign ARIA Hard Negative Control
                   </h3>
                 </div>
@@ -313,13 +306,13 @@ export const DemoGuideModal: React.FC<DemoGuideModalProps> = ({
                   className="btn-secondary"
                   style={{ fontSize: '0.78rem', padding: '6px 14px', gap: '6px' }}
                 >
-                  <Play size={13} fill="#38bdf8" color="#38bdf8" />
+                  <Play size={13} fill="#0284c7" color="#0284c7" />
                   <span>Launch Act 3</span>
                 </button>
               </div>
 
               <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                <strong style={{ color: '#e2e8f0' }}>Speaking Script:</strong> &ldquo;Finally, we demonstrate system precision. Naive keyword filters flag any imperative phrase like &apos;Click here to submit&apos; as an injection attempt, causing high false alarm rates. CtxVigil reconciles the visual button text against the accessibility tree, verifies semantic coherence, and grants permission without false positives.&rdquo;
+                <strong style={{ color: '#0f172a' }}>Speaking Script:</strong> &ldquo;Finally, we demonstrate system precision. Naive keyword filters flag any imperative phrase like &apos;Click here to submit&apos; as an injection attempt, causing high false alarm rates. CtxVigil reconciles the visual button text against the accessibility tree, verifies semantic coherence, and grants permission without false positives.&rdquo;
               </div>
 
               <div style={{
@@ -329,15 +322,15 @@ export const DemoGuideModal: React.FC<DemoGuideModalProps> = ({
                 paddingTop: '6px'
               }}>
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <CheckCircle size={14} color="#38bdf8" />
-                  <span>Expected Score: <strong>12 / 100</strong></span>
+                  <CheckCircle size={14} color="#0284c7" />
+                  <span>Expected Score: <strong>14 / 100</strong></span>
                 </div>
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Shield size={14} color="#38bdf8" />
+                  <Shield size={14} color="#0284c7" />
                   <span>Verdict: <strong>ALLOW (No False Alarm)</strong></span>
                 </div>
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Eye size={14} color="#38bdf8" />
+                  <Eye size={14} color="#0284c7" />
                   <span>Reconciliation: <strong>Cross-View Verified</strong></span>
                 </div>
               </div>
@@ -351,26 +344,26 @@ export const DemoGuideModal: React.FC<DemoGuideModalProps> = ({
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: '14px 18px',
-            backgroundColor: 'rgba(0, 0, 0, 0.3)',
+            backgroundColor: '#f8fafc',
             borderRadius: '10px',
             border: '1px solid var(--border-subtle)',
             flexWrap: 'wrap',
             gap: '12px'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-              <Terminal size={14} color="#94a3b8" />
+              <Terminal size={14} color="#475569" />
               <span>Global Shortcuts:</span>
-              <kbd style={{ background: '#1e293b', padding: '2px 6px', borderRadius: '4px', border: '1px solid #334155', color: '#f8fafc', fontSize: '0.72rem' }}>Ctrl + ↵</kbd> Scan Page
+              <kbd className="kbd-shortcut-hint">Ctrl + ↵</kbd> Scan Page
               <span style={{ opacity: 0.4 }}>•</span>
-              <kbd style={{ background: '#1e293b', padding: '2px 6px', borderRadius: '4px', border: '1px solid #334155', color: '#f8fafc', fontSize: '0.72rem' }}>Shift + ↵</kbd> Test Action
+              <kbd className="kbd-shortcut-hint">Shift + ↵</kbd> Test Action
               <span style={{ opacity: 0.4 }}>•</span>
-              <kbd style={{ background: '#1e293b', padding: '2px 6px', borderRadius: '4px', border: '1px solid #334155', color: '#f8fafc', fontSize: '0.72rem' }}>1 - 5</kbd> Switch Scenarios
+              <kbd className="kbd-shortcut-hint">1 - 6</kbd> Switch Scenarios
               <span style={{ opacity: 0.4 }}>•</span>
-              <kbd style={{ background: '#1e293b', padding: '2px 6px', borderRadius: '4px', border: '1px solid #334155', color: '#f8fafc', fontSize: '0.72rem' }}>Esc</kbd> Close Modal
+              <kbd className="kbd-shortcut-hint">Esc</kbd> Close Modal
             </div>
             <button
               onClick={onClose}
-              className="btn-primary"
+              className="btn-action"
               style={{ fontSize: '0.8rem', padding: '6px 16px' }}
             >
               Close Guide
@@ -382,3 +375,5 @@ export const DemoGuideModal: React.FC<DemoGuideModalProps> = ({
     </div>
   );
 };
+
+export default DemoGuideModal;

@@ -27,43 +27,43 @@ export const SafeRefundTemplate: React.FC = () => {
   ];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', color: '#e2e8f0', fontSize: '0.82rem' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', color: 'var(--text-primary)', fontSize: '0.82rem' }}>
       {/* Header Banner */}
       <div style={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingBottom: '10px',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.08)'
+        paddingBottom: '12px',
+        borderBottom: '1px solid var(--border-subtle)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <div style={{
             width: '28px',
             height: '28px',
             borderRadius: '6px',
-            background: 'rgba(16, 185, 129, 0.15)',
+            background: '#ecfdf5',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            border: '1px solid rgba(16, 185, 129, 0.3)'
+            border: '1px solid #a7f3d0'
           }}>
-            <RotateCcw size={16} color="#10b981" />
+            <RotateCcw size={16} color="#059669" />
           </div>
           <div>
-            <h4 style={{ margin: 0, fontSize: '0.92rem', fontWeight: 700, color: '#f8fafc' }}>
+            <h4 style={{ margin: 0, fontSize: '0.92rem', fontWeight: 700, color: 'var(--text-primary)' }}>
               ShopEase Returns & Exchanges
             </h4>
-            <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>Official Customer Satisfaction Portal</span>
+            <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>Official Customer Satisfaction Portal</span>
           </div>
         </div>
         <span style={{
-          fontSize: '0.68rem',
+          fontSize: '0.7rem',
           fontWeight: 600,
-          color: '#10b981',
-          background: 'rgba(16, 185, 129, 0.1)',
+          color: '#059669',
+          background: '#ecfdf5',
           padding: '2px 8px',
           borderRadius: '9999px',
-          border: '1px solid rgba(16, 185, 129, 0.25)',
+          border: '1px solid #a7f3d0',
           display: 'flex',
           alignItems: 'center',
           gap: '4px'
@@ -75,12 +75,12 @@ export const SafeRefundTemplate: React.FC = () => {
 
       {/* Return Progress Stepper */}
       <div style={{
-        background: 'rgba(255, 255, 255, 0.02)',
+        background: '#f8fafc',
         borderRadius: '8px',
-        padding: '10px 14px',
-        border: '1px solid rgba(255, 255, 255, 0.05)'
+        padding: '12px 14px',
+        border: '1px solid var(--border-subtle)'
       }}>
-        <span style={{ fontSize: '0.7rem', fontWeight: 600, textTransform: 'uppercase', color: '#94a3b8', letterSpacing: '0.04em' }}>
+        <span style={{ fontSize: '0.7rem', fontWeight: 600, textTransform: 'uppercase', color: 'var(--text-muted)', letterSpacing: '0.04em' }}>
           Hassle-Free 4-Step Process
         </span>
         <div style={{
@@ -91,20 +91,20 @@ export const SafeRefundTemplate: React.FC = () => {
           textAlign: 'center'
         }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px' }}>
-            <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: '#10b981', color: '#060911', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.68rem' }}>1</div>
-            <span style={{ fontSize: '0.68rem', color: '#f8fafc', fontWeight: 500 }}>Request</span>
+            <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: '#059669', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.68rem' }}>1</div>
+            <span style={{ fontSize: '0.72rem', color: 'var(--text-primary)', fontWeight: 600 }}>Request</span>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px' }}>
-            <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: 'rgba(255, 255, 255, 0.1)', color: '#94a3b8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 600, fontSize: '0.68rem' }}>2</div>
-            <span style={{ fontSize: '0.68rem', color: '#94a3b8' }}>Print Label</span>
+            <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: '#e2e8f0', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 600, fontSize: '0.68rem' }}>2</div>
+            <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>Print Label</span>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px' }}>
-            <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: 'rgba(255, 255, 255, 0.1)', color: '#94a3b8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 600, fontSize: '0.68rem' }}>3</div>
-            <span style={{ fontSize: '0.68rem', color: '#94a3b8' }}>Inspect</span>
+            <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: '#e2e8f0', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 600, fontSize: '0.68rem' }}>3</div>
+            <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>Inspect</span>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px' }}>
-            <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: 'rgba(255, 255, 255, 0.1)', color: '#94a3b8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 600, fontSize: '0.68rem' }}>4</div>
-            <span style={{ fontSize: '0.68rem', color: '#94a3b8' }}>Refund</span>
+            <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: '#e2e8f0', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 600, fontSize: '0.68rem' }}>4</div>
+            <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>Refund</span>
           </div>
         </div>
       </div>
@@ -118,8 +118,8 @@ export const SafeRefundTemplate: React.FC = () => {
               key={idx}
               style={{
                 borderRadius: '6px',
-                border: '1px solid rgba(255, 255, 255, 0.06)',
-                background: isOpen ? 'rgba(255, 255, 255, 0.04)' : 'rgba(255, 255, 255, 0.015)',
+                border: '1px solid var(--border-subtle)',
+                background: isOpen ? '#f1f5f9' : '#ffffff',
                 overflow: 'hidden',
                 transition: 'all 0.15s ease'
               }}
@@ -131,21 +131,21 @@ export const SafeRefundTemplate: React.FC = () => {
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  padding: '8px 12px',
+                  padding: '9px 12px',
                   background: 'none',
                   border: 'none',
-                  color: '#f8fafc',
-                  fontSize: '0.78rem',
+                  color: 'var(--text-primary)',
+                  fontSize: '0.8rem',
                   fontWeight: 600,
                   cursor: 'pointer',
                   textAlign: 'left'
                 }}
               >
                 <span>{item.title}</span>
-                {isOpen ? <ChevronUp size={14} color="#94a3b8" /> : <ChevronDown size={14} color="#94a3b8" />}
+                {isOpen ? <ChevronUp size={14} color="var(--text-muted)" /> : <ChevronDown size={14} color="var(--text-muted)" />}
               </button>
               {isOpen && (
-                <div style={{ padding: '0 12px 8px 12px', fontSize: '0.75rem', color: '#94a3b8', lineHeight: 1.5 }}>
+                <div style={{ padding: '0 12px 10px 12px', fontSize: '0.76rem', color: 'var(--text-secondary)', lineHeight: 1.55 }}>
                   {item.content}
                 </div>
               )}
@@ -157,7 +157,7 @@ export const SafeRefundTemplate: React.FC = () => {
       {/* Quick Lookup Form */}
       <form onSubmit={handleLookup} style={{
         display: 'flex',
-        gap: '6px',
+        gap: '8px',
         alignItems: 'center',
         paddingTop: '6px'
       }}>
@@ -169,26 +169,26 @@ export const SafeRefundTemplate: React.FC = () => {
             placeholder="Order ID (e.g. ORD-9418)"
             style={{
               width: '100%',
-              padding: '6px 8px 6px 28px',
+              padding: '7px 10px 7px 30px',
               borderRadius: '6px',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              background: 'rgba(0, 0, 0, 0.3)',
-              color: '#f8fafc',
-              fontSize: '0.75rem',
+              border: '1px solid var(--border-subtle)',
+              background: '#ffffff',
+              color: 'var(--text-primary)',
+              fontSize: '0.78rem',
               fontFamily: 'var(--font-mono)'
             }}
           />
-          <Search size={13} color="#64748b" style={{ position: 'absolute', left: '8px', top: '8px' }} />
+          <Search size={14} color="var(--text-muted)" style={{ position: 'absolute', left: '9px', top: '9px' }} />
         </div>
         <button
           type="submit"
           style={{
-            padding: '6px 12px',
+            padding: '7px 14px',
             borderRadius: '6px',
             border: 'none',
             background: 'var(--primary)',
             color: '#ffffff',
-            fontSize: '0.75rem',
+            fontSize: '0.78rem',
             fontWeight: 600,
             cursor: 'pointer'
           }}
@@ -199,17 +199,17 @@ export const SafeRefundTemplate: React.FC = () => {
 
       {lookupMessage && (
         <div style={{
-          fontSize: '0.72rem',
-          color: '#34d399',
-          background: 'rgba(16, 185, 129, 0.08)',
-          padding: '6px 10px',
+          fontSize: '0.76rem',
+          color: '#065f46',
+          background: '#ecfdf5',
+          padding: '8px 12px',
           borderRadius: '6px',
-          border: '1px solid rgba(16, 185, 129, 0.2)',
+          border: '1px solid #a7f3d0',
           display: 'flex',
           alignItems: 'center',
           gap: '6px'
         }}>
-          <CheckCircle2 size={13} />
+          <CheckCircle2 size={14} color="#059669" />
           <span>{lookupMessage}</span>
         </div>
       )}

@@ -4,6 +4,49 @@ All notable changes to the CtxVigil contract and SDK are recorded here.
 Field-name, enum, or HTTP-status changes are **breaking** and follow
 `docs/03_API_CONTRACT.md` §11.
 
+## [0.3.0] — 2026-09-23 — Agent harnesses: real LLM agent wrapped by the layer
+
+The demonstration the project exists for: an actual LLM web agent wrapped by the protection
+layer. Every verdict still comes from the `ctxvigil` SDK; the harnesses add no detection logic.
+
+### Added
+- **`apps/agent-demo` — scripted agent over the local fixture host** (`npm run agent:demo`):
+  fetches each fixture page over HTTP from the Vite dev server, extracts the four contract
+  views with a dependency-free HTML reader, runs `scanPage` → containment → `checkAction`, and
+  narrates all 8 steps per episode in the terminal. Writes `agent-runs/latest.json` for the
+  dashboard. Each fixture page declares its episode (`ctxvigil:*` meta tags), so every run
+  self-checks the engine verdict against the page's declared verdict (exit 1 on mismatch).
+- **Agent Console panel in the dashboard**: renders the run record — summary chips, per-scenario
+  selector, step timeline, and findings with view/selector/signal provenance.
+- **`apps/agent-chat` — real Gemini agent behind the layer** (`npm run agent:chat` terminal ·
+  `npm run agent:web` browser chat at :5174):
+  - Two guarded tools are the model's only capabilities: `read_page` (scans **before** the model
+    reads anything; withheld payloads physically never reach the model; finding text is stripped
+    from the tool response because it *is* the payload) and `propose_action` (gate verdict is
+    binding).
+  - Minimal Gemini REST client (no SDK): function calling with `thoughtSignature` replay for
+    Gemini 3, server-honoured 429 backoff, and a fallback model chain
+    (`gemini-flash-latest` → `gemini-flash-lite-latest` → `gemini-3.5-flash` → `gemini-2.5-flash`)
+    so free-tier quota exhaustion degrades instead of failing.
+  - Terminal chat UI: boxed session header, timestamped transcript, bordered agent reply cards,
+    colour-coded `● layer` / `● gate` / `● error` event lines, braille spinner, `❯` prompt, and
+    session history so follow-up messages refer back to earlier pages (`/clear`, `/history`,
+    `/help`, `/exit`).
+  - Web chat: NDJSON-streamed events so verdicts appear live while the model works.
+  - `GEMINI_API_KEY` in the gitignored repo-root `.env`; `GEMINI_MODEL` optional override.
+- **Live verified episodes** (Gemini, real pages over HTTP): ARIA page → scan BLOCK, payload
+  withheld, clean summary; InjecAgent page → scan BLOCK, model refuses to propose the transfer;
+  task-deviation page → scan ALLOW but gate BLOCKs the unrelated account change; benign pages →
+  allow end-to-end.
+- **`docs/CTXVIGIL_PROJECT_REPORT.md`**: full project report — architecture and flow diagrams,
+  install/wrap guides, trained-vs-prebuilt model inventory, Colab links, and the notebook result
+  graphs (`docs/assets/`).
+
+### Tests
+- `apps/agent-demo`: 16 tests (episode assertions, containment, hard-negative, reproducibility).
+- `apps/agent-chat`: 9 offline tests (payload-withholding proof, gate outcomes, loop budget)
+  using a scripted model transport against a stub page server — no network, no key.
+
 ## [0.2.0-ai] — 2026-09-23 — DA-1 AI Multi-View Fusion, Kaggle Training & Dashboard Revamp
 
 Implementation of the complete AI neural architecture specified in Course BCSE306L DA-1 §4.1:

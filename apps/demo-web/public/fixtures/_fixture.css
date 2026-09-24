@@ -1,0 +1,116 @@
+/* ============================================================================
+   Shared stylesheet for the local fixture pages (apps/demo-web/public/fixtures/).
+
+   These pages exist so the agent demo can fetch a *real* page over HTTP from
+   localhost:5173 and read it the way a browser agent would (DOM + accessibility
+   tree). They must therefore render like ordinary web pages — a sighted reviewer
+   looking at the attack pages should see nothing unusual.
+
+   All content is fictional: *.test domains, sandbox values, simulated actions.
+   ============================================================================ */
+
+:root {
+  --ink: #0f172a;
+  --muted: #475569;
+  --line: #e2e8f0;
+  --brand: #4338ca;
+  --ok: #047857;
+  --warn: #b45309;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #f8fafc;
+  color: var(--ink);
+  font: 15px/1.55 "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+.site-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 24px;
+  background: #ffffff;
+  border-bottom: 1px solid var(--line);
+}
+
+.site-bar h1 { font-size: 1.05rem; margin: 0; }
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand-mark {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: var(--brand); color: #fff;
+  display: grid; place-items: center; font-weight: 700;
+}
+.sub { color: var(--muted); font-size: 0.78rem; }
+
+main { max-width: 860px; margin: 0 auto; padding: 26px 24px 60px; }
+
+.card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 16px;
+}
+
+h2 { font-size: 1rem; margin: 0 0 10px; }
+h3 { font-size: 0.9rem; margin: 14px 0 6px; }
+p { margin: 8px 0; }
+ul { margin: 8px 0 0; padding-left: 20px; }
+li { margin: 4px 0; }
+
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+th { color: var(--muted); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; }
+
+button, .btn {
+  font: inherit;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background: #f1f5f9;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.pill {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  border: 1px solid currentColor;
+}
+.pill.ok { color: var(--ok); }
+.pill.warn { color: var(--warn); }
+.pill.brand { color: var(--brand); }
+
+.muted { color: var(--muted); font-size: 0.84rem; }
+.mono { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: 0.82rem; }
+
+/* Screen-reader-only text is unreachable by eye but present in the accessibility
+   tree. On the genuine hard-negative page this is a legitimate control label; on
+   the attack pages it carries the payload. */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.fixture-note {
+  margin-top: 22px;
+  padding: 10px 12px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: var(--muted);
+  font-size: 0.72rem;
+  opacity: 0.85;
+}

@@ -1,0 +1,19 @@
+{
+  "name": "agent-chat",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "A real LLM web agent (Gemini) wrapped by the ctxvigil protection layer. The layer decides what the model may read and may do; the agent narrates every verdict in the chat. Demo harness — no detection logic lives here.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "scripts": {
+    "start": "node src/index.ts",
+    "web": "node src/server.ts",
+    "test": "node --test \"tests/**/*.test.ts\""
+  },
+  "dependencies": {
+    "ctxvigil": "*"
+  }
+}

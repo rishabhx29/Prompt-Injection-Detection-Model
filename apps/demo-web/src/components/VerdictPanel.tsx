@@ -57,30 +57,30 @@ export const VerdictPanel: React.FC<VerdictPanelProps> = ({
   const strokeOffset = circumference - scorePercent * circumference;
 
   // Determine colors and badges based on decision & score
-  let gaugeColor = '#10b981'; // green (allow)
+  let gaugeColor = '#059669'; // green (allow)
   let badgeClass = 'badge-allow';
   let decisionTitle = 'SAFE TO PROCEED';
   let DecisionIcon = ShieldCheck;
-  let glowColor = 'rgba(16, 185, 129, 0.25)';
+  let glowColor = 'rgba(5, 150, 105, 0.25)';
 
   if (decision === 'sanitize') {
-    gaugeColor = '#f59e0b';
+    gaugeColor = '#d97706';
     badgeClass = 'badge-sanitize';
     decisionTitle = 'CONTENT SANITIZED';
     DecisionIcon = AlertTriangle;
-    glowColor = 'rgba(245, 158, 11, 0.25)';
+    glowColor = 'rgba(217, 119, 6, 0.25)';
   } else if (decision === 'confirm') {
-    gaugeColor = '#8b5cf6';
+    gaugeColor = '#7c3aed';
     badgeClass = 'badge-confirm';
     decisionTitle = 'CONFIRMATION REQUIRED';
     DecisionIcon = AlertOctagon;
-    glowColor = 'rgba(139, 92, 246, 0.25)';
+    glowColor = 'rgba(124, 58, 237, 0.25)';
   } else if (decision === 'block') {
-    gaugeColor = '#ef4444';
+    gaugeColor = '#e11d48';
     badgeClass = 'badge-block';
     decisionTitle = 'ATTACK BLOCKED';
     DecisionIcon = ShieldAlert;
-    glowColor = 'rgba(239, 68, 68, 0.35)';
+    glowColor = 'rgba(225, 29, 72, 0.35)';
   }
 
   // Generate 48 tick marks around circumference
@@ -126,9 +126,9 @@ export const VerdictPanel: React.FC<VerdictPanelProps> = ({
           transform: 'translateX(-50%)',
           width: '240px',
           height: '140px',
-          background: hasScanRun ? gaugeColor : 'rgba(99, 102, 241, 0.15)',
-          filter: 'blur(65px)',
-          opacity: hasScanRun ? 0.35 : 0.15,
+          background: hasScanRun ? gaugeColor : 'rgba(79, 70, 229, 0.08)',
+          filter: 'blur(55px)',
+          opacity: hasScanRun ? 0.16 : 0.06,
           transition: 'all 0.5s ease',
           pointerEvents: 'none'
         }}
@@ -194,7 +194,7 @@ export const VerdictPanel: React.FC<VerdictPanelProps> = ({
                     y1={y1}
                     x2={x2}
                     y2={y2}
-                    stroke={t.isLit ? gaugeColor : 'rgba(255, 255, 255, 0.1)'}
+                    stroke={t.isLit ? gaugeColor : '#e2e8f0'}
                     strokeWidth="1.5"
                     strokeLinecap="round"
                     style={{ transition: 'stroke 0.3s ease' }}
@@ -208,7 +208,7 @@ export const VerdictPanel: React.FC<VerdictPanelProps> = ({
                 cy="75"
                 r={radius}
                 fill="transparent"
-                stroke="rgba(255, 255, 255, 0.06)"
+                stroke="#f1f5f9"
                 strokeWidth={strokeWidth}
               />
 
@@ -218,14 +218,14 @@ export const VerdictPanel: React.FC<VerdictPanelProps> = ({
                 cy="75"
                 r={radius}
                 fill="transparent"
-                stroke={hasScanRun ? gaugeColor : 'rgba(255, 255, 255, 0.15)'}
+                stroke={hasScanRun ? gaugeColor : '#cbd5e1'}
                 strokeWidth={strokeWidth}
                 strokeDasharray={circumference}
                 strokeDashoffset={strokeOffset}
                 strokeLinecap="round"
                 style={{
-                  transition: 'stroke-dashoffset 0.8s cubic-bezier(0.32, 0.72, 0, 1), stroke 0.4s ease',
-                  filter: hasScanRun ? `drop-shadow(0 0 6px ${gaugeColor})` : 'none'
+                  transition: 'stroke-dashoffset 0.8s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.4s ease',
+                  filter: hasScanRun ? `drop-shadow(0 0 4px ${gaugeColor}40)` : 'none'
                 }}
               />
             </svg>
@@ -263,7 +263,7 @@ export const VerdictPanel: React.FC<VerdictPanelProps> = ({
                   textTransform: 'uppercase',
                   letterSpacing: '0.08em',
                   marginTop: '4px',
-                  fontWeight: 600
+                  fontWeight: 700
                 }}
               >
                 Risk Score
@@ -287,21 +287,23 @@ export const VerdictPanel: React.FC<VerdictPanelProps> = ({
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '8px',
-                  padding: '9px 20px',
+                  padding: '8px 18px',
                   borderRadius: '9999px',
                   background: `rgba(${
                     decision === 'allow'
-                      ? '16, 185, 129'
+                      ? '5, 150, 105'
                       : decision === 'block'
-                      ? '239, 68, 68'
-                      : '245, 158, 11'
-                  }, 0.15)`,
-                  border: `1px solid ${gaugeColor}`,
+                      ? '225, 29, 72'
+                      : decision === 'confirm'
+                      ? '124, 58, 237'
+                      : '217, 119, 6'
+                  }, 0.1)`,
+                  border: `1px solid ${gaugeColor}50`,
                   color: gaugeColor,
                   fontWeight: 800,
-                  fontSize: '0.92rem',
-                  letterSpacing: '0.05em',
-                  boxShadow: `0 0 16px -4px ${glowColor}`
+                  fontSize: '0.9rem',
+                  letterSpacing: '0.04em',
+                  boxShadow: `0 1px 4px ${glowColor}`
                 }}
               >
                 <DecisionIcon size={18} />
@@ -335,7 +337,7 @@ export const VerdictPanel: React.FC<VerdictPanelProps> = ({
               >
                 <div
                   style={{
-                    background: 'rgba(255, 255, 255, 0.03)',
+                    background: '#f8fafc',
                     border: '1px solid var(--border-subtle)',
                     borderRadius: 'var(--radius-md)',
                     padding: '8px 12px',
@@ -349,7 +351,7 @@ export const VerdictPanel: React.FC<VerdictPanelProps> = ({
                     style={{
                       fontSize: '0.95rem',
                       fontWeight: 700,
-                      color: '#34d399',
+                      color: '#059669',
                       display: 'flex',
                       alignItems: 'center',
                       gap: '4px',
@@ -363,7 +365,7 @@ export const VerdictPanel: React.FC<VerdictPanelProps> = ({
 
                 <div
                   style={{
-                    background: 'rgba(255, 255, 255, 0.03)',
+                    background: '#f8fafc',
                     border: '1px solid var(--border-subtle)',
                     borderRadius: 'var(--radius-md)',
                     padding: '8px 12px',
@@ -378,7 +380,7 @@ export const VerdictPanel: React.FC<VerdictPanelProps> = ({
                       fontSize: '0.95rem',
                       fontWeight: 700,
                       color:
-                        scanResult.blockedContent.length > 0 ? '#f87171' : 'var(--text-muted)',
+                        scanResult.blockedContent.length > 0 ? '#e11d48' : 'var(--text-muted)',
                       display: 'flex',
                       alignItems: 'center',
                       gap: '4px',
@@ -398,7 +400,7 @@ export const VerdictPanel: React.FC<VerdictPanelProps> = ({
                 fontSize: '0.82rem',
                 lineHeight: 1.5,
                 padding: '12px 10px',
-                background: 'rgba(255, 255, 255, 0.02)',
+                background: '#f8fafc',
                 borderRadius: 'var(--radius-md)',
                 border: '1px dashed var(--border-subtle)',
                 width: '100%'

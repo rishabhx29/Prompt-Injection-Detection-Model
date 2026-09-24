@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CtxVigil Fixture Host - Local Untrusted Pages</title>
+  <link rel="stylesheet" href="./_fixture.css" />
+</head>
+<body>
+  <header class="site-bar">
+    <div class="brand">
+      <span class="brand-mark">CV</span>
+      <div>
+        <h1>CtxVigil Fixture Host</h1>
+        <span class="sub">Local untrusted pages served by the Vite dev server</span>
+      </div>
+    </div>
+    <span class="pill brand">http://localhost:5173/fixtures/</span>
+  </header>
+
+  <main>
+    <div class="card">
+      <h2>What this is</h2>
+      <p>
+        These pages stand in for the untrusted web content an LLM web agent reads.
+        They are ordinary HTML served over HTTP from localhost, so the demo agent can
+        fetch a real page and read it the way a browser agent would (visible text,
+        DOM, hidden DOM, and the accessibility tree).
+      </p>
+      <p class="muted">
+        All content is fictional: <span class="mono">*.test</span> domains, sandbox
+        values, simulated actions. Nothing here contacts the network, a real account,
+        or a payment provider.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>Scenarios</h2>
+      <table>
+        <tr><th>Page</th><th>Scenario</th><th>What it demonstrates</th></tr>
+        <tr>
+          <td><a href="./safe-refund-page.html">safe-refund-page.html</a></td>
+          <td>Safe baseline</td>
+          <td>Normal work must not be disrupted</td>
+        </tr>
+        <tr>
+          <td><a href="./visible-injection.html">visible-injection.html</a></td>
+          <td>Direct injection</td>
+          <td>Override wording in plain sight</td>
+        </tr>
+        <tr>
+          <td><a href="./aria-injection.html">aria-injection.html</a></td>
+          <td>Hidden ARIA injection</td>
+          <td>Payload in an accessible name, invisible on screen</td>
+        </tr>
+        <tr>
+          <td><a href="./injecagent-indirect-hijack.html">injecagent-indirect-hijack.html</a></td>
+          <td>Indirect web hijack</td>
+          <td>Benchmark-style tool hijack across three views</td>
+        </tr>
+        <tr>
+          <td><a href="./task-deviation-settings.html">task-deviation-settings.html</a></td>
+          <td>Task deviation</td>
+          <td>Directive with no override wording — the action gate decides</td>
+        </tr>
+        <tr>
+          <td><a href="./benign-aria-negative.html">benign-aria-negative.html</a></td>
+          <td>Hard negative</td>
+          <td>Imperative accessible name that must <em>not</em> be blocked</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Run the agent against these pages</h2>
+      <p class="mono">npm run agent:demo -- --all</p>
+      <p class="muted">
+        The agent fetches each page over HTTP, the protection layer scans it, and the
+        run is printed in the terminal and written to
+        <span class="mono">apps/demo-web/public/agent-runs/latest.json</span> for the
+        dashboard's Agent Console panel.
+      </p>
+    </div>
+
+    <p class="fixture-note">
+      Note for reviewers: these pages declare their episode metadata in
+      <span class="mono">ctxvigil:*</span> meta tags (task, proposed action, asserted
+      verdict). The agent runner reads those tags so the demo is reproducible and
+      self-checking; a page whose engine verdict stops matching its declared verdict
+      fails loudly instead of quietly.
+    </p>
+  </main>
+</body>
+</html>

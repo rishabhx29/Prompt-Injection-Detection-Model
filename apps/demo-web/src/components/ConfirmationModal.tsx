@@ -28,8 +28,8 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
       left: 0,
       right: 0,
       bottom: 0,
-      background: 'rgba(5, 8, 16, 0.85)',
-      backdropFilter: 'blur(12px)',
+      background: 'rgba(15, 23, 42, 0.45)',
+      backdropFilter: 'blur(8px)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -41,24 +41,24 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
         style={{
           maxWidth: '520px',
           width: '100%',
-          boxShadow: '0 25px 60px -10px rgba(0, 0, 0, 0.8), 0 0 40px rgba(139, 92, 246, 0.25)',
-          border: '1px solid rgba(139, 92, 246, 0.5)',
+          boxShadow: '0 20px 40px -10px rgba(15, 23, 42, 0.15)',
+          border: '1px solid var(--border-subtle)',
           animation: 'fadeIn 0.2s ease-out'
         }}
       >
         <div className="bezel-card-inner" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
           {/* Header */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#c084fc', fontWeight: 800, fontSize: '0.9rem', letterSpacing: '0.04em' }}>
-              <AlertTriangle size={20} color="#c084fc" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#7c3aed', fontWeight: 800, fontSize: '0.9rem', letterSpacing: '0.04em' }}>
+              <AlertTriangle size={20} color="#7c3aed" />
               <span>HUMAN-IN-THE-LOOP AUTHORIZATION REQUIRED</span>
             </div>
             <button
               onClick={onClose}
               style={{
-                background: 'rgba(255,255,255,0.06)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: '4px',
+                background: '#f1f5f9',
+                border: '1px solid var(--border-subtle)',
+                borderRadius: '6px',
                 color: 'var(--text-muted)',
                 cursor: 'pointer',
                 padding: '4px',
@@ -71,13 +71,13 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
           </div>
 
           <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
-            AgentGuard action gate intercepted an agent tool invocation that deviates from your original objective or targets sensitive persistent state. Explicit human confirmation is required before execution.
+            CtxVigil action gate intercepted an agent tool invocation that deviates from your original objective or targets sensitive persistent state. Explicit human confirmation is required before execution.
           </p>
 
           {/* Goal vs Action Comparison */}
           <div style={{
-            background: 'rgba(0, 0, 0, 0.5)',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
+            background: '#f8fafc',
+            border: '1px solid var(--border-subtle)',
             borderRadius: 'var(--radius-sm)',
             padding: '14px',
             display: 'flex',
@@ -85,38 +85,38 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
             gap: '10px'
           }}>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#818cf8', fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#4f46e5', fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase' }}>
                 <Target size={12} />
                 <span>Original User Intent:</span>
               </div>
-              <div style={{ fontSize: '0.85rem', color: '#f8fafc', fontWeight: 600, marginTop: '2px' }}>
+              <div style={{ fontSize: '0.85rem', color: '#0f172a', fontWeight: 600, marginTop: '2px' }}>
                 "{userTask}"
               </div>
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-muted)' }}>
-              <ArrowRight size={14} style={{ opacity: 0.5 }} />
-              <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Intercepted Tool Deviation</span>
+              <ArrowRight size={14} style={{ opacity: 0.6 }} />
+              <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>Intercepted Tool Deviation</span>
             </div>
 
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#f87171', fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#e11d48', fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase' }}>
                 <Lock size={12} />
                 <span>Proposed Divergent Action:</span>
               </div>
-              <div style={{ fontSize: '0.85rem', color: '#fca5a5', fontWeight: 600, marginTop: '2px' }}>
-                {proposedAction.label} <span style={{ color: '#94a3b8', fontFamily: 'var(--font-mono)', fontSize: '0.75rem' }}>({proposedAction.type})</span>
+              <div style={{ fontSize: '0.85rem', color: '#9f1239', fontWeight: 600, marginTop: '2px' }}>
+                {proposedAction.label} <span style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.75rem' }}>({proposedAction.type})</span>
               </div>
             </div>
 
             <div style={{
               marginTop: '4px',
               padding: '8px 10px',
-              background: 'rgba(139, 92, 246, 0.1)',
-              border: '1px solid rgba(139, 92, 246, 0.25)',
+              background: '#f5f3ff',
+              border: '1px solid #ddd6fe',
               borderRadius: '4px',
               fontSize: '0.74rem',
-              color: '#d8b4fe'
+              color: '#6d28d9'
             }}>
               <strong>Security Reason:</strong> {actionResult.reason}
             </div>
@@ -134,8 +134,9 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
                 display: 'flex',
                 alignItems: 'center',
                 gap: '6px',
-                border: '1px solid rgba(239, 68, 68, 0.3)',
-                color: '#fca5a5'
+                border: '1px solid #fecdd3',
+                color: '#e11d48',
+                background: '#fff1f2'
               }}
             >
               <ShieldAlert size={15} />
@@ -146,14 +147,14 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
               onClick={onConfirm}
               className="btn-action"
               style={{
-                background: 'linear-gradient(135deg, #8b5cf6, #6366f1)',
+                background: 'linear-gradient(135deg, #7c3aed, #4f46e5)',
                 padding: '10px 20px',
                 fontSize: '0.82rem',
                 fontWeight: 700,
                 display: 'flex',
                 alignItems: 'center',
                 gap: '6px',
-                boxShadow: '0 4px 16px rgba(139, 92, 246, 0.4)'
+                boxShadow: '0 2px 10px rgba(124, 58, 237, 0.25)'
               }}
             >
               <ShieldCheck size={16} />
@@ -167,4 +168,3 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
 };
 
 export default ConfirmationModal;
-

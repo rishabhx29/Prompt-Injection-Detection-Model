@@ -19,7 +19,11 @@
     "typecheck": "npm run typecheck --workspace packages/ctxvigil-core",
     "pack-check": "node scripts/pack-check.mjs",
     "scan": "node packages/ctxvigil-cli/src/index.ts",
+    "start:api": "node apps/protection-api/src/start.ts",
     "demo:web": "npm run dev --workspace apps/demo-web",
+    "agent:demo": "node apps/agent-demo/src/index.ts",
+    "agent:chat": "node apps/agent-chat/src/index.ts",
+    "agent:web": "node apps/agent-chat/src/server.ts",
     "eval:multiview": "python eval_ml/cross_view_agreement.py",
     "notebooks:gen": "python scripts/generate_notebooks.py"
   }

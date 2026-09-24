@@ -45,7 +45,7 @@ export const WebpagePreview: React.FC<WebpagePreviewProps> = ({
     <DoubleBezelCard
       headerLeft={
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Globe size={16} color="#818cf8" />
+          <Globe size={16} color="#4f46e5" />
           <span>Simulated Web Browser</span>
         </div>
       }
@@ -54,9 +54,9 @@ export const WebpagePreview: React.FC<WebpagePreviewProps> = ({
           <button
             onClick={onToggleExtractionMode}
             style={{
-              background: extractionMode === 'live-dom' ? 'rgba(99, 102, 241, 0.2)' : 'rgba(255, 255, 255, 0.05)',
-              border: `1px solid ${extractionMode === 'live-dom' ? 'rgba(99, 102, 241, 0.4)' : 'var(--border-subtle)'}`,
-              color: extractionMode === 'live-dom' ? '#a5b4fc' : 'var(--text-secondary)',
+              background: extractionMode === 'live-dom' ? '#e0e7ff' : '#ffffff',
+              border: `1px solid ${extractionMode === 'live-dom' ? '#a5b4fc' : 'var(--border-subtle)'}`,
+              color: extractionMode === 'live-dom' ? '#4338ca' : 'var(--text-secondary)',
               borderRadius: '9999px',
               padding: '2px 8px',
               fontSize: '0.7rem',
@@ -83,10 +83,11 @@ export const WebpagePreview: React.FC<WebpagePreviewProps> = ({
     >
       {/* Browser Chrome Shell */}
       <div style={{
-        background: '#0a0f1d',
+        background: '#f8fafc',
         overflow: 'hidden',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        borderRadius: 'calc(var(--radius-lg) - 1px)'
       }}>
         {/* URL Bar */}
         <div style={{
@@ -94,14 +95,14 @@ export const WebpagePreview: React.FC<WebpagePreviewProps> = ({
           alignItems: 'center',
           gap: '8px',
           padding: '8px 12px',
-          background: 'rgba(0,0,0,0.4)',
+          background: '#f1f5f9',
           borderBottom: '1px solid var(--border-subtle)',
           fontSize: '0.75rem'
         }}>
           <div style={{ display: 'flex', gap: '5px' }}>
-            <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#ef4444' }} />
-            <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#f59e0b' }} />
-            <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#10b981' }} />
+            <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#ff5f56' }} />
+            <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#ffbd2e' }} />
+            <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#27c93f' }} />
           </div>
 
           <div style={{
@@ -109,14 +110,15 @@ export const WebpagePreview: React.FC<WebpagePreviewProps> = ({
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
-            background: 'rgba(255,255,255,0.04)',
+            background: '#ffffff',
             padding: '4px 10px',
-            borderRadius: '4px',
+            borderRadius: '6px',
+            border: '1px solid var(--border-subtle)',
             color: 'var(--text-secondary)',
             fontFamily: 'var(--font-mono)'
           }}>
-            <Lock size={12} color="#10b981" />
-            <span style={{ color: '#e2e8f0', fontSize: '0.75rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            <Lock size={12} color="#059669" />
+            <span style={{ color: '#0f172a', fontSize: '0.75rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {url}
             </span>
           </div>
@@ -126,10 +128,10 @@ export const WebpagePreview: React.FC<WebpagePreviewProps> = ({
             <button
               onClick={() => setShowAriaInspector(!showAriaInspector)}
               style={{
-                background: showAriaInspector ? 'rgba(239, 68, 68, 0.25)' : 'rgba(56, 189, 248, 0.15)',
-                border: `1px solid ${showAriaInspector ? 'rgba(239, 68, 68, 0.5)' : 'rgba(56, 189, 248, 0.3)'}`,
-                color: showAriaInspector ? '#fca5a5' : '#38bdf8',
-                borderRadius: '4px',
+                background: showAriaInspector ? '#fff1f2' : '#f0f9ff',
+                border: `1px solid ${showAriaInspector ? '#fecdd3' : '#bae6fd'}`,
+                color: showAriaInspector ? '#e11d48' : '#0284c7',
+                borderRadius: '6px',
                 padding: '3px 8px',
                 fontSize: '0.7rem',
                 fontWeight: 600,
@@ -156,8 +158,8 @@ export const WebpagePreview: React.FC<WebpagePreviewProps> = ({
             minHeight: '260px',
             maxHeight: '300px',
             overflowY: 'auto',
-            background: '#0f172a',
-            color: '#e2e8f0',
+            background: '#ffffff',
+            color: '#0f172a',
             fontSize: '0.85rem'
           }}
         >

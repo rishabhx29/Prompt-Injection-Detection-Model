@@ -58,8 +58,8 @@ export const ApiConfigModal: React.FC<ApiConfigModalProps> = ({
       left: 0,
       right: 0,
       bottom: 0,
-      background: 'rgba(5, 8, 16, 0.85)',
-      backdropFilter: 'blur(12px)',
+      background: 'rgba(15, 23, 42, 0.4)',
+      backdropFilter: 'blur(8px)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -71,24 +71,24 @@ export const ApiConfigModal: React.FC<ApiConfigModalProps> = ({
         style={{
           maxWidth: '480px',
           width: '100%',
-          boxShadow: '0 25px 60px -10px rgba(0, 0, 0, 0.8), 0 0 35px rgba(6, 182, 212, 0.25)',
-          border: '1px solid rgba(6, 182, 212, 0.5)',
+          boxShadow: '0 20px 40px -10px rgba(15, 23, 42, 0.15), 0 0 0 1px #e2e8f0',
+          border: '1px solid var(--border-subtle)',
           animation: 'fadeIn 0.2s ease-out'
         }}
       >
         <div className="bezel-card-inner" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
           {/* Header */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#38bdf8', fontWeight: 800, fontSize: '0.9rem', letterSpacing: '0.04em' }}>
-              <Settings size={18} color="#38bdf8" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#4f46e5', fontWeight: 800, fontSize: '0.9rem', letterSpacing: '0.04em' }}>
+              <Settings size={18} color="#4f46e5" />
               <span>AGENTGUARD LIVE API CONFIGURATION</span>
             </div>
             <button
               onClick={onClose}
               style={{
-                background: 'rgba(255,255,255,0.06)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: '4px',
+                background: '#f1f5f9',
+                border: '1px solid var(--border-subtle)',
+                borderRadius: '6px',
                 color: 'var(--text-muted)',
                 cursor: 'pointer',
                 padding: '4px',
@@ -101,7 +101,7 @@ export const ApiConfigModal: React.FC<ApiConfigModalProps> = ({
           </div>
 
           <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: 1.45, margin: 0 }}>
-            Configure the network endpoint for Rishabh's AgentGuard Protection HTTP Adapter. The dashboard connects here for real-time multi-view scanning and action gating.
+            Configure the network endpoint for the CtxVigil Protection HTTP Adapter. The dashboard connects here for real-time multi-view scanning and action gating.
           </p>
 
           {/* Endpoint Input */}
@@ -115,22 +115,23 @@ export const ApiConfigModal: React.FC<ApiConfigModalProps> = ({
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
-                background: 'rgba(0, 0, 0, 0.5)',
+                background: '#ffffff',
                 border: '1px solid var(--border-subtle)',
                 borderRadius: 'var(--radius-sm)',
-                padding: '8px 12px'
+                padding: '8px 12px',
+                boxShadow: '0 1px 2px rgba(15, 23, 42, 0.04)'
               }}>
                 <Globe size={15} color="var(--text-muted)" />
                 <input
                   type="text"
                   value={urlInput}
                   onChange={(e) => setUrlInput(e.target.value)}
-                  placeholder="http://localhost:3000"
+                  placeholder="http://localhost:8787"
                   style={{
                     background: 'transparent',
                     border: 'none',
                     outline: 'none',
-                    color: '#f8fafc',
+                    color: '#0f172a',
                     fontFamily: 'var(--font-mono)',
                     fontSize: '0.82rem',
                     width: '100%'
@@ -156,20 +157,21 @@ export const ApiConfigModal: React.FC<ApiConfigModalProps> = ({
             <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Quick Presets:</span>
             <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
               {[
-                { label: 'Default (:3000)', url: DEFAULT_PROTECTION_API_URL },
-                { label: 'IPv4 Loopback', url: 'http://127.0.0.1:3000' },
-                { label: 'Port 8000', url: 'http://localhost:8000' }
+                { label: 'Default (:8787)', url: DEFAULT_PROTECTION_API_URL },
+                { label: 'IPv4 Loopback', url: 'http://127.0.0.1:8787' },
+                { label: 'Port 3000', url: 'http://localhost:3000' }
               ].map((p) => (
                 <button
                   key={p.url}
                   onClick={() => handleSelectPreset(p.url)}
                   style={{
-                    background: urlInput === p.url ? 'rgba(6, 182, 212, 0.2)' : 'rgba(255, 255, 255, 0.04)',
-                    border: `1px solid ${urlInput === p.url ? 'rgba(6, 182, 212, 0.5)' : 'var(--border-subtle)'}`,
-                    color: urlInput === p.url ? '#38bdf8' : 'var(--text-secondary)',
+                    background: urlInput === p.url ? '#eef2ff' : '#f8fafc',
+                    border: `1px solid ${urlInput === p.url ? '#c7d2fe' : 'var(--border-subtle)'}`,
+                    color: urlInput === p.url ? '#4f46e5' : 'var(--text-secondary)',
                     borderRadius: '4px',
                     padding: '3px 8px',
                     fontSize: '0.7rem',
+                    fontWeight: 600,
                     cursor: 'pointer'
                   }}
                 >
@@ -184,8 +186,8 @@ export const ApiConfigModal: React.FC<ApiConfigModalProps> = ({
             <div style={{
               padding: '10px 14px',
               borderRadius: 'var(--radius-sm)',
-              background: testResult.online ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)',
-              border: `1px solid ${testResult.online ? 'rgba(16, 185, 129, 0.4)' : 'rgba(239, 68, 68, 0.4)'}`,
+              background: testResult.online ? '#ecfdf5' : '#fff1f2',
+              border: `1px solid ${testResult.online ? '#a7f3d0' : '#fecdd3'}`,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
@@ -193,12 +195,12 @@ export const ApiConfigModal: React.FC<ApiConfigModalProps> = ({
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 {testResult.online ? (
-                  <Wifi size={16} color="#34d399" />
+                  <Wifi size={16} color="#059669" />
                 ) : (
-                  <AlertCircle size={16} color="#f87171" />
+                  <AlertCircle size={16} color="#e11d48" />
                 )}
                 <div>
-                  <div style={{ fontWeight: 700, color: testResult.online ? '#34d399' : '#f87171' }}>
+                  <div style={{ fontWeight: 700, color: testResult.online ? '#059669' : '#e11d48' }}>
                     {testResult.online ? 'API IS ONLINE & RESPONSIVE' : 'CONNECTION FAILED'}
                   </div>
                   <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>
@@ -211,7 +213,7 @@ export const ApiConfigModal: React.FC<ApiConfigModalProps> = ({
                 <span style={{
                   fontFamily: 'var(--font-mono)',
                   fontSize: '0.72rem',
-                  color: testResult.latencyMs < 50 ? '#34d399' : '#f59e0b',
+                  color: testResult.latencyMs < 50 ? '#059669' : '#d97706',
                   fontWeight: 700
                 }}>
                   {testResult.latencyMs}ms
@@ -234,7 +236,6 @@ export const ApiConfigModal: React.FC<ApiConfigModalProps> = ({
               onClick={handleSave}
               className="btn-action"
               style={{
-                background: 'linear-gradient(135deg, #06b6d4, #3b82f6)',
                 padding: '8px 18px',
                 fontSize: '0.8rem',
                 display: 'flex',

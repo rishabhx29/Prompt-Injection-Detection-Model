@@ -1,7 +1,6 @@
 {
   "name": "@ctxvigil/shared-types",
   "version": "0.1.0",
-  "private": true,
   "description": "Contract types for CtxVigil. Types only — no runtime behaviour. Mirrors docs/03_API_CONTRACT.md field-for-field.",
   "license": "MIT",
   "type": "module",

@@ -36,53 +36,54 @@ export const Header: React.FC<HeaderProps> = ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '16px 24px',
+        padding: '14px 24px',
         borderBottom: '1px solid var(--border-subtle)',
-        background: 'rgba(6, 9, 17, 0.85)',
+        background: 'rgba(255, 255, 255, 0.92)',
         backdropFilter: 'blur(12px)',
         position: 'sticky',
         top: 0,
-        zIndex: 50
+        zIndex: 50,
+        boxShadow: '0 1px 3px 0 rgba(15, 23, 42, 0.04)'
       }}>
         {/* Brand & Team Info */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
           <div style={{
-            width: '42px',
-            height: '42px',
-            borderRadius: '12px',
-            background: 'linear-gradient(135deg, #6366f1, #06b6d4)',
+            width: '40px',
+            height: '40px',
+            borderRadius: '10px',
+            background: 'linear-gradient(135deg, #4f46e5, #0284c7)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 0 20px rgba(99, 102, 241, 0.4)'
+            boxShadow: '0 2px 10px rgba(79, 70, 229, 0.25)'
           }}>
-            <Shield size={24} color="#ffffff" />
+            <Shield size={22} color="#ffffff" />
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <h1 style={{ fontSize: '1.25rem', fontWeight: 800, letterSpacing: '-0.02em' }}>
+              <h1 style={{ fontSize: '1.2rem', fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
                 CtxVigil
               </h1>
               <span style={{
-                fontSize: '0.7rem',
+                fontSize: '0.68rem',
                 fontWeight: 700,
-                background: 'rgba(99, 102, 241, 0.2)',
-                color: '#818cf8',
+                background: '#eef2ff',
+                color: '#4f46e5',
                 padding: '2px 8px',
                 borderRadius: '6px',
-                border: '1px solid rgba(99, 102, 241, 0.3)'
+                border: '1px solid #c7d2fe'
               }}>
                 DA-1 AI ENGINE v1.0
               </span>
             </div>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+            <p style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
               Multi-View Prompt-Injection Defense · Rishabh Tripathi (24BRS1136) & Saumya (24BRS1065) · BCSE306L AI
             </p>
           </div>
         </div>
 
         {/* Controls & Connection Status */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           {/* Backend / Mock Status Indicator with Telemetry */}
           <div style={{
             display: 'flex',
@@ -90,17 +91,17 @@ export const Header: React.FC<HeaderProps> = ({
             gap: '8px',
             padding: '6px 12px',
             borderRadius: '8px',
-            background: 'rgba(255, 255, 255, 0.03)',
+            background: '#f8fafc',
             border: '1px solid var(--border-subtle)',
             fontSize: '0.8rem'
           }}>
             <span className={`pulsing-dot ${health.online ? 'online' : 'offline'}`} />
-            <span style={{ color: 'var(--text-secondary)' }}>
+            <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>
               {mode === 'mock' ? 'Mock Engine (Standalone)' : 'Live CtxVigil API (:8787)'}
             </span>
             {health.latencyMs !== undefined && (
               <span style={{ 
-                color: health.latencyMs < 50 ? '#34d399' : (health.latencyMs < 200 ? '#f59e0b' : '#f87171'), 
+                color: health.latencyMs < 50 ? '#059669' : (health.latencyMs < 200 ? '#d97706' : '#e11d48'), 
                 fontSize: '0.75rem',
                 fontFamily: 'var(--font-mono)',
                 fontWeight: 600
@@ -136,12 +137,12 @@ export const Header: React.FC<HeaderProps> = ({
           >
             {mode === 'mock' ? (
               <>
-                <Server size={14} />
+                <Server size={14} color="#4f46e5" />
                 <span>Source: <strong>Mock Fixtures</strong></span>
               </>
             ) : (
               <>
-                <Wifi size={14} />
+                <Wifi size={14} color="#059669" />
                 <span>Source: <strong>Live API</strong></span>
               </>
             )}
@@ -167,17 +168,17 @@ export const Header: React.FC<HeaderProps> = ({
               style={{
                 fontSize: '0.8rem',
                 padding: '6px 14px',
-                background: 'rgba(99, 102, 241, 0.15)',
-                borderColor: 'rgba(99, 102, 241, 0.4)',
-                color: '#c7d2fe',
+                background: '#eef2ff',
+                borderColor: '#c7d2fe',
+                color: '#4338ca',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '6px',
-                boxShadow: '0 0 12px rgba(99, 102, 241, 0.2)'
+                boxShadow: '0 1px 3px rgba(79, 70, 229, 0.12)'
               }}
               title="Open 4-Minute Presentation Guide (Curated Evaluator Walkthrough)"
             >
-              <Sparkles size={14} color="#818cf8" />
+              <Sparkles size={14} color="#4f46e5" />
               <span>★ Demo Guide</span>
             </button>
           )}

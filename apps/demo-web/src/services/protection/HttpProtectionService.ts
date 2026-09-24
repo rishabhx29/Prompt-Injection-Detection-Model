@@ -40,7 +40,7 @@ export class ApiServerError extends Error {
   }
 }
 
-export const DEFAULT_PROTECTION_API_URL = 'http://localhost:3000';
+export const DEFAULT_PROTECTION_API_URL = 'http://localhost:8787';
 export const STORAGE_KEY_API_URL = 'agentguard_api_url';
 
 export class HttpProtectionService implements IProtectionService {

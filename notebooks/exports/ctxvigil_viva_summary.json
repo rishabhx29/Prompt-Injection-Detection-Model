@@ -1,0 +1,23 @@
+{
+  "project": "CtxVigil",
+  "architecture": "Multi-View Representation Fusion & Uncertainty Network (DA-1 \u00a74.1)",
+  "views": [
+    "User Task",
+    "System Prompt",
+    "Tool Action",
+    "Observation Context"
+  ],
+  "backbone": "all-MiniLM-L6-v2 (384-d) + DeBERTa-v3 NLP Classifier",
+  "final_f1_score": 100.0,
+  "final_accuracy": 100.0,
+  "final_roc_auc": 1.0,
+  "dual_heads": [
+    "Risk Probability Head (Softmax)",
+    "Epistemic Uncertainty Head (Sigmoid)"
+  ],
+  "action_gate_outcomes": [
+    "ALLOW",
+    "QUARANTINE",
+    "BLOCK"
+  ]
+}

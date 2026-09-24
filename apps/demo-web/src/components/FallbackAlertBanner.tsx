@@ -37,9 +37,9 @@ export const FallbackAlertBanner: React.FC<FallbackAlertBannerProps> = ({
         <div style={{
           padding: '6px',
           borderRadius: '8px',
-          background: 'rgba(239, 68, 68, 0.2)',
-          border: '1px solid rgba(239, 68, 68, 0.4)',
-          color: '#f87171',
+          background: 'rgba(239, 68, 68, 0.12)',
+          border: '1px solid rgba(239, 68, 68, 0.35)',
+          color: '#b91c1c',
           display: 'flex'
         }}>
           <ShieldAlert size={20} />
@@ -50,7 +50,7 @@ export const FallbackAlertBanner: React.FC<FallbackAlertBannerProps> = ({
             <span style={{
               fontSize: '0.82rem',
               fontWeight: 800,
-              color: '#fca5a5',
+              color: '#b91c1c',
               letterSpacing: '0.04em',
               textTransform: 'uppercase'
             }}>
@@ -61,15 +61,16 @@ export const FallbackAlertBanner: React.FC<FallbackAlertBannerProps> = ({
               fontFamily: 'var(--font-mono)',
               padding: '2px 6px',
               borderRadius: '4px',
-              background: 'rgba(0, 0, 0, 0.4)',
-              color: '#cbd5e1'
+              background: '#fef2f2',
+              border: '1px solid #fecaca',
+              color: '#991b1b'
             }}>
               {apiUrl}
             </span>
           </div>
 
-          <p style={{ fontSize: '0.78rem', color: '#e2e8f0', margin: 0, lineHeight: 1.45 }}>
-            Cannot connect to AgentGuard HTTP adapter. Per Rule 4.4, unscanned pages are <strong>never assumed safe</strong>. You can run Rishabh's API locally, test the connection, or switch to offline mock fixtures.
+          <p style={{ fontSize: '0.78rem', color: '#475569', margin: 0, lineHeight: 1.45 }}>
+            Cannot connect to the protection API. Per the fail-closed rule, unscanned pages are <strong style={{ color: '#0f172a' }}>never assumed safe</strong>. You can run the API locally, test the connection, or switch to offline mock fixtures.
           </p>
         </div>
       </div>

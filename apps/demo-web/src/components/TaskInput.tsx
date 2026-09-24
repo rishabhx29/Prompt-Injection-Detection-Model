@@ -21,7 +21,7 @@ export const TaskInput: React.FC<TaskInputProps> = ({
     <DoubleBezelCard
       headerLeft={
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Target size={16} color="#818cf8" />
+          <Target size={16} color="#4f46e5" />
           <span>User's Original Task</span>
         </div>
       }
@@ -33,7 +33,7 @@ export const TaskInput: React.FC<TaskInputProps> = ({
             style={{
               background: 'none',
               border: 'none',
-              color: '#818cf8',
+              color: '#4f46e5',
               fontSize: '0.74rem',
               cursor: 'pointer',
               display: 'flex',
@@ -61,7 +61,7 @@ export const TaskInput: React.FC<TaskInputProps> = ({
         style={{
           width: '100%',
           padding: '10px 12px',
-          background: 'var(--bg-surface-elevated)',
+          background: '#ffffff',
           border: '1px solid var(--border-subtle)',
           borderRadius: 'var(--radius-md)',
           color: 'var(--text-primary)',
@@ -69,7 +69,7 @@ export const TaskInput: React.FC<TaskInputProps> = ({
           fontFamily: 'var(--font-sans)',
           resize: 'none',
           outline: 'none',
-          boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.3)',
+          boxShadow: '0 1px 2px rgba(15, 23, 42, 0.04)',
           transition: 'border-color 0.2s ease'
         }}
       />

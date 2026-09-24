@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node --no-node-snapshot ./node_modules/vite/bin/vite.js",
-    "build": "node --no-node-snapshot ./node_modules/typescript/bin/tsc --project tsconfig.app.json && node --no-node-snapshot ./node_modules/vite/bin/vite.js build",
-    "preview": "node --no-node-snapshot ./node_modules/vite/bin/vite.js preview",
+    "dev": "vite",
+    "build": "tsc --project tsconfig.app.json && vite build",
+    "preview": "vite preview",
     "verify:phase1": "node scripts/verify-phase1.mjs",
     "verify:phase2": "node scripts/verify-phase2.mjs",
     "verify:phase3": "node scripts/verify-phase3.mjs",

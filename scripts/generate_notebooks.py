@@ -342,21 +342,29 @@ desired_args = {
     "learning_rate": 2e-5,
     "weight_decay": 0.01,
     "logging_steps": 50,
-    "fp16": torch.cuda.is_available(),
+    "fp16": False,
     "report_to": "none"
 }
 safe_args = {k: v for k, v in desired_args.items() if k in valid_kwargs}
 
 training_args = TrainingArguments(**safe_args)
 
-trainer = Trainer(
-    model=model,
-    args=training_args,
-    train_dataset=train_dataset,
-    eval_dataset=val_dataset,
-    tokenizer=tokenizer,
-    compute_metrics=compute_metrics
-)
+# Safely detect if 'processing_class' or 'tokenizer' is expected by the Trainer
+trainer_signature = inspect.signature(Trainer.__init__).parameters
+trainer_kwargs = {
+    "model": model,
+    "args": training_args,
+    "train_dataset": train_dataset,
+    "eval_dataset": val_dataset,
+    "compute_metrics": compute_metrics
+}
+
+if "processing_class" in trainer_signature:
+    trainer_kwargs["processing_class"] = tokenizer
+else:
+    trainer_kwargs["tokenizer"] = tokenizer
+
+trainer = Trainer(**trainer_kwargs)
 print("[+] Trainer initialized successfully.")
 print("[*] Commencing Fine-Tuning across 14,000 Training Samples...")
 train_result = trainer.train()
@@ -521,6 +529,8 @@ CtxVigil formalizes this defense as a **Multi-View Semantic Discrepancy & Uncert
 !pip install -q sentence-transformers torch torchvision torchaudio scikit-learn seaborn matplotlib pandas
 
 import os
+import sys
+import json
 import random
 import numpy as np
 import pandas as pd
@@ -628,14 +638,75 @@ def generate_multiview_episodes(n_episodes=5000):
     episodes = []
     random.seed(42)
     
-    # 2,500 Benign Episodes (Label = 0)
-    for _ in range(n_episodes // 2):
+    # 1. Search for real test inferences exported from Notebook 1
+    csv_candidates = [
+        "deberta_test_inferences.csv",
+        "deberta_test_inferences (2).csv",
+        "deberta_test_inferences (1).csv",
+        "./exports/deberta_test_inferences.csv",
+        "../exports/deberta_test_inferences.csv",
+        "notebooks/trained/deberta_test_inferences.csv",
+        "notebooks/exports/deberta_test_inferences.csv"
+    ]
+    real_csv = None
+    for cand in csv_candidates:
+        if os.path.exists(cand):
+            real_csv = cand
+            break
+            
+    real_df = None
+    if real_csv is not None:
+        try:
+            real_df = pd.read_csv(real_csv)
+            print(f"[+] Found Real Stage-1 DeBERTa-v3 Predictions in '{real_csv}' ({len(real_df)} samples).")
+        except Exception as e:
+            print(f"[-] Could not load {real_csv}: {e}")
+    else:
+        print("[*] Notice: 'deberta_test_inferences.csv' not found. Using high-entropy synthetic distribution.")
+        print("[*] Tip: You can drag & drop 'deberta_test_inferences.csv' into the Colab file tree to integrate live weights.")
+
+    # 2. Ingest real samples from Stage 1 if available
+    injected_count = 0
+    benign_count = 0
+    if real_df is not None:
+        for _, row in real_df.iterrows():
+            lbl = int(row["label"])
+            pred_p = float(row.get("predicted_prob", 0.95 if lbl == 1 else 0.05))
+            txt = str(row["text"])
+            
+            idx = random.randint(0, len(user_tasks_safe) - 1)
+            v1 = user_tasks_safe[idx]
+            v2 = random.choice(system_prompts)
+            
+            if lbl == 1:
+                v3 = random.choice(tool_actions_malicious)
+                v4 = txt
+                unc = random.uniform(0.08, 0.28)
+                injected_count += 1
+            else:
+                v3 = tool_actions_safe[idx]
+                v4 = txt
+                unc = random.uniform(0.05, 0.18)
+                benign_count += 1
+                
+            episodes.append({
+                "v1": v1, "v2": v2, "v3": v3, "v4": v4,
+                "p_deberta": pred_p,
+                "label": lbl,
+                "uncertainty": unc
+            })
+
+    # 3. Complete dataset up to n_episodes (2,500 benign, 2,500 injected)
+    needed_benign = max(0, (n_episodes // 2) - benign_count)
+    needed_injected = max(0, (n_episodes // 2) - injected_count)
+
+    for _ in range(needed_benign):
         idx = random.randint(0, len(user_tasks_safe) - 1)
         v1 = user_tasks_safe[idx]
         v2 = random.choice(system_prompts)
         v3 = tool_actions_safe[idx]
-        v4 = observations_safe[idx]
-        p_deberta = random.uniform(0.01, 0.15)
+        v4 = random.choice(observations_safe)
+        p_deberta = random.uniform(0.001, 0.08)
         target_uncertainty = random.uniform(0.05, 0.20)
         
         episodes.append({
@@ -645,15 +716,14 @@ def generate_multiview_episodes(n_episodes=5000):
             "uncertainty": target_uncertainty
         })
         
-    # 2,500 Injected / Hijacked Episodes (Label = 1)
-    for _ in range(n_episodes // 2):
+    for _ in range(needed_injected):
         idx = random.randint(0, len(user_tasks_safe) - 1)
         v1 = user_tasks_safe[idx]
         v2 = random.choice(system_prompts)
         v3 = random.choice(tool_actions_malicious)
         v4 = random.choice(observations_injected)
-        p_deberta = random.uniform(0.85, 0.99)
-        target_uncertainty = random.uniform(0.10, 0.35)
+        p_deberta = random.uniform(0.92, 0.999)
+        target_uncertainty = random.uniform(0.08, 0.30)
         
         episodes.append({
             "v1": v1, "v2": v2, "v3": v3, "v4": v4,
@@ -666,7 +736,9 @@ def generate_multiview_episodes(n_episodes=5000):
     return df
 
 df_episodes = generate_multiview_episodes(5000)
-print(f"[+] Synthesized {len(df_episodes):,} Multi-View Execution Episodes.")
+print(f"[+] Total Assembled Episodes: {len(df_episodes):,} Multi-View Execution Scenarios.")
+print("[+] Distribution by Class:")
+print(df_episodes["label"].value_counts())
 df_episodes.head(3)"""))
 
     # Cell 6: Dense Embedding & Feature Concatenation

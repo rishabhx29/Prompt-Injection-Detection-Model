@@ -39,7 +39,7 @@ export const MultiViewInspector: React.FC<MultiViewInspectorProps> = ({
     <DoubleBezelCard
       headerLeft={
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Terminal size={16} color="var(--accent-cyan)" />
+          <Terminal size={16} color="var(--primary)" />
           <span>Multi-View Representation Audit</span>
         </div>
       }
@@ -49,9 +49,10 @@ export const MultiViewInspector: React.FC<MultiViewInspectorProps> = ({
             fontSize: '0.7rem',
             padding: '2px 8px',
             borderRadius: '9999px',
-            background: 'rgba(255, 255, 255, 0.05)',
+            background: '#f1f5f9',
             border: '1px solid var(--border-subtle)',
-            color: 'var(--text-muted)'
+            color: 'var(--text-secondary)',
+            fontWeight: 600
           }}
         >
           3 Channels Active
@@ -70,7 +71,7 @@ export const MultiViewInspector: React.FC<MultiViewInspectorProps> = ({
           display: 'flex',
           gap: '6px',
           padding: '4px',
-          background: 'rgba(0, 0, 0, 0.45)',
+          background: '#f1f5f9',
           borderRadius: 'var(--radius-md)',
           border: '1px solid var(--border-subtle)'
         }}
@@ -90,12 +91,13 @@ export const MultiViewInspector: React.FC<MultiViewInspectorProps> = ({
             fontSize: '0.78rem',
             fontWeight: 600,
             cursor: 'pointer',
-            background: activeTab === 'visible' ? 'var(--primary)' : 'transparent',
-            color: activeTab === 'visible' ? '#ffffff' : 'var(--text-secondary)',
-            transition: 'all 0.18s cubic-bezier(0.32, 0.72, 0, 1)'
+            background: activeTab === 'visible' ? '#ffffff' : 'transparent',
+            color: activeTab === 'visible' ? '#0f172a' : 'var(--text-secondary)',
+            boxShadow: activeTab === 'visible' ? '0 1px 3px rgba(15, 23, 42, 0.08)' : 'none',
+            transition: 'all 0.18s cubic-bezier(0.16, 1, 0.3, 1)'
           }}
         >
-          <Eye size={14} />
+          <Eye size={14} color={activeTab === 'visible' ? 'var(--primary)' : 'var(--text-muted)'} />
           <span>Visible</span>
           {visibleFindings.length > 0 ? (
             <span
@@ -103,7 +105,7 @@ export const MultiViewInspector: React.FC<MultiViewInspectorProps> = ({
                 fontSize: '0.65rem',
                 padding: '1px 6px',
                 borderRadius: '10px',
-                background: '#ef4444',
+                background: '#e11d48',
                 color: '#fff',
                 fontWeight: 700
               }}
@@ -116,7 +118,7 @@ export const MultiViewInspector: React.FC<MultiViewInspectorProps> = ({
                 fontSize: '0.65rem',
                 padding: '1px 5px',
                 borderRadius: '10px',
-                background: 'rgba(255, 255, 255, 0.08)',
+                background: '#e2e8f0',
                 color: 'var(--text-muted)'
               }}
             >
@@ -140,12 +142,13 @@ export const MultiViewInspector: React.FC<MultiViewInspectorProps> = ({
             fontSize: '0.78rem',
             fontWeight: 600,
             cursor: 'pointer',
-            background: activeTab === 'dom' ? 'var(--primary)' : 'transparent',
-            color: activeTab === 'dom' ? '#ffffff' : 'var(--text-secondary)',
-            transition: 'all 0.18s cubic-bezier(0.32, 0.72, 0, 1)'
+            background: activeTab === 'dom' ? '#ffffff' : 'transparent',
+            color: activeTab === 'dom' ? '#0f172a' : 'var(--text-secondary)',
+            boxShadow: activeTab === 'dom' ? '0 1px 3px rgba(15, 23, 42, 0.08)' : 'none',
+            transition: 'all 0.18s cubic-bezier(0.16, 1, 0.3, 1)'
           }}
         >
-          <Code size={14} />
+          <Code size={14} color={activeTab === 'dom' ? 'var(--primary)' : 'var(--text-muted)'} />
           <span>Raw DOM</span>
           {domFindings.length > 0 ? (
             <span
@@ -153,7 +156,7 @@ export const MultiViewInspector: React.FC<MultiViewInspectorProps> = ({
                 fontSize: '0.65rem',
                 padding: '1px 6px',
                 borderRadius: '10px',
-                background: '#f59e0b',
+                background: '#d97706',
                 color: '#fff',
                 fontWeight: 700
               }}
@@ -166,7 +169,7 @@ export const MultiViewInspector: React.FC<MultiViewInspectorProps> = ({
                 fontSize: '0.65rem',
                 padding: '1px 5px',
                 borderRadius: '10px',
-                background: 'rgba(255, 255, 255, 0.08)',
+                background: '#e2e8f0',
                 color: 'var(--text-muted)'
               }}
             >
@@ -190,12 +193,13 @@ export const MultiViewInspector: React.FC<MultiViewInspectorProps> = ({
             fontSize: '0.78rem',
             fontWeight: 600,
             cursor: 'pointer',
-            background: activeTab === 'accessibility' ? 'var(--primary)' : 'transparent',
-            color: activeTab === 'accessibility' ? '#ffffff' : 'var(--text-secondary)',
-            transition: 'all 0.18s cubic-bezier(0.32, 0.72, 0, 1)'
+            background: activeTab === 'accessibility' ? '#ffffff' : 'transparent',
+            color: activeTab === 'accessibility' ? '#0f172a' : 'var(--text-secondary)',
+            boxShadow: activeTab === 'accessibility' ? '0 1px 3px rgba(15, 23, 42, 0.08)' : 'none',
+            transition: 'all 0.18s cubic-bezier(0.16, 1, 0.3, 1)'
           }}
         >
-          <Accessibility size={14} />
+          <Accessibility size={14} color={activeTab === 'accessibility' ? 'var(--primary)' : 'var(--text-muted)'} />
           <span>AXTree / ARIA</span>
           {ariaFindings.length > 0 ? (
             <span
@@ -203,7 +207,7 @@ export const MultiViewInspector: React.FC<MultiViewInspectorProps> = ({
                 fontSize: '0.65rem',
                 padding: '1px 6px',
                 borderRadius: '10px',
-                background: '#ef4444',
+                background: '#e11d48',
                 color: '#fff',
                 fontWeight: 700
               }}
@@ -216,7 +220,7 @@ export const MultiViewInspector: React.FC<MultiViewInspectorProps> = ({
                 fontSize: '0.65rem',
                 padding: '1px 5px',
                 borderRadius: '10px',
-                background: 'rgba(255, 255, 255, 0.08)',
+                background: '#e2e8f0',
                 color: 'var(--text-muted)'
               }}
             >
@@ -230,18 +234,18 @@ export const MultiViewInspector: React.FC<MultiViewInspectorProps> = ({
       {hasDiscrepancy && (
         <div
           style={{
-            padding: '8px 12px',
+            padding: '9px 12px',
             borderRadius: 'var(--radius-sm)',
-            background: 'rgba(99, 102, 241, 0.12)',
-            border: '1px solid rgba(99, 102, 241, 0.3)',
+            background: '#eef2ff',
+            border: '1px solid #c7d2fe',
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
             fontSize: '0.74rem',
-            color: '#c7d2fe'
+            color: '#4338ca'
           }}
         >
-          <AlertTriangle size={14} color="#818cf8" style={{ flexShrink: 0 }} />
+          <AlertTriangle size={15} color="#4f46e5" style={{ flexShrink: 0 }} />
           <span>
             <strong>Multi-View Discrepancy:</strong> Visible text contains 0 threats, but AXTree contains hidden instruction overrides.
           </span>
@@ -254,8 +258,8 @@ export const MultiViewInspector: React.FC<MultiViewInspectorProps> = ({
           flex: 1,
           maxHeight: '270px',
           overflowY: 'auto',
-          background: 'rgba(2, 6, 17, 0.75)',
-          border: '1px solid rgba(255, 255, 255, 0.06)',
+          background: '#f8fafc',
+          border: '1px solid var(--border-subtle)',
           borderRadius: 'var(--radius-md)',
           padding: '12px',
           fontSize: '0.8rem',
@@ -281,12 +285,12 @@ export const MultiViewInspector: React.FC<MultiViewInspectorProps> = ({
                     padding: '8px 12px',
                     borderRadius: 'var(--radius-sm)',
                     background: matchingFinding
-                      ? 'rgba(239, 68, 68, 0.15)'
-                      : 'rgba(255, 255, 255, 0.02)',
+                      ? '#fff1f2'
+                      : '#ffffff',
                     border: matchingFinding
-                      ? '1px solid #ef4444'
-                      : '1px solid rgba(255, 255, 255, 0.03)',
-                    color: matchingFinding ? '#fca5a5' : '#cbd5e1',
+                      ? '1px solid #fecdd3'
+                      : '1px solid var(--border-subtle)',
+                    color: matchingFinding ? '#9f1239' : '#1e293b',
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '4px'
@@ -303,7 +307,7 @@ export const MultiViewInspector: React.FC<MultiViewInspectorProps> = ({
                       <span
                         style={{
                           fontSize: '0.66rem',
-                          color: '#f87171',
+                          color: '#e11d48',
                           fontWeight: 700,
                           textTransform: 'uppercase',
                           letterSpacing: '0.04em'
@@ -316,7 +320,7 @@ export const MultiViewInspector: React.FC<MultiViewInspectorProps> = ({
                         style={{
                           background: 'transparent',
                           border: 'none',
-                          color: '#fca5a5',
+                          color: '#e11d48',
                           cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'center',
@@ -357,15 +361,15 @@ export const MultiViewInspector: React.FC<MultiViewInspectorProps> = ({
                     key={i}
                     className={`code-line-row ${isTainted ? 'attack-spotlight' : ''}`}
                     style={{
-                      background: isTainted ? 'rgba(239, 68, 68, 0.1)' : undefined
+                      background: isTainted ? '#fff1f2' : undefined
                     }}
                   >
                     <span className="code-line-number">{i + 1}</span>
                     <span
                       className="code-line-content"
                       style={{
-                        color: isTainted ? '#fca5a5' : '#94a3b8',
-                        fontWeight: isTainted ? 600 : 400
+                        color: isTainted ? '#9f1239' : '#334155',
+                        fontWeight: isTainted ? 700 : 400
                       }}
                     >
                       {item}
@@ -409,14 +413,15 @@ export const MultiViewInspector: React.FC<MultiViewInspectorProps> = ({
                       padding: '10px 12px',
                       borderRadius: 'var(--radius-sm)',
                       background: isMaliciousAria
-                        ? 'rgba(239, 68, 68, 0.15)'
-                        : 'rgba(16, 185, 129, 0.08)',
+                        ? '#fff1f2'
+                        : '#ffffff',
                       border: isMaliciousAria
-                        ? '1px solid #ef4444'
-                        : '1px solid rgba(16, 185, 129, 0.25)',
+                        ? '1px solid #fecdd3'
+                        : '1px solid var(--border-subtle)',
                       display: 'flex',
                       flexDirection: 'column',
-                      gap: '6px'
+                      gap: '6px',
+                      boxShadow: '0 1px 2px rgba(15, 23, 42, 0.03)'
                     }}
                   >
                     <div
@@ -432,7 +437,7 @@ export const MultiViewInspector: React.FC<MultiViewInspectorProps> = ({
                             fontSize: '0.72rem',
                             fontWeight: 700,
                             fontFamily: 'var(--font-mono)',
-                            color: isMaliciousAria ? '#f87171' : '#34d399'
+                            color: isMaliciousAria ? '#e11d48' : '#059669'
                           }}
                         >
                           {entry.kind}
@@ -444,8 +449,9 @@ export const MultiViewInspector: React.FC<MultiViewInspectorProps> = ({
                               fontFamily: 'var(--font-mono)',
                               padding: '1px 6px',
                               borderRadius: '3px',
-                              background: 'rgba(255, 255, 255, 0.06)',
-                              color: 'var(--text-muted)'
+                              background: '#f1f5f9',
+                              border: '1px solid var(--border-subtle)',
+                              color: 'var(--text-secondary)'
                             }}
                           >
                             {entry.selector}
@@ -459,9 +465,10 @@ export const MultiViewInspector: React.FC<MultiViewInspectorProps> = ({
                           padding: '2px 7px',
                           borderRadius: '4px',
                           background: isMaliciousAria
-                            ? 'rgba(239, 68, 68, 0.3)'
-                            : 'rgba(16, 185, 129, 0.2)',
-                          color: isMaliciousAria ? '#fecaca' : '#a7f3d0',
+                            ? '#ffe4e6'
+                            : '#ecfdf5',
+                          color: isMaliciousAria ? '#9f1239' : '#065f46',
+                          border: isMaliciousAria ? '1px solid #fecdd3' : '1px solid #a7f3d0',
                           fontWeight: 700,
                           display: 'flex',
                           alignItems: 'center',
@@ -484,11 +491,12 @@ export const MultiViewInspector: React.FC<MultiViewInspectorProps> = ({
 
                     <div
                       style={{
-                        color: isMaliciousAria ? '#fca5a5' : '#e2e8f0',
+                        color: isMaliciousAria ? '#9f1239' : '#1e293b',
                         fontWeight: isMaliciousAria ? 600 : 400,
                         fontFamily: 'var(--font-mono)',
                         fontSize: '0.76rem',
-                        background: 'rgba(0, 0, 0, 0.2)',
+                        background: isMaliciousAria ? '#fff5f5' : '#f8fafc',
+                        border: '1px solid var(--border-subtle)',
                         padding: '6px 8px',
                         borderRadius: '4px'
                       }}

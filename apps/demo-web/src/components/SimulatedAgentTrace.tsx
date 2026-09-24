@@ -151,15 +151,15 @@ export const SimulatedAgentTrace: React.FC<SimulatedAgentTraceProps> = ({
               textTransform: 'uppercase',
               letterSpacing: '0.04em',
               background: !isComplete 
-                ? 'rgba(6, 182, 212, 0.15)' 
-                : (isAttackBlocked ? 'rgba(239, 68, 68, 0.15)' : 'rgba(16, 185, 129, 0.15)'),
+                ? 'rgba(2, 132, 199, 0.12)' 
+                : (isAttackBlocked ? 'rgba(225, 29, 72, 0.12)' : 'rgba(5, 150, 105, 0.12)'),
               color: !isComplete 
-                ? '#22d3ee' 
-                : (isAttackBlocked ? '#f87171' : '#34d399'),
+                ? '#0369a1' 
+                : (isAttackBlocked ? '#be123c' : '#047857'),
               border: `1px solid ${
                 !isComplete 
-                  ? 'rgba(6, 182, 212, 0.3)' 
-                  : (isAttackBlocked ? 'rgba(239, 68, 68, 0.3)' : 'rgba(16, 185, 129, 0.3)')
+                  ? 'rgba(2, 132, 199, 0.35)' 
+                  : (isAttackBlocked ? 'rgba(225, 29, 72, 0.35)' : 'rgba(5, 150, 105, 0.35)')
               }`
             }}>
               {!isComplete 
@@ -173,14 +173,14 @@ export const SimulatedAgentTrace: React.FC<SimulatedAgentTraceProps> = ({
         trace ? (
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             {/* Speed Selector */}
-            <div style={{ display: 'flex', background: 'rgba(0,0,0,0.4)', borderRadius: '4px', padding: '2px', border: '1px solid rgba(255,255,255,0.06)' }}>
+            <div style={{ display: 'flex', background: '#f1f5f9', borderRadius: '4px', padding: '2px', border: '1px solid var(--border-subtle)' }}>
               {(['1x', '2x', 'instant'] as const).map(spd => (
                 <button
                   key={spd}
                   onClick={() => setPlaybackSpeed(spd)}
                   style={{
-                    background: playbackSpeed === spd ? 'rgba(6, 182, 212, 0.25)' : 'transparent',
-                    color: playbackSpeed === spd ? '#22d3ee' : 'var(--text-muted)',
+                    background: playbackSpeed === spd ? '#0284c7' : 'transparent',
+                    color: playbackSpeed === spd ? '#ffffff' : 'var(--text-secondary)',
                     border: 'none',
                     borderRadius: '3px',
                     padding: '2px 6px',
@@ -247,21 +247,21 @@ export const SimulatedAgentTrace: React.FC<SimulatedAgentTraceProps> = ({
 
           let cardClass = 'step-card';
           let StepIcon = CheckCircle;
-          let iconColor = '#10b981';
+          let iconColor = '#059669';
 
           if (isRevealed) {
             if (step.status === 'blocked') {
               cardClass += ' step-card-blocked';
               StepIcon = XCircle;
-              iconColor = '#ef4444';
+              iconColor = '#e11d48';
             } else if (step.status === 'warning') {
               cardClass += ' step-card-warning';
               StepIcon = AlertTriangle;
-              iconColor = '#f59e0b';
+              iconColor = '#d97706';
             } else if (step.status === 'active') {
               cardClass += ' step-card-active';
               StepIcon = Terminal;
-              iconColor = '#06b6d4';
+              iconColor = '#0284c7';
             } else {
               cardClass += ' step-card-success';
             }
@@ -286,7 +286,7 @@ export const SimulatedAgentTrace: React.FC<SimulatedAgentTraceProps> = ({
                   fontSize: '0.68rem',
                   fontWeight: 800,
                   fontFamily: 'var(--font-mono)',
-                  color: isCurrentActive ? '#22d3ee' : 'var(--text-muted)'
+                  color: isCurrentActive ? '#0284c7' : 'var(--text-muted)'
                 }}>
                   STEP 0{step.stepNumber}
                 </span>
@@ -301,7 +301,7 @@ export const SimulatedAgentTrace: React.FC<SimulatedAgentTraceProps> = ({
                 </div>
               </div>
 
-              <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#f8fafc' }}>
+              <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                 {step.title}
               </div>
 
@@ -317,12 +317,12 @@ export const SimulatedAgentTrace: React.FC<SimulatedAgentTraceProps> = ({
                   justifyContent: 'space-between',
                   marginTop: '4px',
                   paddingTop: '6px',
-                  borderTop: '1px solid rgba(255,255,255,0.05)',
+                  borderTop: '1px solid var(--border-subtle)',
                   fontSize: '0.68rem',
-                  color: '#94a3b8'
+                  color: 'var(--text-secondary)'
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <Code size={11} color="var(--accent-cyan)" />
+                    <Code size={11} color="var(--primary)" />
                     <span>Telemetry Inspector</span>
                   </div>
                   {isExpanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
@@ -332,23 +332,24 @@ export const SimulatedAgentTrace: React.FC<SimulatedAgentTraceProps> = ({
               {/* Inline Telemetry Drawer */}
               {isExpanded && step.telemetry && (
                 <div className="telemetry-drawer" onClick={(e) => e.stopPropagation()}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', color: '#38bdf8', fontWeight: 700, fontSize: '0.7rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', color: '#0284c7', fontWeight: 700, fontSize: '0.7rem' }}>
                     <span>STEP 0{step.stepNumber} TELEMETRY</span>
                     <span>TIMESTAMP: {step.timestamp}</span>
                   </div>
 
                   {step.telemetry.threatSignals && step.telemetry.threatSignals.length > 0 && (
-                    <div style={{ color: '#fca5a5', fontSize: '0.7rem' }}>
+                    <div style={{ color: '#e11d48', fontSize: '0.7rem' }}>
                       <strong>Detected Signals:</strong> {step.telemetry.threatSignals.join(', ')}
                     </div>
                   )}
 
                   {step.telemetry.rawCodeSnippet && (
                     <pre style={{
-                      background: 'rgba(0,0,0,0.6)',
+                      background: '#f1f5f9',
                       padding: '8px',
                       borderRadius: '4px',
-                      color: '#a5f3fc',
+                      border: '1px solid var(--border-subtle)',
+                      color: '#0f172a',
                       margin: 0,
                       overflowX: 'auto'
                     }}>
@@ -356,18 +357,18 @@ export const SimulatedAgentTrace: React.FC<SimulatedAgentTraceProps> = ({
                     </pre>
                   )}
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', fontSize: '0.68rem', color: '#94a3b8' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', fontSize: '0.68rem', color: 'var(--text-secondary)' }}>
                     {step.telemetry.inputTokens !== undefined && (
-                      <div>Input Tokens: <strong style={{ color: '#e2e8f0' }}>{step.telemetry.inputTokens}</strong></div>
+                      <div>Input Tokens: <strong style={{ color: '#0f172a' }}>{step.telemetry.inputTokens}</strong></div>
                     )}
                     {step.telemetry.contextSizeChars !== undefined && (
-                      <div>Context Chars: <strong style={{ color: '#e2e8f0' }}>{step.telemetry.contextSizeChars}</strong></div>
+                      <div>Context Chars: <strong style={{ color: '#0f172a' }}>{step.telemetry.contextSizeChars}</strong></div>
                     )}
                     {step.telemetry.quarantinedSpansCount !== undefined && (
-                      <div>Quarantined Spans: <strong style={{ color: '#fca5a5' }}>{step.telemetry.quarantinedSpansCount}</strong></div>
+                      <div>Quarantined Spans: <strong style={{ color: '#e11d48' }}>{step.telemetry.quarantinedSpansCount}</strong></div>
                     )}
                     {step.telemetry.riskScore !== undefined && (
-                      <div>Risk Score: <strong style={{ color: step.telemetry.riskScore >= 70 ? '#f87171' : '#34d399' }}>{step.telemetry.riskScore}/100</strong></div>
+                      <div>Risk Score: <strong style={{ color: step.telemetry.riskScore >= 70 ? '#e11d48' : '#059669' }}>{step.telemetry.riskScore}/100</strong></div>
                     )}
                   </div>
                 </div>
@@ -380,8 +381,8 @@ export const SimulatedAgentTrace: React.FC<SimulatedAgentTraceProps> = ({
       {/* Exploit Containment & Sandbox State Banner */}
       {trace && isComplete && (
         <div className={isAttackBlocked ? 'exploit-barrier-banner' : undefined} style={!isAttackBlocked ? {
-          background: 'rgba(16, 185, 129, 0.08)',
-          border: '1px solid rgba(16, 185, 129, 0.3)',
+          background: '#ecfdf5',
+          border: '1px solid #a7f3d0',
           borderRadius: 'var(--radius-md)',
           padding: '14px 18px',
           display: 'flex',
@@ -393,9 +394,9 @@ export const SimulatedAgentTrace: React.FC<SimulatedAgentTraceProps> = ({
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               {isAttackBlocked ? (
-                <ShieldAlert size={22} color="#ef4444" />
+                <ShieldAlert size={22} color="#e11d48" />
               ) : (
-                <ShieldCheck size={22} color="#10b981" />
+                <ShieldCheck size={22} color="#059669" />
               )}
               <div>
                 <span style={{
@@ -403,14 +404,14 @@ export const SimulatedAgentTrace: React.FC<SimulatedAgentTraceProps> = ({
                   fontWeight: 800,
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em',
-                  color: isAttackBlocked ? '#f87171' : '#34d399',
+                  color: isAttackBlocked ? '#e11d48' : '#059669',
                   display: 'block'
                 }}>
                   {isAttackBlocked 
                     ? 'SECURITY CONTAINMENT BARRIER ACTIVE' 
                     : 'AUTHORIZED ACTION VERIFIED'}
                 </span>
-                <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#f8fafc' }}>
+                <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-primary)' }}>
                   {trace.executionSummary}
                 </span>
               </div>
@@ -422,9 +423,9 @@ export const SimulatedAgentTrace: React.FC<SimulatedAgentTraceProps> = ({
               borderRadius: '9999px',
               fontWeight: 800,
               fontFamily: 'var(--font-mono)',
-              background: isAttackBlocked ? 'rgba(239, 68, 68, 0.25)' : 'rgba(16, 185, 129, 0.2)',
-              color: isAttackBlocked ? '#fca5a5' : '#6ee7b7',
-              border: `1px solid ${isAttackBlocked ? 'rgba(239, 68, 68, 0.5)' : 'rgba(16, 185, 129, 0.4)'}`
+              background: isAttackBlocked ? '#fff1f2' : '#ecfdf5',
+              color: isAttackBlocked ? '#e11d48' : '#059669',
+              border: `1px solid ${isAttackBlocked ? '#fecdd3' : '#a7f3d0'}`
             }}>
               {isAttackBlocked ? 'ZERO MUTATION (0 BYTES MODIFIED)' : 'SANDBOX STATE CLEAN'}
             </span>
@@ -435,8 +436,8 @@ export const SimulatedAgentTrace: React.FC<SimulatedAgentTraceProps> = ({
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
             gap: '10px',
-            background: 'rgba(0, 0, 0, 0.45)',
-            border: '1px solid rgba(255, 255, 255, 0.06)',
+            background: '#f8fafc',
+            border: '1px solid var(--border-subtle)',
             borderRadius: 'var(--radius-sm)',
             padding: '10px 14px',
             fontSize: '0.76rem'
@@ -445,25 +446,25 @@ export const SimulatedAgentTrace: React.FC<SimulatedAgentTraceProps> = ({
               <span style={{ color: 'var(--text-muted)', textTransform: 'uppercase', fontSize: '0.68rem', fontWeight: 700, display: 'block' }}>
                 Initial Sandbox State:
               </span>
-              <span style={{ color: '#cbd5e1', fontFamily: 'var(--font-mono)' }}>
+              <span style={{ color: '#334155', fontFamily: 'var(--font-mono)' }}>
                 {trace.initialSandboxState}
               </span>
             </div>
 
             <div>
-              <span style={{ color: isAttackBlocked ? '#f87171' : '#38bdf8', textTransform: 'uppercase', fontSize: '0.68rem', fontWeight: 700, display: 'block' }}>
+              <span style={{ color: isAttackBlocked ? '#e11d48' : '#0284c7', textTransform: 'uppercase', fontSize: '0.68rem', fontWeight: 700, display: 'block' }}>
                 {isAttackBlocked ? 'Intercepted Exploit Mutation:' : 'Attempted Action Intent:'}
               </span>
-              <span style={{ color: isAttackBlocked ? '#fca5a5' : '#e2e8f0', fontFamily: 'var(--font-mono)' }}>
+              <span style={{ color: isAttackBlocked ? '#9f1239' : '#0f172a', fontFamily: 'var(--font-mono)' }}>
                 {trace.attemptedStateMutation}
               </span>
             </div>
 
-            <div style={{ gridColumn: '1 / -1', borderTop: '1px solid rgba(255, 255, 255, 0.06)', paddingTop: '6px' }}>
-              <span style={{ color: isAttackBlocked ? '#34d399' : '#6ee7b7', textTransform: 'uppercase', fontSize: '0.68rem', fontWeight: 700, display: 'block' }}>
+            <div style={{ gridColumn: '1 / -1', borderTop: '1px solid var(--border-subtle)', paddingTop: '6px' }}>
+              <span style={{ color: isAttackBlocked ? '#059669' : '#0284c7', textTransform: 'uppercase', fontSize: '0.68rem', fontWeight: 700, display: 'block' }}>
                 Final Sandbox State:
               </span>
-              <span style={{ color: isAttackBlocked ? '#34d399' : '#f8fafc', fontWeight: 600 }}>
+              <span style={{ color: isAttackBlocked ? '#059669' : 'var(--text-primary)', fontWeight: 600 }}>
                 {trace.finalSandboxState}
               </span>
             </div>
