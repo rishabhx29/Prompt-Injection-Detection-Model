@@ -34,3 +34,16 @@ Thumbs.db
 # Logs
 *.log
 npm-debug.log*
+
+# Model weights (exceed GitHub 100 MB cap; available via Colab/Kaggle exports)
+*.pt
+
+# Local duplicate artifacts
+*(1)*
+*(2)*
+.freebuff/
+eval_ml/eval_ml/
+/ctxvigil_pipeline_flowchart.jpg
+
+# Local-only reference material (not for publication)
+/submission/reference report.pdf
