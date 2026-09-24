@@ -16,6 +16,13 @@ IEEE conference-format report covering the DA2 evaluation requirements:
 - `ctxvigil_da2_report.pdf` — compiled output (7 pages)
 - `figures/` — all figures (regenerate data figures with the scripts in the repo)
 
+## Training notebooks (Google Colab)
+
+- Notebook 1 — DeBERTa-v3 prompt-injection classifier: https://colab.research.google.com/drive/13LmE8n0IVCu9OW7JB1x7vv9EZeCvsb3F
+- Notebook 2 — Multi-view fusion & uncertainty network: https://colab.research.google.com/drive/1jvokAoKsrch2NqQor0vrTl64ij-a4Bll
+
+The same notebooks (with exported metrics artifacts) also live in the repository under `notebooks/`.
+
 ## Compile
 
 - **Overleaf**: upload this whole folder as a project, set the compiler to pdfLaTeX, recompile. No bibliography step needed.
