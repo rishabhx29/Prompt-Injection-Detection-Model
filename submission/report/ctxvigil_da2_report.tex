@@ -1,16 +1,17 @@
 % !TEX program = pdflatex
 % ============================================================================
-% CtxVigil — DA2 Project Review Report (IEEE conference format)
+% CtxVigil — DA2 Project Review Report (IEEE Transactions journal format,
+% matching the reference report's first-page design)
 %
 % Compile on Overleaf:
 %   1. Upload the entire `report/` folder (this file + figures/) as a project.
 %   2. Set the compiler to pdfLaTeX (Menu -> Compiler -> pdfLaTeX).
 %   3. Recompile. No bibliography step is needed (references are inline).
 %
-% TODO for the authors (title block): fill in Saumya's full name, roll
-% numbers, department, institution, and guide name where marked with % TODO.
+% TODO for the authors (marked % TODO below): Saumya's full name and e-mail,
+% and the institution name in the \thanks footnote.
 % ============================================================================
-\documentclass[conference]{IEEEtran}
+\documentclass[journal]{IEEEtran}
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -19,20 +20,27 @@
 
 \graphicspath{{figures/}}
 
+% Reference-style running heads
+\markboth{BCSE306L --- Artificial Intelligence: Final Project \& Viva Evaluation (DA2), 2026}%
+{Tripathi and Saumya: CtxVigil: An Explainable Multi-View Protection Layer Against Indirect Prompt Injection}
+
+% Reference-style keyword lead-in ("IEEE Keywords—")
+\renewcommand{\IEEEkeywordsname}{IEEE Keywords}
+
 \begin{document}
 
 \title{CtxVigil: An Explainable Multi-View Protection Layer Against
 Indirect Prompt Injection in LLM Web Agents}
 
-\author{\IEEEauthorblockN{Rishabh Tripathi\IEEEauthorrefmark{1}
-\and Saumya\IEEEauthorrefmark{2}} % TODO: Saumya's full name
-\IEEEauthorblockA{\IEEEauthorrefmark{1}Roll No.\ 24BRS1136 \quad
-\IEEEauthorrefmark{2}Roll No.\ 24BRS1065
-\\ Department of Computer Science and Engineering
-% TODO: institution name
-\\ Course: BCSE306L -- Artificial Intelligence (Final Project \& Viva Evaluation)
-\\ \texttt{rishabh.j.tripathi2903@gmail.com}} % TODO: second author's e-mail
-}
+\author{Rishabh~Tripathi~and~Saumya% TODO: Saumya's full name
+\thanks{Manuscript prepared September 24, 2026, for the DA2 project review
+and viva evaluation. \textit{(Corresponding author: Rishabh Tripathi.)}
+Rishabh Tripathi (Roll No.~24BRS1136) and Saumya (Roll No.~24BRS1065) are
+with the Department of Computer Science and Engineering, [Institution],
+% TODO: replace [Institution] with the institution name
+India. Course: BCSE306L --- Artificial Intelligence
+(e-mail: rishabh.j.tripathi2903@gmail.com).% TODO: second author's e-mail
+}}
 
 \maketitle
 
