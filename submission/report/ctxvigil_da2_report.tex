@@ -112,12 +112,13 @@ with latency measurements on commodity CPU (Section~\ref{sec:results}).
 \begin{figure*}[t]
 \centering
 \includegraphics[width=0.98\textwidth]{fig1_system_overview.png}
-\caption{End-to-end application block diagram. The LLM web agent (Gemini)
-never touches a page directly: \texttt{read\_page} and \texttt{propose\_action}
-route through the in-process CtxVigil layer, which scans every page before the
-model sees it and gates every action before it executes. Only approved content
-(\texttt{safeContent}, with placeholders where attacks were withheld) reaches
-the model; a \texttt{block} scan verdict halts the episode entirely.}
+\caption{End-to-end application flow. (1) The Gemini agent's only two tools
+route through the protection layer: \texttt{read\_page} fetches the page and
+receives only \texttt{safeContent} back, and \texttt{propose\_action} receives
+the gate's binding decision. (2) The deterministic layer validates, normalises
+the page into four content views, detects, scores, and partitions content.
+(3) The multi-view fusion model of Fig.~\ref{fig:layer} evaluates the episode
+and contributes an advisory verdict to the gate.}
 \label{fig:overview}
 \end{figure*}
 
@@ -163,21 +164,21 @@ demonstration.
 \begin{figure*}[t]
 \centering
 \includegraphics[width=0.98\textwidth]{fig2_layer_architecture.png}
-\caption{Detailed architecture of the protection layer. (A) The scan
-pipeline: a page is validated and normalised into four content views
-(plus a reserved OCR channel), scanned by seven deterministic detectors,
-weighted into a 0--100 risk score, and mapped by fixed score bands to a
-verdict with per-segment content outputs. (B) The action gate consumes the
-proposed action and the scan evidence and returns an independent decision.
-(C) The multi-view fusion network (advisory) embeds four agent-context views
-with all-MiniLM-L6-v2, augments them with six pairwise cosine agreements and
-the DeBERTa injection probability, and produces a risk probability plus an
-epistemic uncertainty estimate.}
+\caption{Detailed data-flow of the protection layer. The agent runtime
+supplies four context views: user task, system prompt, proposed action, and
+observation. Tokenization and vectorization with the frozen all-MiniLM-L6-v2
+encoder produce four 384-d embeddings, whose pairwise cosine similarities are
+stored in the 4$\times$4 agreement matrix (in the InjecAgent hijack fixture the
+task--action agreement S13 collapses from 0.911 to 0.004). In parallel, the
+observation text passes through the fine-tuned DeBERTa-v3 classifier to yield
+p(injection). The concatenated 1{,}543-d feature vector feeds the CtxVigil
+fusion network, whose risk and uncertainty heads drive the thresholded
+ALLOW / QUARANTINE / BLOCK decision that is returned to the agent runtime.}
 \label{fig:layer}
 \end{figure*}
 
 \subsection{Scan Pipeline}
-Fig.~\ref{fig:layer}(A) shows the scan pipeline, executed in five pure,
+The scan pipeline (Fig.~\ref{fig:overview}, middle band) executes five pure,
 order-fixed stages:
 
 \subsubsection{Validation and normalisation}
@@ -225,7 +226,7 @@ finding---explainability is part of the interface contract, not an
 afterthought.
 
 \subsection{Action Gate}
-Fig.~\ref{fig:layer}(B) shows the gate, an \emph{independent} decision, never
+The gate (Fig.~\ref{fig:overview}) is an \emph{independent} decision, never
 a re-run of the scan. For a proposed action it evaluates three axes:
 (i) \emph{task alignment}---token overlap between the action label and the
 user's task, so ``summarize\_policy'' serves ``summarize the refund policy''
@@ -240,7 +241,7 @@ unrelated high-risk action.
 
 \subsection{Multi-View Fusion and Uncertainty Network}
 \label{sec:fusion}
-The learned component, Fig.~\ref{fig:layer}(C), treats an agent checkpoint as
+The learned component (Fig.~\ref{fig:layer}) treats an agent checkpoint as
 four semantic views: the user task $V_1$, the system prompt $V_2$, the
 proposed tool action $V_3$, and the observation context $V_4$. Each view is
 embedded with all-MiniLM-L6-v2~\cite{reimers2019} ($e_i \in
