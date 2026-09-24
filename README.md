@@ -115,3 +115,12 @@ in `docs/00_SOURCE_EXTRACTION.md` §24–§25 can be checked against the origina
 - The core demonstration must run offline with no paid LLM API and no API key.
 - If the protection API is unavailable, the dashboard must say "Protection scan unavailable" and
   must **not** imply the page was safe.
+
+---
+
+## DA1 artifacts
+
+Earlier DA-1 deliverables live at the repo root: `DA1 AI (Prompt injection model ).docx`
+(the DA-1 report), `data/` (dataset loaders), and `diagrams/` (DA-1 architecture figures).
+The DA-2 review report (IEEE conference format, with architecture diagrams and evaluation
+figures) is in [`submission/report/`](submission/report/).

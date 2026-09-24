@@ -1,3 +1,52 @@
+# ===== DA1 entries (from original DA1 repo) =====
+# ===== Folders / files to exclude =====
+.agents/
+AI DIGITAL ASSIGNMENT.docx
+build_da1_docx.py
+extract.ps1
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+*.so
+
+# ===== Virtual environments =====
+venv/
+env/
+.venv/
+.env/
+
+# ===== IDE / editor =====
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ===== OS junk =====
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== Jupyter =====
+.ipynb_checkpoints/
+
+# ===== Temp files =====
+*.log
+*.tmp
+~$*.docx
+~$*.doc
+
+# ===== Data =====
+data/raw/
+
+<<<<<<< HEAD
 # Dependencies
 node_modules/
 
@@ -47,3 +96,51 @@ eval_ml/eval_ml/
 
 # Local-only reference material (not for publication)
 /submission/reference report.pdf
+=======
+# ===== Folders / files to exclude =====
+.agents/
+AI DIGITAL ASSIGNMENT.docx
+build_da1_docx.py
+extract.ps1
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+*.so
+
+# ===== Virtual environments =====
+venv/
+env/
+.venv/
+.env/
+
+# ===== IDE / editor =====
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ===== OS junk =====
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== Jupyter =====
+.ipynb_checkpoints/
+
+# ===== Temp files =====
+*.log
+*.tmp
+~$*.docx
+~$*.doc
+
+# ===== Data =====
+data/raw/
+>>>>>>> origin/main
