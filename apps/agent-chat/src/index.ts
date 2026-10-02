@@ -107,7 +107,11 @@ function wrap(text: string, width: number): string[] {
 
 /** Visible length of a string that may contain ANSI colour codes. */
 function visibleLength(text: string): number {
-  return text.replace(/\u001b\[\d*m/gu, "").length;
+  // The escape is the safe form: a literal ESC byte in source is invisible,
+  // diff-hostile, and is the exact hazard this rule guards against. `paint()`
+  // only ever emits `\u001b[<digits>m`, which is all this pattern matches.
+  // oxlint-disable-next-line no-control-regex
+  return text.replace(/\u001b\[\d*m/gu, "").length; // NOSONAR
 }
 
 function padTo(text: string, width: number): string {
