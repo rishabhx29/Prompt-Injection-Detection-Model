@@ -147,7 +147,16 @@ export const FindingsList: React.FC<FindingsListProps> = ({ findings }) => {
           >
             {/* Clickable Card Header */}
             <div
+              role="button"
+              tabIndex={0}
+              aria-expanded={isExpanded}
               onClick={() => toggleExpand(f.id)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  toggleExpand(f.id);
+                }
+              }}
               style={{
                 padding: '10px 12px',
                 cursor: 'pointer',

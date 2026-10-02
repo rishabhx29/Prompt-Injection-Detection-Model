@@ -34,6 +34,9 @@ export const DemoGuideModal: React.FC<DemoGuideModalProps> = ({
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') onClose();
+      }}
       role="dialog"
       aria-modal="true"
       aria-labelledby="demo-guide-title"
@@ -51,7 +54,6 @@ export const DemoGuideModal: React.FC<DemoGuideModalProps> = ({
           display: 'flex',
           flexDirection: 'column'
         }}
-        onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
         <div style={{

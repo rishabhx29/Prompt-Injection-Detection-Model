@@ -236,7 +236,9 @@ export function normalisePage(page: PageRepresentation): TextSegment[] {
     // First-appearance order across all views.
     const sorted = [...observations].sort((a, b) => a.order - b.order);
     const views = VIEW_ORDER.filter((view) => sorted.some((o) => o.view === view));
-    const channels = [...new Set(sorted.map((o) => o.channel))].sort();
+    const channels = [...new Set(sorted.map((o) => o.channel))].sort((a, b) =>
+      a.localeCompare(b),
+    );
     const primaryView = pickPrimaryView(views);
 
     // Prefer the provenance supplied by an observation in the primary view, so a

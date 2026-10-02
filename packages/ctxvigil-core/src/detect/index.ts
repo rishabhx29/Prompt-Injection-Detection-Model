@@ -257,7 +257,7 @@ function detectRiskyAction(
       matches.some((token) => sets.highRiskNouns.has(token));
     if (operationMatches.length < 2 && !strongOperationPair && decisiveMatches.length < 2) return;
 
-    const evidence = [...matches].sort().join(", ");
+    const evidence = [...matches].sort((a, b) => a.localeCompare(b)).join(", ");
     hits.push({
       signal: "risky_action",
       segmentIndex,

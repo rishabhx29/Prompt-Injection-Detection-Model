@@ -275,7 +275,21 @@ export const SimulatedAgentTrace: React.FC<SimulatedAgentTraceProps> = ({
             <div
               key={step.id}
               className={cardClass}
-              onClick={() => handleToggleExpandStep(step.id)}
+              role="button"
+              tabIndex={0}
+              aria-expanded={isExpanded}
+              onClick={(e) => {
+                // The telemetry drawer is a read-only region: clicks inside it
+                // must not collapse the step it belongs to.
+                if ((e.target as HTMLElement).closest('[data-telemetry-drawer]')) return;
+                handleToggleExpandStep(step.id);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleToggleExpandStep(step.id);
+                }
+              }}
               style={{
                 opacity: isRevealed ? 1 : 0.45,
                 filter: isRevealed ? 'none' : 'grayscale(60%)'
@@ -331,7 +345,7 @@ export const SimulatedAgentTrace: React.FC<SimulatedAgentTraceProps> = ({
 
               {/* Inline Telemetry Drawer */}
               {isExpanded && step.telemetry && (
-                <div className="telemetry-drawer" onClick={(e) => e.stopPropagation()}>
+                <div className="telemetry-drawer" data-telemetry-drawer>
                   <div style={{ display: 'flex', justifyContent: 'space-between', color: '#0284c7', fontWeight: 700, fontSize: '0.7rem' }}>
                     <span>STEP 0{step.stepNumber} TELEMETRY</span>
                     <span>TIMESTAMP: {step.timestamp}</span>
