@@ -1,26 +1,14 @@
 # ============================================================
-# Agent / authoring tooling  (local-only, not part of the product)
+# Agent / authoring tooling
 # ============================================================
 
-# Skill libraries. `agent/` and `.agents/` were byte-identical copies
-# of the same 103-file skills tree; all three are agent scaffolding.
-/.agents/
-/agent/
-/.claude/
-skills-lock.json
+# Tracked on purpose: `.agents/`, `.claude/` and `agent/` hold the
+# skill libraries + instructions, and `AGENTS.md` / `CLAUDE.md` /
+# `skills-lock.json` pin them. Keep those in the repo.
 
-# Agent instructions and local issue tracker
-AGENTS.md
-CLAUDE.md
-/.scratch/
+# Local-only orchestrator workspace (never published)
 /agents_orchestrator/
-
-# Assignment briefs (local-only input material)
-/Required/
-
-# Project meta files kept out of the published repo
-CHANGELOG.md
-requirements*.txt
+/.freebuff/
 
 # ============================================================
 # Dependencies
@@ -70,7 +58,6 @@ npm-debug.log*
 # ============================================================
 /data/raw/
 graphify-out/
-.freebuff/
 eval_ml/eval_ml/
 
 # Model weights (exceed GitHub 100 MB cap; available via Colab/Kaggle)
@@ -79,16 +66,6 @@ eval_ml/eval_ml/
 # Local duplicate downloads
 *(1)*
 *(2)*
-
-# ============================================================
-# DA1 leftovers
-# ============================================================
-/*.docx
-AI DIGITAL ASSIGNMENT.docx
-build_da1_docx.py
-extract.ps1
-/ctxvigil_pipeline_flowchart.jpg
-/submission/reference report.pdf
 
 # ============================================================
 # Editor / OS / temp
